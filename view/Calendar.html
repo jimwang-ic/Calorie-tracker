@@ -1,0 +1,39 @@
+<html>
+	<head>
+		<tilte></tilte>
+		<!-- JAVASCRIPT API source -->
+		<script src="http://platform.fatsecret.com/js?key=1d1e36bf07f84761b76cd39e0ad1c1dd&auto_template=false"></script>
+		
+		<!-- We can customize our calendar through the calendar.css -->
+		<!-- this css file comes from http://platform.fatsecret.com/api/Default.aspx?screen=jsapicssr -->
+		<link rel="stylesheet" href="css/calendar.css" type="text/css" />
+		
+		<script src="/public/Calendar.js"></script>
+		<script src="/public/jquery.js"></script>
+		<link rel="stylesheet" href="css/style.css" type="text/css" />
+		
+	</head>
+	
+	<body>
+		
+		<h2>Calorie Tracker Beta !</h2>
+		
+		<script>
+			// Sample of using the javascript api of FATSECRET platform
+			fatsecret.setContainer('container'); 
+			fatsecret.setCanvas("calendar.get_month");
+		</script> 
+		
+		<div style="width:1000px; margin:0 auto;" id="holder">
+			 
+			 <!-- Here is the magic happens -->
+			 <script>fatsecret.writeHolder("calendar");</script> 
+			 <script>fatsecret.writeHolder("previousmonth");</script> 
+             <script>fatsecret.writeHolder("nextmonth");</script> 	
+             <div id="container"> 
+             
+		</div>
+		
+	</body>
+	
+</html>

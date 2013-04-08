@@ -1,0 +1,102 @@
+/* calendar */
+.fatsecret_calendar
+{
+	font-size: 125%;
+	border-collapse: collapse;
+	width: 95%;
+	margin: 0 auto;	
+}
+
+.fatsecret_calendar tr td
+{
+	padding: 2px;
+}
+
+/* days row (Sun, Mon, Tues, etc) */
+.fatsecret_days_row td
+{
+	width: 14%;
+	font-weight: 700;
+	text-align: center;
+}
+
+/* all rows that are not the days row */
+.fatsecret_other_row
+{
+	height: 80px;
+	vertical-align: top;
+}
+
+/* blank day cell */
+.fatsecret_day_blank
+{
+	background-color: #F2F2F2;
+}
+
+/* today's cell */
+.fatsecret_day_today
+{
+	background-color: #FFFFCE;
+}
+
+/* all cells that are not blank or today */
+.fatsecret_day_other
+{
+	background-color: #FFF;
+}
+
+/* the day of the month (1-31) */
+.fatsecret_day_number
+{
+	font-weight: 700;
+}
+
+/* all text in a cell that is not the day */
+.fatsecret_day_content
+{
+	font-size: 75%;
+	padding: 0 4px 0 4px;
+	text-align: right;
+}
+
+/* exercise link (if there is an entry) */
+.fatsecret_day_exercise
+{
+	color: #C05F5F;
+	font-weight: 700;
+}
+
+/* food link (if there is an entry) */
+.fatsecret_day_food
+{
+	color: #399941;
+	font-weight:700;
+}
+
+/* link of there isnt an entry */
+/*
+.fatsecret_day_link
+{
+}
+*/
+
+/* the net gain/loss if there is an entry for both exercise and food */
+.fatsecret_day_summary
+{
+	margin-top: 2px;
+	cursor: default;
+}
+
+/* net gain/loss text */
+.fatsecret_day_net
+{
+	float: right;
+	padding: 1px 0 0 4px;
+}
+
+/* net gain/loss image (up or down arrow) */
+/*
+.fatsecret_day_net_image
+{
+}
+*/

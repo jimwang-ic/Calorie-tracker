@@ -1,0 +1,13 @@
+{
+	"name": "CalorieTracker",
+	"description": "A web-based Calorie tracker",
+	"version": "0.0.1",
+	"dependencies": {
+		"express": "3.0.x",
+		"any-db": "0.3.x",
+		"hogan.js": "2.0.x",
+		"consolidate": "0.7.x",
+		"sqlite3": "2.1.x",
+		"dnode": "1.0.5"
+	}
+}
