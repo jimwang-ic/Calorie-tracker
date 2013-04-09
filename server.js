@@ -74,6 +74,13 @@ app.get('/getFood.json', function(req,res){
 			
 });
 
+//Displays Graph
+app.get('/graph', function(req,res) {
+  
+  res.render('graph.html');
+  
+});
+
 
 
 app.listen(8080);
