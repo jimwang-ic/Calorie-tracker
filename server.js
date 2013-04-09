@@ -30,7 +30,7 @@ app.get('/searchFood.json', function(req,res){
 	
 	// Connect to DNode server for FatSecretAPI.php running in above ip with TCP port 8811 
 	// and call "foodsearch" with arugment Search_string. 
-	// more infomation about dnode see the followin:
+	// more infomation about dnode see the following:
 	// http://bergie.iki.fi/blog/dnode-make_php_and_node-js_talk_to_each_other/
 	dnode.connect(ip,port, function (remote, conn) {
 		remote.foodSearch(Search_string, function (result) {		

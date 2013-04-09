@@ -32,7 +32,7 @@ function Customize() {
 	// bind our customize click event
 	$('.fatsecret_day_content div:nth-child(2) a').on('click', other);
 
-	// Hide the fat secret api log
+	// Hide the fat secret api logo
 	$('.fatsecret_footer').hide();
 		
 }
