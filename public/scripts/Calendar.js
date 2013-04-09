@@ -1,5 +1,5 @@
 window.addEventListener('load', function(){
-//	alert('test');
+	alert('test');
 		// Customize our Calendar  
 	Customize();
 	
@@ -32,7 +32,7 @@ function Customize() {
 	// bind our customize click event
 	$('.fatsecret_day_content div:nth-child(2) a').on('click', other);
 
-	// Hide the fat secret api logo
+	// Hide the fat secret api log
 	$('.fatsecret_footer').hide();
 		
 }
