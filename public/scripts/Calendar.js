@@ -1,5 +1,5 @@
 window.addEventListener('load', function(){
-//	alert('test');
+	alert('test');
 		// Customize our Calendar  
 	Customize();
 	
