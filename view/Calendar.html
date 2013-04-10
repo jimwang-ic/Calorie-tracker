@@ -6,8 +6,6 @@
 		<!-- JAVASCRIPT API source -->
 		<script src="http://platform.fatsecret.com/js?key=1d1e36bf07f84761b76cd39e0ad1c1dd&auto_template=false"></script>
 
-
-
 		<!-- TABBING JS -->
 		<script type="text/javascript" src="/public/scripts/tab.js"</script>
 		<script src="/public/scripts/Calendar.js"></script>
@@ -38,33 +36,31 @@
 			<div class="tab_contents_container">
 				<!-- Calendar Tab contents -->
 				<div id="calendar_tab" class="tab_contents tab_contents_active">
-								<div style="width:1000px; margin:0 auto;" id="holder">
-
+					<div style="width:1000px; margin:0 auto;" id="holder">
 						<!-- Here is the magic happens -->
+						<div class="monthbutton">
+							<script>fatsecret.writeHolder("previousmonth");</script> 
+						</div>
+						<div class="date">
+							<script>fatsecret.writeHolder("date");</script>
+						</div>
+						<div class="monthbutton">
+							<script>fatsecret.writeHolder("nextmonth");</script> 	
+						</div>
 						<script>fatsecret.writeHolder("calendar");</script> 
-						<script>fatsecret.writeHolder("previousmonth");</script> 
-						<script>fatsecret.writeHolder("nextmonth");</script> 	
 
 					</div>
-
 				</div>
 
 				<!-- Analysis Tab contents -->
 				<div id="graph_tab" class="tab_contents">
-
 					<div id="container"></div>
 					<script>
 						// Sample of using the javascript api of FATSECRET platform
-					/*	fatsecret.setContainer('container'); (*/
 						fatsecret.setCanvas("calendar.get_month");
 					</script> 
 				</div>
 			</div> <!-- end tabs_container -->
-
-
-
-
-
-		</body>
-
-	</html>
+		</div>
+	</body>
+</html>
