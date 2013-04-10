@@ -1,3 +1,5 @@
+/* General CSS for ShapeUp Webapp */
+
 *{
 	margin:0;
 	padding:0;
@@ -5,20 +7,24 @@
 	/*border: red 1px dotted;*/
 }
 
+
 body{
-	/*background:#ccc;*/
+	background:#eee;
 	min-width:800px;
 }
+
 
 a{
 	text-decoration:none;
 }
+
 
 h2{
 	font-size: 45px;
 	margin-top:20px;
 	text-align: center;
 }
+
 
 #fatsecret_output_0, #fatsecret_output_2 {
 	color:#EEE;
@@ -28,8 +34,10 @@ h2{
 	display:block;
 }
 
+
 #fatsecret_output_0{
 	margin-left:21px;
+	position:relative;
 }
 
 
@@ -40,6 +48,7 @@ h2{
 	margin-right:270px;
 	margin-bottom:10px;
 }
+
 
 .monthbutton{
 	height: 25px;
@@ -54,10 +63,23 @@ h2{
 	margin-left:25px;
 }
 
+
 .monthbutton:hover {
 	background:#ccc;
 }
 
+
 a.monthbutton{
 	color:#EEE;
+}
+
+
+#calendar_tab{
+	margin-bottom:40px;
+}
+
+
+#graph{
+	margin:40px auto;
+
 }
