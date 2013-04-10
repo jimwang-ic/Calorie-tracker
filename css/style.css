@@ -16,6 +16,15 @@ body{
 
 a{
 	text-decoration:none;
+	color:black;
+}
+
+a:visited {
+ 	color:black;
+}
+
+#calendar a:hover {
+	color:#999;
 }
 
 
@@ -37,7 +46,7 @@ h2{
 
 #fatsecret_output_0{
 	margin-left:21px;
-	position:relative;
+	color:black;
 }
 
 
@@ -47,12 +56,15 @@ h2{
 	margin-left:300px;
 	margin-right:270px;
 	margin-bottom:10px;
+	position:absolute;
+	top:45px;
+	left:160px;
 }
 
 
 .monthbutton{
 	height: 25px;
-	width: 110px;
+	width: 125px;
 	border:1px #aaa solid;
 	display:inline-block;
 	background:#ddd;
@@ -63,6 +75,18 @@ h2{
 	margin-left:25px;
 }
 
+#prevMonth{
+	margin-bottom:10px;
+	position:absolute;
+	left:25px;
+	top:30px;
+}
+
+#nextMonth{
+	position:absolute;
+	left:849px;
+	top:30px;
+}
 
 .monthbutton:hover {
 	background:#ccc;
@@ -75,6 +99,7 @@ a.monthbutton{
 
 
 #calendar_tab{
+	margin-top:55px;
 	margin-bottom:40px;
 }
 
