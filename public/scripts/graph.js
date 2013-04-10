@@ -3,7 +3,7 @@ window.addEventListener('load', function(){
 	// Customize our Calendar  
 	Customize();
 	
-		
+	
 }, false);
 
 function Customize() {

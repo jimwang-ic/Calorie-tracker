@@ -1,19 +1,19 @@
 window.addEventListener('load', function(){
-	alert('test');
-		// Customize our Calendar  
-	Customize();
+	
+	// Customize our Calendar  
+	Customize_cal();
 	
 	fatsecret.onTabChanged = function(tab_id){
 			
 		if(tab_id == 8)
-			Customize();
+			Customize_cal();
 	};
 	
 		
 }, false);
 
 
-function Customize() {
+function Customize_cal() {
 	
 	console.log("Customize");
 	
@@ -32,9 +32,10 @@ function Customize() {
 	// bind our customize click event
 	$('.fatsecret_day_content div:nth-child(2) a').on('click', other);
 
-	// Hide the fat secret api log
+	// Hide the fat secret api logo
 	$('.fatsecret_footer').hide();
 		
+	
 }
 
 function edit_meal(e) {

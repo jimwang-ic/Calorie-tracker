@@ -6,6 +6,8 @@ alert('testTABE');
 */
 
  $(document).ready(function(){
+ 	//alert('test_tab');
+ 	
 	$('.tab').click(function(){
 		$('#tabs_container > .tabs > li.active')
 			.removeClass('active');

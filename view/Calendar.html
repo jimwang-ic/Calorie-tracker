@@ -2,26 +2,24 @@
 	<head>
 		<title>Calorie Tracker</title>
 		<!-- JQUERY LIBRARY--> 
-		<script type="text/javascript" src="/public/scripts/jquery-1.2.6.min.js"></script> 
+		<script src="/public/scripts/jquery.js"></script>
 		<!-- JAVASCRIPT API source -->
 		<script src="http://platform.fatsecret.com/js?key=1d1e36bf07f84761b76cd39e0ad1c1dd&auto_template=false"></script>
-
 		<!-- TABBING JS -->
-		<script type="text/javascript" src="/public/scripts/tab.js"</script>
-		<script src="/public/Calendar.js"></script>
-		<script src="/public/jquery.js"></script>
-
+		<script src="/public/scripts/tab.js"></script>
+		<!-- Calendar JS -->
+		<script src="/public/scripts/Calendar.js"></script>
+		<!-- graph JS -->
+		<script src="/public/scripts/graph.js"></script>
+		<script src="/public/scripts/jquery.flot.js"></script>
 
 		<!-- We can customize our calendar through the calendar.css -->
 		<!-- this css file comes from http://platform.fatsecret.com/api/Default.aspx?screen=jsapicssr -->
 		<link rel="stylesheet" href="css/calendar.css" type="text/css" />	
 		<link rel="stylesheet" href="css/style.css" type="text/css" />
 		<link rel="stylesheet" href="css/tab.css" type="text/css" />
-
-		<script src="/public/graph.js"></script>
-		<script src="/public/jquery.js"></script>
-		<script src="/public/jquery.flot.js"></script>
-		<link rel="stylesheet" href="css/style.css" type="text/css" />
+		
+		
 	</head>
 
 	<body>
@@ -45,7 +43,12 @@
 
 					<!-- FatSecret API Embeds -->
 					<div style="width:1000px; margin:0 auto;" id="holder">
-						<script> fatsecret.setCanvas("calendar.get_month"); </script> 
+						<script>
+							// Must set a container to initialize the application
+							// or it would have error message 
+							fatsecret.setContainer('container'); 
+							fatsecret.setCanvas("calendar.get_month"); 
+						</script> 
 						<div class="monthbutton">
 							<script>fatsecret.writeHolder("previousmonth");</script> 
 						</div>
@@ -56,6 +59,8 @@
 							<script>fatsecret.writeHolder("nextmonth");</script> 	
 						</div>
 						<script>fatsecret.writeHolder("calendar");</script> 
+						<!-- a empty container, don't remove this -->
+						<div id="container"></div> 
 					</div>
 				</div>
 
