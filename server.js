@@ -6,6 +6,7 @@ var engines = require('consolidate');
 var app = express();
 app.use(express.bodyParser()); 
 app.use('/public', express.static(__dirname + '/public'));
+app.use('/public/scripts', express.static(__dirname + '/public/scripts'));
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/img', express.static(__dirname + '/img'));
 app.use('/fonts', express.static(__dirname + '/fonts'));
