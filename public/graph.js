@@ -19,8 +19,11 @@ function Customize() {
   for (var i = 1; i<= 30; i++) {
     weight.push([i,Math.floor(Math.random()*(200-190+1)+190)]);
   }
-  console.log(calories);
-  var plot = $.plot($("#placeholder"), [{data:calories,yaxis:1,label:"Calories Consumed"},{data:weight,yaxis:2,label:"Weight"}], { xaxes: [ { position: "top" } ],yaxes: [ { }, { position: "right", min: 20 } ],legend: {show: true}, yaxis: { max: 300 }, xaxis: {min:0, max:30}, series: { lines: { show: true }, points: { show: true } },grid: { hoverable: true, clickable: true }});
+  
+  
+  var datasets = {"calories": {data:calories,yaxis:1,label:"Calories Consumed"},"weight":{data:weight,yaxis:2,label:"Weight"}};
+  
+  //var plot = $.plot($("#placeholder"), [{data:calories,yaxis:1,label:"Calories Consumed"},{data:weight,yaxis:2,label:"Weight"}], { xaxes: [ { position: "top" } ],yaxes: [ { }, { position: "right", min: 20 } ],legend: {show: true}, yaxis: { max: 300 }, xaxis: {min:0, max:30}, series: { lines: { show: true }, points: { show: true } },grid: { hoverable: true, clickable: true }});
   //var weightgraph = $.plot($("#weight"), [weight], { legend: {show: true}, yaxis: { max: 300 }, xaxis: {min:0, max:30}, series: { lines: { show: true }, points: { show: true } },grid: { hoverable: true, clickable: true }});
   $("#placeholder").bind("plotclick", function (event, pos, item) {
     if (item) {
@@ -35,4 +38,32 @@ function Customize() {
     }
   });
   
+  // insert checkboxes 
+  var choiceContainer = $("#choices");
+  $.each(datasets, function(key, val) {
+	  choiceContainer.append("<br/><input type='checkbox' name='" + key +
+		  "' checked='checked' id='id" + key + "'></input>" +
+		  "<label for='id" + key + "'>"
+		  + val.label + "</label>");
+  });
+
+  choiceContainer.find("input").click(plotAccordingToChoices);
+
+  function plotAccordingToChoices() {
+
+	  var data = [];
+
+	  choiceContainer.find("input:checked").each(function () {
+		  var key = $(this).attr("name");
+		  if (key && datasets[key]) {
+			  data.push(datasets[key]);
+		  }
+	  });
+
+	  if (data.length > 0) {
+		  $.plot("#placeholder", data, { xaxes: [ { position: "top" } ],yaxes: [ { }, { position: "right", min: 20 } ],legend: {show: true}, yaxis: { max: 300 }, xaxis: {min:0, max:30}, series: { lines: { show: true }, points: { show: true } },grid: { hoverable: true, clickable: true }});
+	  }
+  };
+  plotAccordingToChoices();
+
 }
