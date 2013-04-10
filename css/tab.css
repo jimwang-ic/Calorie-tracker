@@ -12,6 +12,7 @@ a:focus {
 	font-size: 12px;
 	margin:auto;
 	background:#fff;
+	position:relative;
 }
 
 .tabs{

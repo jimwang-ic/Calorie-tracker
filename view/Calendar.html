@@ -45,17 +45,21 @@
 
 					<!-- FatSecret API Embeds -->
 					<div style="width:1000px; margin:0 auto;" id="holder">
+
 						<script> fatsecret.setCanvas("calendar.get_month"); </script> 
-						<div class="monthbutton">
+
+						<div id="prevMonth" class="monthbutton">
 							<script>fatsecret.writeHolder("previousmonth");</script> 
 						</div>
 						<div class="date">
 							<script>fatsecret.writeHolder("date");</script>
 						</div>
-						<div class="monthbutton">
+						<div id ="nextMonth" class="monthbutton">
 							<script>fatsecret.writeHolder("nextmonth");</script> 	
 						</div>
-						<script>fatsecret.writeHolder("calendar");</script> 
+						<div id="calendar">
+							<script>fatsecret.writeHolder("calendar");</script> 
+						</div>
 					</div>
 				</div>
 
