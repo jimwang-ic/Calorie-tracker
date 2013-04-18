@@ -1,16 +1,21 @@
+// Including the package
 var express = require('express');
 var dnode = require('dnode');
 var anyDB = require('any-db');
 var engines = require('consolidate');
 
+// Set varable for library call
 var app = express();
 app.use(express.bodyParser()); 
+
+// What does that mean by static here?
 app.use('/public', express.static(__dirname + '/public'));
 app.use('/public/scripts', express.static(__dirname + '/public/scripts'));
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/img', express.static(__dirname + '/img'));
 app.use('/fonts', express.static(__dirname + '/fonts'));
 
+// Where is the template and why do we ues the template?
 app.engine('html', engines.hogan);     // tell Express to run .html files through Hogan
 app.set('views', __dirname + '/view');  // tell Express where to find templates
 
@@ -30,6 +35,7 @@ app.get('/', function(req,res){
 	res.render('Calendar.html');
 		
 });
+
 
 // Conducts a search of the food database using the search expression specified.
 app.get('/searchFood.json', function(req,res){
