@@ -14,6 +14,17 @@ app.use('/fonts', express.static(__dirname + '/fonts'));
 app.engine('html', engines.hogan);     // tell Express to run .html files through Hogan
 app.set('views', __dirname + '/view');  // tell Express where to find templates
 
+//what db to use?
+var conn = anyDB.createConnection('sqlite3://database.db');
+conn.query('CREATE TABLE users (userid INTEGER, username TEXT, password TEXT);') 
+    .on('end', function() {
+      console.log('Made table!');
+    });
+conn.query('CREATE TABLE calendar (datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, weight INTEGER);') 
+  .on('end', function() {
+    console.log('Made table!');
+  });
+
 app.get('/', function(req,res){
 
 	res.render('Calendar.html');
