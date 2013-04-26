@@ -16,6 +16,9 @@ window.addEventListener('load', function(){
 		
 	});	
 		
+	$('#foodentry').on('focus',show);
+	$('#foodentry').on('blur',hide);
+	
 }, false);
 
 var myHash = {}; // New object
@@ -24,6 +27,28 @@ var myHash = {}; // New object
 	myHash['Dinner'] = [];
 	myHash['Snack'] = [];
 	myHash['Beverage'] = [];
+
+
+function hide(){
+	$('#q_results_container').hide();
+}
+
+function show(){
+	console.log("called");
+	$('#q_results_container').show();
+}
+
+
+function showResult(data){
+	var queryResults = document.getElementById(q_results);
+	// This is a proto type depends on what kind of data is passed
+	// from the server
+	for(var i=0; i<data; i++){
+		var entry = document.createElement('div');
+		entry.innerHTML = data[i];
+		queryResults.appendChild(entry);
+	}
+}
 
 
 function saveFormValue (event) {
