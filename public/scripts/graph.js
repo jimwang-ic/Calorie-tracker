@@ -94,7 +94,17 @@ function update(data) {
 	  });
 
 	  if (data.length > 0) {
-		  plot = $.plot("#placeholder", data, { xaxes: [ { position: "top" } ],yaxes: [ { }, { position: "right", min: 20 } ],legend: {show: true}, yaxis: { max: 300 }, xaxis: {min:0, max:30}, series: { lines: { show: true }, points: { show: true } },grid: { hoverable: true, clickable: true }});
+
+      var properties =  {
+       xaxes: [ { position: "top" } ],
+       yaxes: [ { }, { position: "right", min: 20 } ],
+       legend: {show: true}, yaxis: { min: 0, max: 500 }, 
+       xaxis: {mode: "time", timeformat: "%m-%d"}, 
+       series: {
+        lines: { show: true }, points: { show: true } },
+       grid: { hoverable: true, clickable: true }};
+
+		  plot = $.plot("#placeholder", data,properties);
 	  }
   };
   plotAccordingToChoices();

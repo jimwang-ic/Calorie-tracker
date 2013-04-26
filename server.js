@@ -160,11 +160,14 @@ app.get('/graph.json',function(req,res) {
 // serves as bullshit primary key
 var userscount = 0;
 function test() {
-	for (var i = 0; i < 1; i++) {
+	for (var i = 0; i < 5; i++) {
 		console.log("here");
 		meal = {};
 		//food,name,calories,id,weight
-		meal['time'] = new Date().getDate();
+		//meal['time'] = new Date().getDate();
+		datetime = new Date('2013/04/2'+i)
+		console.log(datetime.getDate());
+		meal['time'] = datetime.getTime();
 		meal['food'] = [];
 		meal['food'][0] = 1;
 		meal['food'][1] = "something";
