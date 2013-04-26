@@ -1,10 +1,20 @@
+var ReqInterval = null;
 
 window.addEventListener('load', function(){
 	
-
-
 	$('#saveInJavaScript').on('click', saveFormValue);
-
+	
+	$('#FoodSearch').on('submit', function(e){
+		e.preventDefault();
+	
+	});
+	$('#search_query').on('keyup', function(){
+	
+		clearInterval(ReqInterval);
+		// A Hack way to make a request to server with delay : 750 miliseconds.
+		ReqInterval = setInterval(function(){ getResult(); }, 750);
+		
+	});	
 		
 }, false);
 
@@ -50,3 +60,33 @@ function saveFormValue (event) {
  	// console.log(type);
  	// console.log(food);
 }
+
+
+function getResult () {
+	
+	//e.preventDefault();
+	console.log($('#search_query').val());
+	
+	var req = new XMLHttpRequest();
+	req.open('GET', '/searchFood.json?food=' + $('#search_query').val() );
+	req.addEventListener('load', function(){
+		
+		if(req.status == 200)
+		{
+			var content = JSON.parse(req.responseText);
+			$('#results').html(content);
+			
+			// stop the timer
+			clearInterval(ReqInterval);
+		}
+		
+	});  
+	req.send(null);
+}
+
+/*
+function displayResult()
+{
+
+}
+*/

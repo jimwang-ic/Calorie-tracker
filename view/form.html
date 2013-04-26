@@ -4,6 +4,23 @@
 <script src="../public/scripts/form.js"></script>
 </head>
 
+<body>
+
+<form id="FoodSearch">
+
+item: 
+<input type="text" id="search_query" >
+<!-- <input type="submit" value="Search" id="search"> -->
+
+</form> 
+
+<div id="results_wrapper">
+	<div id="results">
+	
+	</div>
+</div>
+
+
 <select id="meal_type" name="meal_type" form="foodtracker">
 	<option value="Breakfast">Breakfast</option>
 	<option value="Lunch">Lunch</option>
@@ -24,15 +41,16 @@ Food:<input type="text" name="food" id="foodentry"><br>
 </form>
 
 <div id="data_container">
-<table border="3" id="table_container">
-<tr>
-<th>Type</th>
-<th>Food Content</th>
-</tr>
-
-</table>
-
+	<table border="3" id="table_container">
+		<tr>
+			<th>Type</th>
+			<th>Food Content</th>
+		</tr>
+	</table>
 </div>
+
+
+</body>
 
 </html>
 

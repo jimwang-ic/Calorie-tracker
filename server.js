@@ -99,6 +99,11 @@ app.get('/graph', function(req,res) {
   
 });
 
+//Displays form
+app.get('/form1', function(req,res) {
+	
+	res.render('form.html');
+});
 
 
 app.listen(8080);
