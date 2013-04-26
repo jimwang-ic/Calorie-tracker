@@ -127,18 +127,18 @@ console.log('Listen on port 8080');
 */
 app.get('/graph.json',function(req,res) {
 	var data = {};
-	data['food'] = {};
-	data['weight'] = {};
+	data['food'] = [];
+	data['weight'] = [];
 	//as of now returns everything
 	//conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
 	conn.query('SELECT * FROM calendar;')
 		.on('row',function(row) {
 			console.log(row);
 			if (row.foodweight == 1) {
-				data['food'][row.datetime] = row.totalcalories;
+				data['food'].push([row.datetime,row.totalcalories])
 			}
 			else {
-				data['weight'][row.datetime] = row.weight;
+				data['weight'].push([row.datetime, row.weight]);
 			}
 			
 
