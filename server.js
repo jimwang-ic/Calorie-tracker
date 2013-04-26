@@ -19,10 +19,32 @@ app.use('/fonts', express.static(__dirname + '/fonts'));
 app.engine('html', engines.hogan);     // tell Express to run .html files through Hogan
 app.set('views', __dirname + '/view');  // tell Express where to find templates
 
+
+//likely migrate this way down the page
+//what db to use?
+var conn = anyDB.createConnection('sqlite3://database.db');
+conn.query('CREATE TABLE users (userid INTEGER, username TEXT, password TEXT);') 
+    .on('end', function() {
+      console.log('Made table!');
+    });
+conn.query('CREATE TABLE calendar (datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, weight INTEGER);') 
+  .on('end', function() {
+    console.log('Made table!');
+    test();
+  });
+
+
+
+
 app.get('/', function(req,res){
 
 	res.render('Calendar.html');
 		
+});
+
+app.get('/form',function(req,res) {
+	res.render('form.html');
+
 });
 
 
@@ -88,7 +110,115 @@ app.get('/graph', function(req,res) {
   
 });
 
+app.post('/addmeal', function(req,res) {
+	addMeal(req.meal);
+});
+
 
 
 app.listen(8080);
 console.log('Listen on port 8080');
+
+
+/**
+ * Get data for graph from DB
+ * returns all entries within given time
+ * returns dataset of pairs of coordinates datetime and other calories
+*/
+app.get('/graph.json',function(req,res) {
+	var data = {};
+	data['food'] = {};
+	data['weight'] = {};
+	//as of now returns everything
+	//conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
+	conn.query('SELECT * FROM calendar;')
+		.on('row',function(row) {
+			console.log(row);
+			if (row.foodweight == 1) {
+				data['food'][row.datetime] = row.totalcalories;
+			}
+			else {
+				data['weight'][row.datetime] = row.weight;
+			}
+			
+
+		})
+		.on('end',function(row) {
+
+			console.log('about to return');
+			console.log(data);
+			res.json(data);
+		})
+
+});
+
+
+//------------------------------------------------------------
+//DATABASE BELOW
+//MAYBE TO MIGRATE TO MODULE FILE
+
+// serves as bullshit primary key
+var userscount = 0;
+function test() {
+	for (var i = 0; i < 1; i++) {
+		console.log("here");
+		meal = {};
+		//food,name,calories,id,weight
+		meal['time'] = new Date().getDate();
+		meal['food'] = [];
+		meal['food'][0] = 1;
+		meal['food'][1] = "something";
+		meal['food'][2] = 300 + i;
+		meal['food'][3] = 300 * i;
+		meal['food'][4] = 0;
+		addMeal(meal);
+	}
+	console.log('all done');
+
+}
+
+
+
+/**
+ * 
+ * Takes in meal object and adds its contents to database
+ * Meal object will be {
+ * 	[food],time
+ * }
+ * 
+ */
+function addMeal(meal) {
+  food = meal['food']
+  time = meal['time']
+  console.log(meal);
+  //conn.query('SQL STATEMENT', function(error, result) {...});
+  conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6)', [time,food[0],food[1],food[2],food[3],food[4]],function(error,result){
+  	console.log(error);
+  });
+  //conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6)', time,food[0],food[1],food[2],food[3],food[4]);
+  console.log("after");
+  console.log('done');
+  
+}
+
+
+
+/**
+ * given day returns meal
+ * 
+ */
+function getMeal(time) {
+  var item = conn.query('SELECT * FROM calendar WHERE datetime = $1',time);
+  return item;
+}
+
+
+
+
+/**
+* Adds new user to database.  Should also create new CALENDAR?  Returns userid?
+**/
+function addUser(username,password) {
+	conn.query('INSERT INTO users VALUES ($1,$2,$3)',userscount,username,password);
+	return userscount; //unique id is count?
+}
