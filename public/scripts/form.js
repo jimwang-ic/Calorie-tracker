@@ -1,11 +1,24 @@
+var ReqInterval = null;
 
 window.addEventListener('load', function(){
 	
-
-
 	$('#saveInJavaScript').on('click', saveFormValue);
-
+	
+	$('#FoodSearch').on('submit', function(e){
+		e.preventDefault();
+	
+	});
+	$('#search_query').on('keyup', function(){
+	
+		clearInterval(ReqInterval);
+		// A Hack way to make a request to server with delay : 750 miliseconds.
+		ReqInterval = setInterval(function(){ getResult(); }, 750);
 		
+	});	
+		
+	$('#foodentry').on('focus',show);
+	$('#foodentry').on('blur',hide);
+	
 }, false);
 
 var myHash = {}; // New object
@@ -14,6 +27,28 @@ var myHash = {}; // New object
 	myHash['Dinner'] = [];
 	myHash['Snack'] = [];
 	myHash['Beverage'] = [];
+
+
+function hide(){
+	$('#q_results_container').hide();
+}
+
+function show(){
+	console.log("called");
+	$('#q_results_container').show();
+}
+
+
+function showResult(data){
+	var queryResults = document.getElementById(q_results);
+	// This is a proto type depends on what kind of data is passed
+	// from the server
+	for(var i=0; i<data; i++){
+		var entry = document.createElement('div');
+		entry.innerHTML = data[i];
+		queryResults.appendChild(entry);
+	}
+}
 
 
 function saveFormValue (event) {
@@ -50,3 +85,33 @@ function saveFormValue (event) {
  	// console.log(type);
  	// console.log(food);
 }
+
+
+function getResult () {
+	
+	//e.preventDefault();
+	console.log($('#search_query').val());
+	
+	var req = new XMLHttpRequest();
+	req.open('GET', '/searchFood.json?food=' + $('#search_query').val() );
+	req.addEventListener('load', function(){
+		
+		if(req.status == 200)
+		{
+			var content = JSON.parse(req.responseText);
+			$('#results').html(content);
+			
+			// stop the timer
+			clearInterval(ReqInterval);
+		}
+		
+	});  
+	req.send(null);
+}
+
+/*
+function displayResult()
+{
+
+}
+*/

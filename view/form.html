@@ -4,6 +4,23 @@
 <script src="../public/scripts/form.js"></script>
 </head>
 
+<body>
+
+<form id="FoodSearch">
+
+item: 
+<input type="text" id="search_query" >
+<!-- <input type="submit" value="Search" id="search"> -->
+
+</form> 
+
+<div id="results_wrapper">
+	<div id="results">
+	
+	</div>
+</div>
+
+
 <select id="meal_type" name="meal_type" form="foodtracker">
 	<option value="Breakfast">Breakfast</option>
 	<option value="Lunch">Lunch</option>
@@ -16,23 +33,38 @@
 <form name="input" action="html_form_action.asp" method="post" id="foodtracker">
 
 Username: <input type="text" name="user" id="username"><br>
-Food:<input type="text" name="food" id="foodentry"><br>
+Food:	<input type="text" name="food" id="foodentry" value="" size="85" maxlength="255" autocomplete="off">
+<div id="q_results_container" style="display: none;">
+	<div id="q_results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
+</div>
 
 <input type="button" value="Show" id="saveInJavaScript">
 
 
+<!-- <input type="text" id="ntq" name="q" value="" size="85" maxlength="255" autocomplete="off">
+
+<div id="q_results_container">
+
+	<div align="right" class="button" style="background:#cccccc; border-bottom:1px dotted #333333; width:552px; position:relative; top:0px; right:0px;" onclick="NutritionTracker.handleManualEntry(event);"><b>x</b>&nbsp;&nbsp;</div>
+
+	<div id="q_results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
+
+</div>
+ -->
+
 </form>
 
 <div id="data_container">
-<table border="3" id="table_container">
-<tr>
-<th>Type</th>
-<th>Food Content</th>
-</tr>
-
-</table>
-
+	<table border="3" id="table_container">
+		<tr>
+			<th>Type</th>
+			<th>Food Content</th>
+		</tr>
+	</table>
 </div>
+
+
+</body>
 
 </html>
 
