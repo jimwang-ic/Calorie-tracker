@@ -133,18 +133,18 @@ console.log('Listen on port 8080');
 */
 app.get('/graph.json',function(req,res) {
 	var data = {};
-	data['food'] = {};
-	data['weight'] = {};
+	data['food'] = [];
+	data['weight'] = [];
 	//as of now returns everything
 	//conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
 	conn.query('SELECT * FROM calendar;')
 		.on('row',function(row) {
 			console.log(row);
 			if (row.foodweight == 1) {
-				data['food'][row.datetime] = row.totalcalories;
+				data['food'].push([row.datetime,row.totalcalories])
 			}
 			else {
-				data['weight'][row.datetime] = row.weight;
+				data['weight'].push([row.datetime, row.weight]);
 			}
 			
 
@@ -166,11 +166,14 @@ app.get('/graph.json',function(req,res) {
 // serves as bullshit primary key
 var userscount = 0;
 function test() {
-	for (var i = 0; i < 1; i++) {
+	for (var i = 0; i < 5; i++) {
 		console.log("here");
 		meal = {};
 		//food,name,calories,id,weight
-		meal['time'] = new Date().getDate();
+		//meal['time'] = new Date().getDate();
+		datetime = new Date('2013/04/2'+i)
+		console.log(datetime.getDate());
+		meal['time'] = datetime.getTime();
 		meal['food'] = [];
 		meal['food'][0] = 1;
 		meal['food'][1] = "something";

@@ -28,14 +28,16 @@ function Customize(user,start,end) {
   var request = new XMLHttpRequest();
 
   // specify the HTTP method, URL, and asynchronous flag
-  request.open('GET', 'http://www.example.com/content.json', true);
+  request.open('GET', '/graph.json', true);
 
   // add an event handler
   request.addEventListener('load', function(e){
       if (request.status == 200) {
           // do something with the loaded content
           var content = request.responseText;
+          update(JSON.parse(content));
       } else {
+        console.log('error');
           // something went wrong, check the request status
           // hint: 403 means Forbidden, maybe you forgot your username?
       }
@@ -43,6 +45,9 @@ function Customize(user,start,end) {
 
   // start the request, optionally with a request body for POST requests
   request.send(null);
+}
+
+function update(data) {
 
   calories = data['food'];
   weight = data['weight'];
@@ -52,17 +57,17 @@ function Customize(user,start,end) {
   
   
   var datasets = {"calories": {data:calories,yaxis:1,label:"Calories Consumed"},"weight":{data:weight,yaxis:2,label:"Weight"}};
-
+  var plot; //defined below when its plotted
   $("#placeholder").bind("plotclick", function (event, pos, item) {
     if (item) {
-	plot.unhighlight();
+	      plot.unhighlight();
         plot.highlight(item.series, item.datapoint);
         alert("You clicked a point! " + item.datapoint);
-	if (item.selected) {
-	  item.selected = true;
-	  plot.highlight(item.series, item.datapoint);
-	  
-	}
+    	if (item.selected) {
+    	  item.selected = true;
+    	  plot.highlight(item.series, item.datapoint);
+    	  
+    	}
     }
   });
   
@@ -89,7 +94,17 @@ function Customize(user,start,end) {
 	  });
 
 	  if (data.length > 0) {
-		  $.plot("#placeholder", data, { xaxes: [ { position: "top" } ],yaxes: [ { }, { position: "right", min: 20 } ],legend: {show: true}, yaxis: { max: 300 }, xaxis: {min:0, max:30}, series: { lines: { show: true }, points: { show: true } },grid: { hoverable: true, clickable: true }});
+
+      var properties =  {
+       xaxes: [ { position: "top" } ],
+       yaxes: [ { }, { position: "right", min: 20 } ],
+       legend: {show: true}, yaxis: { min: 0, max: 500 }, 
+       xaxis: {mode: "time", timeformat: "%m-%d"}, 
+       series: {
+        lines: { show: true }, points: { show: true } },
+       grid: { hoverable: true, clickable: true }};
+
+		  plot = $.plot("#placeholder", data,properties);
 	  }
   };
   plotAccordingToChoices();
