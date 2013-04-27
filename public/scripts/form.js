@@ -19,7 +19,7 @@ window.addEventListener('load', function(){
 	$('#search_query').on('keyup', function(){
 		// A Hack way to make a request to server with delay : 250 miliseconds.
 		clearInterval(ReqInterval);
-		ReqInterval = setInterval(function(){ getResult(); }, 250);
+		ReqInterval = setInterval(function(){ getResult(); }, 300);
 	});	
 	
 	$('#btn_additem').on('click', function(){
@@ -146,9 +146,6 @@ function getResult () {
 		
 		if(req.status == 200)
 		{
-			// stop the timer
-			clearInterval(ReqInterval);
-			
 			// Take JSON "stings" and returns the resulting Jabascript object
 			var content = jQuery.parseJSON(req.responseText);
 			RefreshResult(content);	
@@ -157,6 +154,9 @@ function getResult () {
 		
 	});  
 	req.send(null);
+	
+	// stop the timer
+	clearInterval(ReqInterval);
 }
 
 
