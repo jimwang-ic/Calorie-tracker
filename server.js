@@ -23,7 +23,7 @@ app.set('views', __dirname + '/view');  // tell Express where to find templates
 //likely migrate this way down the page
 //what db to use?
 var conn = anyDB.createConnection('sqlite3://database.db');
-conn.query('CREATE TABLE users (userid INTEGER, username TEXT, password TEXT);') 
+conn.query('CREATE TABLE users (userid INTEGER PRIMARY KEY, username TEXT, password TEXT);') 
     .on('end', function() {
       console.log('Made table!');
     });
@@ -163,29 +163,33 @@ console.log('Listen on port 8080');
  * returns dataset of pairs of coordinates datetime and other calories
 */
 app.get('/graph.json',function(req,res) {
-	var data = {};
-	data['food'] = [];
-	data['weight'] = [];
-	//as of now returns everything
-	//conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
-	conn.query('SELECT * FROM calendar;')
-		.on('row',function(row) {
-			console.log(row);
-			if (row.foodweight == 1) {
-				data['food'].push([row.datetime,row.totalcalories])
-			}
-			else {
-				data['weight'].push([row.datetime, row.weight]);
-			}
-		    
+    console.log(req.query);
+    var start = req.query['start'];
+    var end = req.query['end'];
+    var data = {};
+    data['food'] = [];
+    data['weight'] = [];
+    console.log("between " + start + " " + end);
+    //as of now returns everything
+    //conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
+    conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2;',[start,end])
+	    .on('row',function(row) {
+		    console.log(row);
+		    if (row.foodweight == 1) {
+			    data['food'].push([row.datetime,row.totalcalories,row.id])
+		    }
+		    else {
+			    data['weight'].push([row.datetime, row.weight,row.id]);
+		    }
+		
 
-		})
-		.on('end',function(row) {
-	    
-			console.log('about to return');
-			console.log(row);
-			res.json(data);
-		})
+	    })
+	    .on('end',function(row) {
+	
+		    console.log('about to return');
+		    console.log(row);
+		    res.json(data);
+	    })
 
 });
 
@@ -202,25 +206,30 @@ app.get('/graph.json',function(req,res) {
 **/
 app.get('/entry.json',function(req,res) {
     var entry = {};
-    conn.query('SELECT * FROM calendar WHERE id = $1;',[req.query['id']])
-	.on('row',function(row) {
-	    console.log(row);
-	    if (row.foodweight == 1) {
-		if (row.foodid.toString().indexOf(",") !== -1) { //there is more than one
-		    entry['food'] = row.foodid.split(','); //undo CSV
+    if (req.query['id'] == null) {
+	res.json(entry);
+    }
+    else {
+	conn.query('SELECT * FROM calendar WHERE id = $1;',[req.query['id']])
+	    .on('row',function(row) {
+		console.log(row);
+		if (row.foodweight == 1) {
+		    if (row.foodid.toString().indexOf(",") !== -1) { //there is more than one
+			entry['food'] = row.foodid.split(','); //undo CSV
+		    }
+		    else {
+			entry['food'] = [row.foodid];
+		    }
 		}
 		else {
-		    entry['food'] = [row.foodid];
+		    entry['weight'] = row.weight;
 		}
-	    }
-	    else {
-		entry['weight'] = row.weight;
-	    }
-	    entry['id'] = row.id;
-	    entry['datetime'] = row.datetime;
-	    res.json(entry);
-	});
-    
+		entry['id'] = row.id;
+		entry['datetime'] = row.datetime;
+		res.json(entry);
+	    });
+    }
+	
 });
 
 
@@ -234,7 +243,12 @@ returns: rows of database: meal name, day, id
 **/
 app.get('/calendar.json',function(req,res) {
     var data = {};
-    var date = req.query['date'].split('-');
+    try {
+	var date = req.query['date'].split('-');
+    }
+    catch(err) {
+	var date = [13,04]; //default april 2013
+    }
     var start = new Date("20"+date[1],date[0]-1,1);
     var end = new Date("20"+date[1],date[0],0);
     var name = req.username;
@@ -298,14 +312,6 @@ function test() {
 
 
 
-/**
- * given day returns meal
- * 
- */
-function getMeal(time) {
-  var item = conn.query('SELECT * FROM calendar WHERE datetime = $1',time);
-  return item;
-}
 
 
 
