@@ -9,6 +9,11 @@ window.addEventListener('load', function(){
 			Customize_cal();
 	};
 	
+	$('#fade').on('click',function(){
+		document.getElementById('light').style.display='none';
+		document.getElementById('fade').style.display='none';
+
+	});
 		
 }, false);
 
@@ -34,19 +39,16 @@ function Customize_cal() {
 
 	// Hide the fat secret api logo
 	$('.fatsecret_footer').hide();
-		
-	
 }
 
-function edit_meal(e) {
-	
-	alert("Edit meal!");
 
+// make lightbox appear
+function edit_meal(e) {	
+	document.getElementById('light').style.display='block';
+	document.getElementById('fade').style.display='block';
 }
 
 
 function other(e) {
-	
 	alert("Other features!");
-	
 }
