@@ -67,7 +67,7 @@ app.get('/searchFood.json', function(req,res){
 			// return in JSON format
 			// desciption for json : 
 			// http://platform.fatsecret.com/api/Default.aspx?screen=rapiref&method=foods.search
-			res.json(result);
+			res.send(result);
 			conn.end();
 			
 		});
@@ -94,7 +94,7 @@ app.get('/getFood.json', function(req,res){
 			// return in JSON format
 			// desciption for json : 
 			// http://platform.fatsecret.com/api/Default.aspx?screen=rapiref&method=food.get
-			res.json(result);
+			res.send(result);
 			conn.end();
 			
 		});
@@ -129,7 +129,8 @@ entry {
 
 **/
 app.post('/addmeal', function(req,res) {
-	addMeal(req.meal);
+	var meal = JSON.parse(req.body.meal);
+	//addMeal(meal);
 });
 
 

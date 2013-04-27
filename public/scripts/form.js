@@ -1,6 +1,14 @@
 var ReqInterval = null;
+var Meal = {};
 
 window.addEventListener('load', function(){
+	
+	var time = new Date();
+	 
+	Meal.username = "username";
+	Meal.date = time.getTime();
+	Meal.food = [];
+	
 	
 	$('#saveInJavaScript').on('click', saveFormValue);
 	
@@ -9,15 +17,55 @@ window.addEventListener('load', function(){
 	
 	});
 	$('#search_query').on('keyup', function(){
-	
+		// A Hack way to make a request to server with delay : 250 miliseconds.
 		clearInterval(ReqInterval);
-		// A Hack way to make a request to server with delay : 750 miliseconds.
-		ReqInterval = setInterval(function(){ getResult(); }, 750);
-		
+		ReqInterval = setInterval(function(){ getResult(); }, 250);
 	});	
+	
+	$('#btn_additem').on('click', function(){
 		
-	$('#foodentry').on('focus',show);
+		var food_id = $('#foodid').val();
+		var food_name = $('#search_query').val();
+		var food_calories = $('#calories_field').val();
+		
+		var foodwrapper = '<td>'+ food_name +'</td>' +
+						  '<td>'+ food_calories +'</td>';
+		var tofill = document.createElement('tr');
+		tofill.innerHTML = foodwrapper;
+		var table_container = document.getElementById("table_container");
+		table_container.appendChild(tofill);
+		
+		// Add to meal object
+		Meal.food.push({id : food_id, name : food_name, calories : food_calories});
+		
+	});
+	
+	$('#btn_addmeal').on('click', function(){
+		
+		// TODO: POST method to server side
+		console.log(Meal);
+		
+		serialize_meal = JSON.stringify(Meal);
+		
+		// Create a FormData object from out form
+		var fd = new FormData(document.getElementById('FoodSearch'));
+		fd.append('meal', serialize_meal);
+		
+		// Send it to the server 
+		var req = new XMLHttpRequest();
+		req.open('POST', '/addmeal', true);
+		req.send(fd);
+	
+	});
+	
+	
+	//$('#search_query').on('focus',show);
+	//$('#search_query').on('blur',hide);
+		
+	/*
+$('#foodentry').on('focus',show);
 	$('#foodentry').on('blur',hide);
+*/
 	
 }, false);
 
@@ -30,12 +78,12 @@ var myHash = {}; // New object
 
 
 function hide(){
-	$('#q_results_container').hide();
+	$('#results_wrapper').hide();
 }
 
 function show(){
 	console.log("called");
-	$('#q_results_container').show();
+	$('#results_wrapper').show();
 }
 
 
@@ -98,20 +146,57 @@ function getResult () {
 		
 		if(req.status == 200)
 		{
-			var content = JSON.parse(req.responseText);
-			$('#results').html(content);
-			
 			// stop the timer
 			clearInterval(ReqInterval);
+			
+			// Take JSON "stings" and returns the resulting Jabascript object
+			var content = jQuery.parseJSON(req.responseText);
+			RefreshResult(content);	
+			
 		}
 		
 	});  
 	req.send(null);
 }
 
-/*
-function displayResult()
-{
 
+function RefreshResult(content) {
+	
+	$('#results').html("");
+	
+	var n = content.total_results > 10 ? content.max_results : content.total_results;
+	
+	// If have time, deal with edge case with only one result
+	for(var i = 0 ; i < n ; i++)
+	{
+		// 
+		var inner_html = (n == 1) ? content.food.food_name : content.food[i].food_name
+		
+		$('#results').append($('<div></div')
+					  .html(inner_html)
+					  .on('click', handlerGen(content.food[i].food_id, 
+					                          content.food[i].food_name,
+					                          content.food[i].food_description))
+					  );	
+		
+	}
 }
-*/
+
+function handlerGen(id, name, dsp) {
+	
+	return function() {
+		
+		var Re = /\d+kcal/;
+		var arr = Re.exec(dsp);
+		var calories = parseInt(arr[0]);
+		
+		//console.log(id);
+		//console.log(name);
+		//console.log(parseInt(arr[0]));
+		
+		$('#search_query').val(name);
+		$('#calories_field').val(calories);
+		$('#foodid').val(id);
+
+	}
+}
