@@ -27,9 +27,11 @@ conn.query('CREATE TABLE users (userid INTEGER, username TEXT, password TEXT);')
     .on('end', function() {
       console.log('Made table!');
     });
-conn.query('CREATE TABLE calendar (datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, weight INTEGER);') 
+conn.query('CREATE TABLE calendar (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, weight INTEGER);') 
   .on('end', function() {
     console.log('Made table!');
+    
+    //UNCOMMENT FOR TEST POINTS
     //test();
   });
 
@@ -135,7 +137,6 @@ app.post('/addmeal', function(req,res) {
 	food = meal['food']
 	time = meal['date']
 	console.log(meal);
-	meals += 1;
 	ids = "";
 	names = "";
 	calories = 0;
@@ -145,14 +146,12 @@ app.post('/addmeal', function(req,res) {
 		calories += food[i]['calories'];
 	}
 	ids += food[food.length-1]['id'];
-	names += ", and" + food[food.length-1]['name'];
+	names += food[food.length-1]['name'];
 	calories += food[food.length-1]['calories'];
-	//date,foodorweight,name,calories,id,weight
-	//conn.query('SQL STATEMENT', function(error, result) {...});
-	conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6)', [meal['date'],1,names,calories,ids,0],function(error,result){
+	//id,date,foodorweight,name,calories,id,weight
+	conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6,$7)', [null,meal['date'],1,names,calories,ids,0],function(error,result){
 		console.log(error);
 	});
-	//conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6)', time,food[0],food[1],food[2],food[3],food[4]);
 	console.log("after");
 	console.log('done');
 	res.render('graph.html');
@@ -183,16 +182,80 @@ app.get('/graph.json',function(req,res) {
 			else {
 				data['weight'].push([row.datetime, row.weight]);
 			}
-			
+		    
 
 		})
 		.on('end',function(row) {
-
+	    
 			console.log('about to return');
-			console.log(data);
+			console.log(row);
 			res.json(data);
 		})
 
+});
+
+
+/**
+ *
+ * Get entry object from database, returns in JSON format (including unique id)
+ *entry {
+    date: datetime (integer)
+    food: [id1,id2,id3]
+    OR weight: int
+    entry id
+}
+**/
+app.get('/entry.json',function(req,res) {
+    var entry = {};
+    conn.query('SELECT * FROM calendar WHERE id = $1;',[req.query['id']])
+	.on('row',function(row) {
+	    console.log(row);
+	    if (row.foodweight == 1) {
+		if (row.foodid.toString().indexOf(",") !== -1) { //there is more than one
+		    entry['food'] = row.foodid.split(','); //undo CSV
+		}
+		else {
+		    entry['food'] = [row.foodid];
+		}
+	    }
+	    else {
+		entry['weight'] = row.weight;
+	    }
+	    entry['id'] = row.id;
+	    entry['datetime'] = row.datetime;
+	    res.json(entry);
+	});
+    
+});
+
+
+
+/**e
+
+CALENDAR TO DATABASE
+SENDS: month/year (mm-yy), username
+returns: rows of database: meal name, day, id
+
+**/
+app.get('/calendar.json',function(req,res) {
+    var data = {};
+    var date = req.query['date'].split('-');
+    var start = new Date("20"+date[1],date[0]-1,1);
+    var end = new Date("20"+date[1],date[0],0);
+    var name = req.username;
+    console.log(start);
+    console.log(end);
+    conn.query('SELECT mealname,datetime,id FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
+	.on('row',function(row) {
+	    var day = new Date(row.datetime).getDate();
+	    var entry = {};
+	    entry['mealname'] = row.mealname;
+	    entry['id'] = row.id;
+	    data[day] = entry;
+	})
+	.on('end',function(row) {
+	    res.json(data);
+	});
 });
 
 
@@ -204,39 +267,39 @@ app.get('/graph.json',function(req,res) {
 var userscount = 0;
 function test() {
 	for (var i = 0; i < 5; i++) {
-		console.log("here");
 		meal = {};
+		meal['username'] = "username";
+		meal['date'] = new Date(2013,03,i+1);
+		food = [];
+		food[0] = {}
+		food[0]['id'] = 1111;
+		food[0]['name'] = 'something';
+		food[0]['calories'] = 200+i;
+		meal['food'] = []
+		ids = "";
+		names = "";
+		calories = 0;
+		for (var j = 0; j < food.length-1; j++) {
+			ids += food[j]['id'] + ",";
+			names += food[j]['name'] + " , ";
+			calories += food[j]['calories'];
+		}
+		ids += food[food.length-1]['id'];
+		names += food[food.length-1]['name'];
+		calories += food[food.length-1]['calories'];
 		//date,foodorweight,name,calories,id,weight
-		//meal['time'] = new Date().getDate();
-		datetime = new Date('2013/04/2'+i)
-		console.log(datetime.getDate());
-		meal['time'] = datetime.getTime();
-		meal['food'] = [];
-		meal['food'][0] = 1;
-		meal['food'][1] = "something";
-		meal['food'][2] = 300 + i;
-		meal['food'][3] = 300 * i;
-		meal['food'][4] = 0;
-		addMeal(meal);
+		//conn.query('SQL STATEMENT', function(error, result) {...});
+		conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6,$7)', [null,meal['date'],1,names,calories,ids,0],function(error,result){
+			console.log(error);
+		});
+		//conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6)', time,food[0],food[1],food[2],food[3],food[4]);
+		console.log("after");
+		console.log('done');
 	}
 	console.log('all done');
 
 }
 
-var meals = 0;
-
-/**
- * 
- * Takes in meal object and adds its contents to database
- * Meal object will be {
- * 	[food],time
- * }
- * 
- */
-function addMeal(meal) {
-  
-  
-}
 
 
 
