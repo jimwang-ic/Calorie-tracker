@@ -30,7 +30,7 @@ conn.query('CREATE TABLE users (userid INTEGER, username TEXT, password TEXT);')
 conn.query('CREATE TABLE calendar (datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, weight INTEGER);') 
   .on('end', function() {
     console.log('Made table!');
-    test();
+    //test();
   });
 
 
@@ -129,8 +129,33 @@ entry {
 
 **/
 app.post('/addmeal', function(req,res) {
+	console.log("here!");
 	var meal = JSON.parse(req.body.meal);
-	//addMeal(meal);
+	console.log(meal);
+	food = meal['food']
+	time = meal['date']
+	console.log(meal);
+	meals += 1;
+	ids = "";
+	names = "";
+	calories = 0;
+	for (var i = 0; i < food.length-1; i++) {
+		ids += food[i]['id'] + ",";
+		names += food[i]['name'] + " , ";
+		calories += food[i]['calories'];
+	}
+	ids += food[food.length-1]['id'];
+	names += ", and" + food[food.length-1]['name'];
+	calories += food[food.length-1]['calories'];
+	//date,foodorweight,name,calories,id,weight
+	//conn.query('SQL STATEMENT', function(error, result) {...});
+	conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6)', [meal['date'],1,names,calories,ids,0],function(error,result){
+		console.log(error);
+	});
+	//conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6)', time,food[0],food[1],food[2],food[3],food[4]);
+	console.log("after");
+	console.log('done');
+	res.render('graph.html');
 });
 
 
@@ -198,6 +223,7 @@ function test() {
 
 }
 
+var meals = 0;
 
 /**
  * 
@@ -208,16 +234,7 @@ function test() {
  * 
  */
 function addMeal(meal) {
-  food = meal['food']
-  time = meal['time']
-  console.log(meal);
-  //conn.query('SQL STATEMENT', function(error, result) {...});
-  conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6)', [time,food[0],food[1],food[2],food[3],food[4]],function(error,result){
-  	console.log(error);
-  });
-  //conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6)', time,food[0],food[1],food[2],food[3],food[4]);
-  console.log("after");
-  console.log('done');
+  
   
 }
 
