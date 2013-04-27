@@ -116,6 +116,18 @@ app.get('/form1', function(req,res) {
 	res.render('form.html');
 });
 
+
+/**
+JSON format
+entry {
+	date: 4-23-13
+	food: [[calories,id,name][calories2,id2,name2]]
+	OR weight: int
+}
+
+
+
+**/
 app.post('/addmeal', function(req,res) {
 	addMeal(req.meal);
 });
@@ -168,7 +180,7 @@ function test() {
 	for (var i = 0; i < 5; i++) {
 		console.log("here");
 		meal = {};
-		//food,name,calories,id,weight
+		//date,foodorweight,name,calories,id,weight
 		//meal['time'] = new Date().getDate();
 		datetime = new Date('2013/04/2'+i)
 		console.log(datetime.getDate());
@@ -184,7 +196,6 @@ function test() {
 	console.log('all done');
 
 }
-
 
 
 /**
