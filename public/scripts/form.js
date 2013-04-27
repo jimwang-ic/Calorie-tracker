@@ -182,6 +182,7 @@ function RefreshResult(content) {
 	}
 }
 
+// Closeover the local variables
 function handlerGen(id, name, dsp) {
 	
 	return function() {
