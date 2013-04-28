@@ -1,7 +1,11 @@
 window.addEventListener('load', function(){
 	
 	// Customize our Calendar  
-	Customize(0,100000000000);
+	//for now april 2013
+	var start = new Date(2013,3,1).getTime();
+	var end = new Date(2013,4,0).getTime();
+	console.log("between " + start + " " + end);
+	Customize("username",start,end);
 	
 	
 }, false);
@@ -28,7 +32,7 @@ function Customize(user,start,end) {
   var request = new XMLHttpRequest();
 
   // specify the HTTP method, URL, and asynchronous flag
-  request.open('GET', '/graph.json', true);
+  request.open('GET', '/graph.json?start=' + start + "&end=" + end, true);
 
   // add an event handler
   request.addEventListener('load', function(e){
@@ -55,14 +59,46 @@ function update(data) {
   console.log('calories');
   console.log(calories);
   
+  //eventually try to map datapoint to object ID!
+  pointToId = {};
+  for (var i = 0; i < calories.length; i++) {
+      var entry = calories[i];
+      pointToId[entry[0] + "," + entry[1]] = entry[2];
+  }
+  console.log(pointToId);
   
   var datasets = {"calories": {data:calories,yaxis:1,label:"Calories Consumed"},"weight":{data:weight,yaxis:2,label:"Weight"}};
   var plot; //defined below when its plotted
   $("#placeholder").bind("plotclick", function (event, pos, item) {
     if (item) {
-	      plot.unhighlight();
+	plot.unhighlight();
         plot.highlight(item.series, item.datapoint);
-        alert("You clicked a point! " + item.datapoint);
+	var values = item.datapoint.toString().split(',');
+	var date = new Date(parseInt(values[0]));
+	console.log(item.datapoint);
+        //alert("You clicked a point!  On " + date + " you ate " + values[1] + " calories.  Also " + pointToId[item.datapoint]);
+	// create a request object
+	var request = new XMLHttpRequest();
+
+	// specify the HTTP method, URL, and asynchronous flag
+	request.open('GET', '/entry.json?id=' + pointToId[item.datapoint], true);
+
+	// add an event handler
+	request.addEventListener('load', function(e){
+	    if (request.status == 200) {
+		// do something with the loaded content
+		var content = request.responseText;
+		alert(content); //pull up edit meal window!
+	    } else {
+		console.log('error');
+		// something went wrong, check the request status
+		// hint: 403 means Forbidden, maybe you forgot your username?
+	    }
+	}, false);
+
+	// start the request, optionally with a request body for POST requests
+	request.send(null);
+	
     	if (item.selected) {
     	  item.selected = true;
     	  plot.highlight(item.series, item.datapoint);
