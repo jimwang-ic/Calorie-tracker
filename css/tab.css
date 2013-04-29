@@ -13,6 +13,7 @@ a:focus {
 	margin:auto;
 	background:#fff;
 	position:relative;
+	overflow:auto;
 }
 
 .tabs{
@@ -51,6 +52,7 @@ div.tab_contents_container{
 	border: 1px solid #ccc;
 	border-top: none;
 	padding: 10px;
+	overflow:auto;
 }
 
 div.tab_contents{
@@ -59,6 +61,10 @@ div.tab_contents{
 
 div.tab_contents_active{
 	display:block;
+}
+
+#calendar_tab{
+	overflow:auto;
 }
 
 div.clear {
