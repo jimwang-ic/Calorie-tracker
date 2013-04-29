@@ -115,8 +115,27 @@ function update(data) {
 		  "<label for='id" + key + "'>"
 		  + val.label + "</label>");
   });
+  
+  
 
   choiceContainer.find("input").click(plotAccordingToChoices);
+  
+  
+  // insert datepickers
+  $("#start").datepicker();
+  $("#end").datepicker();
+  var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+  var firstDay = new Date(y, m, 1);
+  var lastDay = new Date(y, m + 1, 0);
+  $("#start").datepicker("setDate",firstDay);
+  $("#end").datepicker("setDate",lastDay);
+  $("#start").change(function() {
+      plotAccordingToChoices();
+  });
+  $("#end").change(function() {
+      plotAccordingToChoices();
+  });
+  
 
   function plotAccordingToChoices() {
 
@@ -134,8 +153,9 @@ function update(data) {
       var properties =  {
        xaxes: [ { position: "top" } ],
        yaxes: [ { }, { position: "right", min: 20 } ],
-       legend: {show: true}, yaxis: { min: 0, max: 500 }, 
-       xaxis: {mode: "time", timeformat: "%m-%d"}, 
+       legend: {show: true}, 
+       yaxis: { min: 0, max: 500 }, 
+       xaxis: {mode: "time", timeformat: "%m-%d",min:$("#start").datepicker("getDate"),max:$("#end").datepicker("getDate")}, 
        series: {
         lines: { show: true }, points: { show: true } },
        grid: { hoverable: true, clickable: true }};

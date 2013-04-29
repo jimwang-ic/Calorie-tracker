@@ -149,8 +149,11 @@ app.post('/addmeal', function(req,res) {
 	});
 	console.log("after");
 	console.log('done');
+	
 	res.render('graph.html');
 });
+
+
 
 
 app.listen(8080);
@@ -188,6 +191,7 @@ app.get('/graph.json',function(req,res) {
 	
 		    console.log('about to return');
 		    console.log(row);
+		    //examinePrevious();
 		    res.json(data);
 	    })
 
@@ -263,17 +267,15 @@ app.get('/calendar.json',function(req,res) {
 	    data[day] = entry;
 	})
 	.on('end',function(row) {
+	    //examinePrevious(); add later
 	    res.json(data);
 	});
 });
 
 
 //------------------------------------------------------------
-//DATABASE BELOW
-//MAYBE TO MIGRATE TO MODULE FILE
+//  TEST 
 
-// serves as bullshit primary key
-var userscount = 0;
 function test() {
 	for (var i = 0; i < 5; i++) {
 		meal = {};
@@ -323,3 +325,25 @@ function addUser(username,password) {
 	conn.query('INSERT INTO users VALUES ($1,$2,$3)',userscount,username,password);
 	return userscount; //unique id is count?
 }
+
+
+//BEGIN AI STUFF
+//will be called on each calendar call (opening of page)
+//examines dates from last meal input until now and prompts user to enter meal on dates missed
+//user can choose to enter automatic dates if they want
+function examinePrevious() {
+    //first get max date from database
+    console.log("THIS SHIT RIGHT HERE");
+    conn.query('SELECT mealname,datetime,id FROM calendar WHERE datetime BETWEEN $1 AND $2',[0,9999999999999],function(err,rows,fields) {
+	    console.log("LAST ENTRY: " + rows);
+	    console.log(fields);
+	    console.log(err);
+	});
+    
+    conn.query('SELECT MAX(datetime) from calendar',function(err,rows,fields) {
+	console.log(rows);
+	});
+    
+}
+
+//END AI STUFF
