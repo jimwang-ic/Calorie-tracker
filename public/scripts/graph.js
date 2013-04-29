@@ -134,7 +134,7 @@ function update(data) {
       var properties =  {
        xaxes: [ { position: "top" } ],
        yaxes: [ { }, { position: "right", min: 20 } ],
-       legend: {show: true}, yaxis: { min: 0, max: 500 }, 
+       legend: {show: true}, //yaxis: { min: 0, max: 3000 }, 
        xaxis: {mode: "time", timeformat: "%m-%d"}, 
        series: {
         lines: { show: true }, points: { show: true } },
