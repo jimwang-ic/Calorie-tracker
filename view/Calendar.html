@@ -5,6 +5,9 @@
 		<script src="/public/scripts/jquery.js"></script>
 		<!-- JAVASCRIPT API source -->
 		<script src="http://platform.fatsecret.com/js?key=1d1e36bf07f84761b76cd39e0ad1c1dd&auto_template=false"></script>
+
+	
+
 		<!-- TABBING JS -->
 		<script src="/public/scripts/tab.js"></script>
 		<!-- Calendar JS -->
@@ -13,6 +16,7 @@
 		<script src="/public/scripts/graph.js"></script>
 		<script src="/public/scripts/jquery.flot.js"></script>
 		<script src="/public/scripts/jquery.flot.time.js"></script>
+		<script src="/public/scripts/jquery-ui.js"></script>
 
 		<!-- We can customize our calendar through the calendar.css -->
 		<!-- this css file comes from http://platform.fatsecret.com/api/Default.aspx?screen=jsapicssr -->
@@ -65,7 +69,15 @@
 							<script>fatsecret.writeHolder("calendar");</script> 
 						</div>
 						<!-- a empty container, don't remove this -->
+						<div>
+							<script>fatsecret.writeHolder("	dateselector");</script> 
+						
+						</div>
 						<div id="container"></div> 
+					
+		
+
+
 					</div>
 				</div>
 
@@ -84,6 +96,7 @@
 							<td>
 								<div id="placeholder" style="width:600px;height:300px"></div>
 								<p id="choices" style="float:right; width:135px;"></p>
+								<p>Start: <input type="text" id="start"/> End: <input type="text" id="end"/></p>
 							</td>
 							<td></td>
 						</tr>
@@ -109,23 +122,94 @@
 						<th>Meal</th>
 						<th>Status</th>
 						<th>Calorie Count</th>
+						<tr>
+						</thead>
+						<td>Breakfast</td>
+					</tr>
 					<tr>
-				</thead>
-					<td>Breakfast</td>
-				</tr>
-				<tr>
-					<td>Lunch</td>
-				</tr>
-				<tr>
-					<td>Dinner</td>
-				</tr>
-				<tr>
-					<td>Snack/Other</td>
-				</tr>
-			</table>
-		</div>
-		<!-- HTML FOR LIGHTBOX -->
-		<div id = "light" class="white_content">Hi, I'm a test test test</div>
-		<div id="fade" class="black_overlay"></div>
-	</body>
-</html>
+						<td>Lunch</td>
+					</tr>
+					<tr>
+						<td>Dinner</td>
+					</tr>
+					<tr>
+						<td>Snack/Other</td>
+					</tr>
+				</table>
+			</div>
+
+			<!-- HTML FOR LIGHTBOX -->
+			<div id = "light" class="white_content">
+
+
+				<form id="FoodSearch">
+
+					item: <input type="text" id="search_query" style="width:500px;" > <br>
+					<!-- <input type="submit" value="Search" id="search"> -->
+					Calories: <input type="text" id="calories_field"> 
+					<input type="hidden" id="foodid">
+
+					<input type="button" id="btn_additem" value="Add!">
+				</form> 
+
+				<div id="food_choose"></div>
+
+				<div id="results_wrapper">
+					<div id="results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
+				</div>
+
+
+				<!--
+				<select id="meal_type" name="meal_type" form="foodtracker">
+					<option value="Breakfast">Breakfast</option>
+					<option value="Lunch">Lunch</option>
+					<option value="Dinner">Dinner</option>
+					<option value="Snack">Snack</option>
+					<option value="Beverage">Beverage</option>
+				</select>
+				-->
+
+
+				<!--
+				<form name="input" action="html_form_action.asp" method="post" id="foodtracker">
+
+					Username: <input type="text" name="user" id="username"><br>
+					Food:	<input type="text" name="food" id="foodentry" value="" size="85" maxlength="255" autocomplete="off">
+					<div id="q_results_container" style="display: none;">
+						<div id="q_results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
+					</div>
+
+					<input type="button" value="Show" id="saveInJavaScript">
+					-->
+
+
+					<!-- <input type="text" id="ntq" name="q" value="" size="85" maxlength="255" autocomplete="off">
+
+					<div id="q_results_container">
+
+						<div align="right" class="button" style="background:#cccccc; border-bottom:1px dotted #333333; width:552px; position:relative; top:0px; right:0px;" onclick="NutritionTracker.handleManualEntry(event);"><b>x</b>&nbsp;&nbsp;</div>
+
+						<div id="q_results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
+
+					</div>
+					-->
+
+					<!-- </form> -->
+
+				<div id="data_container">
+					<table border="3" id="table_container">
+						<tr>
+							<!-- <th>Type</th> -->
+							<th>Food Content</th>
+							<th>Calories</th>
+						</tr>
+					</table>
+				</div>
+
+				<button id='btn_addmeal'>Add Meal</button>
+
+
+			</div>
+			<div id="fade" class="black_overlay"></div>
+		</body>
+	</html>
