@@ -16,6 +16,7 @@
 		<script src="/public/scripts/graph.js"></script>
 		<script src="/public/scripts/jquery.flot.js"></script>
 		<script src="/public/scripts/jquery.flot.time.js"></script>
+		<script src="/public/scripts/jquery-ui.js"></script>
 
 		<!-- We can customize our calendar through the calendar.css -->
 		<!-- this css file comes from http://platform.fatsecret.com/api/Default.aspx?screen=jsapicssr -->
@@ -28,6 +29,7 @@
 
 	<body>
 		<h2>ShapeUp Calorie Tracker</h2>
+
 		<div id="tabs_container">
 			<ul class="tabs">
 				<li class="active">
@@ -78,6 +80,44 @@
 
 
 					</div>
+
+					<div id = "dayData">
+						<div id = "dayDataHeader">
+							<h3>Detailed Day Information</h3>
+							<h4>Click on a calendar date to view</h4>
+						</div>
+			<table id="box-table-a">
+				<thead>
+					<tr>
+						<th>Meal</th>
+						<th>Status</th>
+						<th>Calorie Count</th>
+					</tr>
+				</thead>
+					<tr>
+						<td>Breakfast</td>
+						<td>Unrecorded</td>
+						<td> n/a </td>
+					</tr>
+					<tr>
+						<td>Lunch</td>
+						<td>Unrecorded</td>
+						<td> n/a </td>
+
+					</tr>
+					<tr>
+						<td>Dinner</td>
+						<td>Unrecorded</td>
+						<td> n/a </td>
+					</tr>
+					<tr>
+						<td>Snack/Other</td>
+						<td>Unrecorded</td>
+						<td> n/a </td>
+					</tr>
+				</table>
+			</div>
+
 				</div>
 
 				<!-- Analysis Tab contents -->
@@ -95,6 +135,7 @@
 							<td>
 								<div id="placeholder" style="width:600px;height:300px"></div>
 								<p id="choices" style="float:right; width:135px;"></p>
+								<p>Start: <input type="text" id="start"/> End: <input type="text" id="end"/></p>
 							</td>
 							<td></td>
 						</tr>
@@ -111,78 +152,80 @@
 
 
 		</div>
+
+
 			<!-- HTML FOR LIGHTBOX -->
 			<div id = "light" class="white_content">
 
 
-<form id="FoodSearch">
+				<form id="FoodSearch">
 
-	item: <input type="text" id="search_query" style="width:500px;" > <br>
-	<!-- <input type="submit" value="Search" id="search"> -->
-	Calories: <input type="text" id="calories_field"> 
-	<input type="hidden" id="foodid">
-	
-	<input type="button" id="btn_additem" value="Add!">
-</form> 
+					item: <input type="text" id="search_query" style="width:500px;" > <br>
+					<!-- <input type="submit" value="Search" id="search"> -->
+					Calories: <input type="text" id="calories_field"> 
+					<input type="hidden" id="foodid">
 
-<div id="food_choose"></div>
+					<input type="button" id="btn_additem" value="Add!">
+				</form> 
 
-<div id="results_wrapper">
-	<div id="results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
-</div>
+				<div id="food_choose"></div>
 
-
-<!--
-<select id="meal_type" name="meal_type" form="foodtracker">
-	<option value="Breakfast">Breakfast</option>
-	<option value="Lunch">Lunch</option>
-	<option value="Dinner">Dinner</option>
-	<option value="Snack">Snack</option>
-	<option value="Beverage">Beverage</option>
-</select>
--->
+				<div id="results_wrapper">
+					<div id="results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
+				</div>
 
 
-<!--
-<form name="input" action="html_form_action.asp" method="post" id="foodtracker">
-
-Username: <input type="text" name="user" id="username"><br>
-Food:	<input type="text" name="food" id="foodentry" value="" size="85" maxlength="255" autocomplete="off">
-<div id="q_results_container" style="display: none;">
-	<div id="q_results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
-</div>
-
-<input type="button" value="Show" id="saveInJavaScript">
--->
+				<!--
+				<select id="meal_type" name="meal_type" form="foodtracker">
+					<option value="Breakfast">Breakfast</option>
+					<option value="Lunch">Lunch</option>
+					<option value="Dinner">Dinner</option>
+					<option value="Snack">Snack</option>
+					<option value="Beverage">Beverage</option>
+				</select>
+				-->
 
 
-<!-- <input type="text" id="ntq" name="q" value="" size="85" maxlength="255" autocomplete="off">
+				<!--
+				<form name="input" action="html_form_action.asp" method="post" id="foodtracker">
 
-<div id="q_results_container">
+					Username: <input type="text" name="user" id="username"><br>
+					Food:	<input type="text" name="food" id="foodentry" value="" size="85" maxlength="255" autocomplete="off">
+					<div id="q_results_container" style="display: none;">
+						<div id="q_results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
+					</div>
 
-	<div align="right" class="button" style="background:#cccccc; border-bottom:1px dotted #333333; width:552px; position:relative; top:0px; right:0px;" onclick="NutritionTracker.handleManualEntry(event);"><b>x</b>&nbsp;&nbsp;</div>
+					<input type="button" value="Show" id="saveInJavaScript">
+					-->
 
-	<div id="q_results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
 
-</div>
- -->
+					<!-- <input type="text" id="ntq" name="q" value="" size="85" maxlength="255" autocomplete="off">
 
-<!-- </form> -->
+					<div id="q_results_container">
 
-<div id="data_container">
-	<table border="3" id="table_container">
-		<tr>
-			<!-- <th>Type</th> -->
-			<th>Food Content</th>
-			<th>Calories</th>
-		</tr>
-	</table>
-</div>
+						<div align="right" class="button" style="background:#cccccc; border-bottom:1px dotted #333333; width:552px; position:relative; top:0px; right:0px;" onclick="NutritionTracker.handleManualEntry(event);"><b>x</b>&nbsp;&nbsp;</div>
 
-<button id='btn_addmeal'>Add Meal</button>
+						<div id="q_results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
+
+					</div>
+					-->
+
+					<!-- </form> -->
+
+				<div id="data_container">
+					<table border="3" id="table_container">
+						<tr>
+							<!-- <th>Type</th> -->
+							<th>Food Content</th>
+							<th>Calories</th>
+						</tr>
+					</table>
+				</div>
+
+				<button id='btn_addmeal'>Add Meal</button>
 
 
 			</div>
 			<div id="fade" class="black_overlay"></div>
-	</body>
-</html>
+		</body>
+	</html>

@@ -31,6 +31,7 @@ a:visited {
 h2{
 	font-size: 45px;
 	margin-top:20px;
+	margin-bottom:20px;
 	text-align: center;
 }
 
@@ -58,7 +59,7 @@ h2{
 	margin-bottom:10px;
 	position:absolute;
 	top:45px;
-	left:160px;
+	left:175px;
 }
 
 
@@ -78,14 +79,14 @@ h2{
 #prevMonth{
 	margin-bottom:10px;
 	position:absolute;
-	left:25px;
-	top:30px;
+	left:15px;
+	top:40px;
 }
 
 #nextMonth{
 	position:absolute;
-	left:849px;
-	top:30px;
+	left:487px;
+	top:40px;
 }
 
 .monthbutton:hover {
@@ -108,3 +109,4 @@ a.monthbutton{
 	margin:40px auto;
 
 }
+
