@@ -254,23 +254,26 @@ returns: rows of database: meal name, day, id
 **/
 app.get('/calendar.json',function(req,res) {
     var data = {};
+    console.log("date " + req.query['date']);
     try {
 	var date = req.query['date'].split('-');
     }
     catch(err) {
-	var date = [13,04]; //default april 2013
+	console.log(err);
+	var date = [2013,04]; //default april 2013
     }
-    var start = new Date("20"+date[1],date[0]-1,1);
-    var end = new Date("20"+date[1],date[0],0);
+    var start = new Date(date[0],date[1]-1,1);
+    var end = new Date(date[0],date[1],0);
     var name = req.username;
-    console.log(start);
+    console.log("start " + start);
     console.log(end);
-    conn.query('SELECT mealname,datetime,id FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
+    conn.query('SELECT mealname,datetime,totalcalories,id FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
 	.on('row',function(row) {
 	    var day = new Date(row.datetime).getDate();
 	    var entry = {};
 	    entry['mealname'] = row.mealname;
 	    entry['id'] = row.id;
+	    entry['totalcalories'] = row.totalcalories;
 	    data[day] = entry;
 	})
 	.on('end',function(row) {
