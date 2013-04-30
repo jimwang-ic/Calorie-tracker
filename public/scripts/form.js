@@ -3,10 +3,13 @@ var Meal = {};
 
 window.addEventListener('load', function(){
 	
-	var time = new Date();
+	var date = getClickDate();
+	console.log("this " + date);
+	var items = date.split('/');
 	 
 	Meal.username = "username";
-	Meal.date = time.getTime();
+	Meal.date = new Date(items[2],items[1],items[0]);
+	console.log("date " +Meal.date.getDate());
 	Meal.food = [];
 	
 	
