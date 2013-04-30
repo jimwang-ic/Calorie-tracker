@@ -14,9 +14,14 @@ window.addEventListener('load', function(){
 	$('#fade').on('click',function(){
 		document.getElementById('light').style.display='none';
 		document.getElementById('fade').style.display='none';
-
+		document.getElementById('chooseMeal').style.display='block';
+		document.getElementById('detailedForm').style.display='none';
 	});
-		
+			
+	$('#next').on('click',function(){
+		document.getElementById('chooseMeal').style.display='none';
+		document.getElementById('detailedForm').style.display='block';
+	});
 
 
 	// This is the part for form
@@ -49,7 +54,7 @@ window.addEventListener('load', function(){
 			var food_type = $('#mealType input:radio:checked').val();
 			var total_calories = food_calories*parseInt(food_servings);
 			
-			var delete_btn = $('<button class="delete_btn">delete</button>');
+			var delete_btn = $('<button class="delete_btn">x</button>');
 									
 									//.attr('class', btn_delete);
 			
@@ -59,7 +64,7 @@ window.addEventListener('load', function(){
 							  '<td>'+ food_servings + '</td>' + 
 							  '<td>'+ food_name +'</td>' +
 							  '<td>'+ total_calories +'</td>' + 
-							  '<td>' + '<button class="delete_btn">delete</button>' + '</td>'; 				 				 
+							  '<td>' + '<button class="delete_btn">x</button>' + '</td>'; 				 				 
 			//foodwrapper.append(delete_btn);				  
 			
 							  
