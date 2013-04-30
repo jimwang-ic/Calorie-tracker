@@ -76,6 +76,11 @@
 						</div>
 						<div id="container"></div> 
 					
+<<<<<<< HEAD
+=======
+						
+
+>>>>>>> 7f571080ab2a6e089c312de5ef70d73450cb1176
 
 					</div>
 
@@ -154,20 +159,44 @@
 			<div id = "light" class="white_content">
 				<h5>Detailed Meal Entry Form</h5>
 				<!-- FOOD SEARCH FORM -->
+				
+				
+				<form id="mealType">
+					<span>Meal Type : </span>
+					<input type="radio" name="group1" id="breakfast" value="breakfast" checked>breakfast
+					<input type="radio" name="group1" id="lunch" value="lunch">lunch 
+					<input type="radio" name="group1" id="dinner" value="dinner">dinner
+					<input type="radio" name="group1" id="snack" value="snack">snack
+				</form>
+
+				
 				<form id="FoodSearch">
 					Search For Food Item: <input type="text" id="search_query"> <br>
 				<div id="food_choose"></div>
 
-				<div id="results_wrapper">
-					<div id="results"></div>
-				</div>
+					item: <input type="text" id="search_query" style="width:500px;" > 
 					<!-- <input type="submit" value="Search" id="search"> -->
-					Calories: <input type="text" id="calories_field"> 
+					<input type="hidden" id="calories_field"> 
 					<input type="hidden" id="foodid">
-
+								
 					<input type="button" id="btn_additem" value="Add!">
 				</form> 
-
+				
+				<span>servings:</span>
+				<select id="fruit_servings" name="fruit_servings">
+						<option value="1">1</option>
+						<option value="2">2</option>
+						<option value="3">3</option>
+						<option value="4">4</option>
+						<option value="5">5</option>
+						<option value="6">6</option>
+						<option value="7">7</option>
+						<option value="8">8</option>
+						<option value="9">9</option>
+						<option value="10">10</option>
+				</select>
+				
+				<div id="food_choose"></div>
 
 
 
@@ -207,8 +236,9 @@
 					-->
 
 					<!-- </form> -->
-
+						
 				<div id="data_container">
+<<<<<<< HEAD
 					<table class="box-table-b" id="table_container">
 						<thead>
 							<tr>
@@ -218,6 +248,17 @@
 								<th>Calories</th>
 							</tr>
 						</thead>
+=======
+					<table border="3" id="table_container">
+						<tr>
+							<!-- <th>Type</th> -->
+							<th>Type</th>
+							<th>Servings</th>
+							<th>Food Content</th>
+							<th>Total Calories</th>
+							<th>Delete</th>
+						</tr>
+>>>>>>> 7f571080ab2a6e089c312de5ef70d73450cb1176
 					</table>
 				</div>
 
