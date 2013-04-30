@@ -82,14 +82,31 @@ window.addEventListener('load', function(){
 			serialize_meal = JSON.stringify(Meal);
 			console.log(serialize_meal);
 			
+			var form = document.createElement("form");
+			form.setAttribute("method",'post');
+			form.setAttribute("action",'/addmeal');
+			
+			var hiddenField = document.createElement("input");
+			hiddenField.setAttribute("type", "hidden");
+			hiddenField.setAttribute("name", 'meal');
+			hiddenField.setAttribute("value", serialize_meal);
+			
+			form.appendChild(hiddenField);
+			
+			document.body.appendChild(form);
+			form.submit();
+			
+			
+			
+			
 			// Create a FormData object from out form
-			var fd = new FormData(document.getElementById('FoodSearch'));
+			/*var fd = new FormData(document.getElementById('FoodSearch'));
 			fd.append('meal', serialize_meal);
 			
 			// Send it to the server 
 			var req = new XMLHttpRequest();
 			req.open('POST', '/addmeal', true);
-			req.send(fd);
+			req.send(fd);*/
 		
 		});
 		
@@ -227,7 +244,7 @@ function edit_meal(e) {
 	console.log(e.currentTarget.id);
 	var items = e.currentTarget.id.split('/');
 	
-	Meal.date = new Date(items[2],items[1]-1,items[0]).getTime();
+	Meal.date = new Date(items[2],items[1]-1,items[0]-1).getTime();
 	
 	
 	document.getElementById('light').style.display='block';
