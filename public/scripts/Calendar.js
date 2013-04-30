@@ -201,7 +201,7 @@ function updateCalendar(data) {
     console.log(days);
     for (var key in data) {
 	console.log(key);
-	$(days[key]).append(data[key].mealname + ": " + data[key].totalcalories);
+	$(days[key]).append('<p mealid=' + data[key].id + '>' + data[key].mealname + ": " + data[key].totalcalories + '</p>');
     }
 }
 
