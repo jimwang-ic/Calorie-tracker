@@ -159,7 +159,7 @@ app.post('/addmeal', function(req,res) {
 	console.log("after");
 	console.log('done');
 	
-	res.render('graph.html');
+	res.render('Calendar.html');
 });
 
 
