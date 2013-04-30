@@ -242,7 +242,7 @@ app.get('/entry.json',function(req,res) {
 
 CALENDAR TO DATABASE
 SENDS: month/year (mm-yy), username
-returns: rows of database: meal name, day, id
+returns: rows of database: meal name, day, id /calendar.json?date="04-13"
 
 **/
 app.get('/calendar.json',function(req,res) {
