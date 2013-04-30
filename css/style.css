@@ -110,3 +110,40 @@ a.monthbutton{
 
 }
 
+
+/*Login page css*/
+#leftlogincolumn {
+	width: 40%;
+	height: 80%;
+	float: left;
+	border: 3px solid;
+	background-color: #6495ED ;
+	
+}
+
+#rightlogincolumn {
+	width: 40%;
+	height: 80%;
+	float: right;
+	border: 3px solid;
+}
+
+
+#toploginbar {
+	width: 100%;
+	height: 5%;
+	border: 3px solid;
+}
+
+
+#bottomloginbar {
+	width: 100%;
+	height: 5%;
+	border: 3px solid;
+	position: absolute;
+	bottom: 0;
+}
+
+#motto {
+	color: #FFFFFF;
+}
