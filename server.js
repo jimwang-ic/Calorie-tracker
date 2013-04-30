@@ -14,6 +14,13 @@ app.use('/public/scripts', express.static(__dirname + '/public/scripts'));
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/img', express.static(__dirname + '/img'));
 app.use('/fonts', express.static(__dirname + '/fonts'));
+app.use(express.cookieParser());
+app.use(express.session({
+	secret: 'session_key'
+	store: new express.session.MemoryStore({reapInterval: 60000 * 15})
+}));
+app.use(app.router);
+
 
 // Where is the template and why do we ues the template?
 app.engine('html', engines.hogan);     // tell Express to run .html files through Hogan
