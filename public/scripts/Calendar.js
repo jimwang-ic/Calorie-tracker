@@ -77,6 +77,8 @@ window.addEventListener('load', function(){
 		});
 		
 		
+		
+		
 		//$('#search_query').on('focus',show);
 		//$('#search_query').on('blur',hide);
 			
@@ -130,8 +132,31 @@ function Customize_cal() {
 	
 	console.log("Customize");
 	
+	var date = new Date();
+	var month = new Date().getMonth() + 1;
+	var year = new Date().getFullYear();
+	var text = year + "-" + month;
 	
-	
+	var request = new XMLHttpRequest();
+
+	// specify the HTTP method, URL, and asynchronous flag
+	request.open('GET', '/calendar.json?date=' + text, true);
+
+	// add an event handler
+	request.addEventListener('load', function(e){
+	    if (request.status == 200) {
+		// do something with the loaded content
+		var content = request.responseText;
+		updateCalendar(JSON.parse(content));
+	    } else {
+		console.log('error');
+		// something went wrong, check the request status
+		// hint: 403 means Forbidden, maybe you forgot your username?
+	    }
+	}, false);
+
+	// start the request, optionally with a request body for POST requests
+	request.send(null);
 	
 	
 	
@@ -141,27 +166,45 @@ function Customize_cal() {
 	transferDateToIntSetID();
 
 	// Change the span element's title to "Edit Meal"
-	$('.fatsecret_day_content div:nth-child(1) span').html('<b>Add Meal</b>');	
+	$('.fatsecret_day_content div:nth-child(1) span').html('<h4><b>+</b></h4>');	
 	// remove the original onclick function
 	$('.fatsecret_day_content div:nth-child(1) a').removeAttr('onclick');
 	// bind our customize click event
 	$('.fatsecret_day_content div:nth-child(1) a span').on('click', edit_meal);
 	
+	/*$('.fatsecret_day_content div').remove();
+	$('.fatsecret_day_other').append('<span id="plus"><a href="#">+<a/></span>');*/
+	
 	//test
 	//$('.fatsecret_day_content div:nth-child(1) a').attr('id',"123");
 	
 	// Change the span element's title to "Other features"
-	$('.fatsecret_day_content div:nth-child(2) span').html('<b>Other features</b>')	
+	/*$('.fatsecret_day_content div:nth-child(2) span').html('<b>Other features</b>')	
 	// remove the original onclick function
 	$('.fatsecret_day_content div:nth-child(2) a').removeAttr('onclick');
 	// bind our customize click event
-	$('.fatsecret_day_content div:nth-child(2) a').on('click', other);
+	$('.fatsecret_day_content div:nth-child(2) a').on('click', other);*/
+	
+	//removed other features, shouldn't be in this
+	$('.fatsecret_day_content div:nth-child(2)').remove();
 
 	// Hide the fat secret api logo
 	$('.fatsecret_footer').hide();
 }
 
-var click_date;
+/**
+  Displays returned information on calendar
+**/
+function updateCalendar(data) {
+    console.log(data);
+    var days = $('.fatsecret_day_content');
+    console.log(days);
+    for (var key in data) {
+	console.log(key);
+	$(days[key]).append(data[key].mealname + ": " + data[key].totalcalories);
+    }
+}
+
 // make lightbox appear
 function edit_meal(e) {
 	console.log(e.currentTarget.id);
