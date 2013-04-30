@@ -14,19 +14,6 @@ window.addEventListener('load', function(){
 function Customize(user,start,end) {
 
 
-  //FAKE DATA!
-  /*var calories = new Array();
-  var daily = 300;
-  for (var i = 1; i <= 30; i++) {
-    calories.push([i, daily]);
-    daily--;
-  }
-  
-  var weight = new Array();
-  for (var i = 1; i<= 30; i++) {
-    weight.push([i,Math.floor(Math.random()*(200-190+1)+190)]);
-  }*/
-
   var data = {};
   // create a request object
   var request = new XMLHttpRequest();
