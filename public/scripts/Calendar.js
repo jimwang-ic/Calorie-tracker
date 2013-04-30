@@ -44,22 +44,39 @@ window.addEventListener('load', function(){
 			var food_id = $('#foodid').val();
 			var food_name = $('#search_query').val();
 			var food_calories = $('#calories_field').val();
+			var food_servings = $('#fruit_servings').val();
+			var food_type = $('#mealType input:radio:checked').val();
+			var total_calories = food_calories*parseInt(food_servings);
 			
-			var foodwrapper = '<td>'+ food_name +'</td>' +
-							  '<td>'+ food_calories +'</td>';
+			var delete_btn = $('<button class="delete_btn">delete</button>');
+									
+									//.attr('class', btn_delete);
+			
+			//console.log(food_servings);
+			
+			var foodwrapper = '<td>'+ food_type + '</td>' + 
+							  '<td>'+ food_servings + '</td>' + 
+							  '<td>'+ food_name +'</td>' +
+							  '<td>'+ total_calories +'</td>' + 
+							  '<td>' + '<button class="delete_btn">delete</button>' + '</td>'; 				 				 
+			//foodwrapper.append(delete_btn);				  
+			
+							  
 			var tofill = document.createElement('tr');
 			tofill.innerHTML = foodwrapper;
+			
 			var table_container = document.getElementById("table_container");
 			table_container.appendChild(tofill);
 			
 			// Add to meal object
+			// TODO : Must change this...
 			Meal.food.push({id : food_id, name : food_name, calories : food_calories});
 			
 		});
 		
 		$('#btn_addmeal').on('click', function(){
 			
-			// TODO: POST method to server side
+			
 			console.log(Meal);
 			
 			serialize_meal = JSON.stringify(Meal);
