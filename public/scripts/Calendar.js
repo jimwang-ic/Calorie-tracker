@@ -21,10 +21,9 @@ window.addEventListener('load', function(){
 
 	// This is the part for form
 
-		var time = new Date();
-		 
+		
 		Meal.username = "username";
-		Meal.date = time.getTime();
+	
 		Meal.food = [];
 		
 		
@@ -64,6 +63,7 @@ window.addEventListener('load', function(){
 			console.log(Meal);
 			
 			serialize_meal = JSON.stringify(Meal);
+			console.log(serialize_meal);
 			
 			// Create a FormData object from out form
 			var fd = new FormData(document.getElementById('FoodSearch'));
@@ -130,17 +130,22 @@ function Customize_cal() {
 	
 	console.log("Customize");
 	
+	
+	
+	
+	
+	
 	// in order to have the information about what date we click on, we need
 	// to set id for every edit meal link. The function handles all the nessary
 	// operation, for example: selector, string conversion.
 	transferDateToIntSetID();
 
 	// Change the span element's title to "Edit Meal"
-	$('.fatsecret_day_content div:nth-child(1) span').html('<b>Edit Meal</b>');	
+	$('.fatsecret_day_content div:nth-child(1) span').html('<b>Add Meal</b>');	
 	// remove the original onclick function
 	$('.fatsecret_day_content div:nth-child(1) a').removeAttr('onclick');
 	// bind our customize click event
-	$('.fatsecret_day_content div:nth-child(1) a').on('click', edit_meal);
+	$('.fatsecret_day_content div:nth-child(1) a span').on('click', edit_meal);
 	
 	//test
 	//$('.fatsecret_day_content div:nth-child(1) a').attr('id',"123");
@@ -156,13 +161,15 @@ function Customize_cal() {
 	$('.fatsecret_footer').hide();
 }
 
-
+var click_date;
 // make lightbox appear
 function edit_meal(e) {
-	console.log(e);	
-	console.log(e.currentTarget);	
-	var date = fatsecret.calendar;
-	console.log(date);
+	console.log(e.currentTarget.id);
+	var items = e.currentTarget.id.split('/');
+	
+	Meal.date = new Date(items[2],items[1]-1,items[0]).getTime();
+	
+	
 	document.getElementById('light').style.display='block';
 	document.getElementById('fade').style.display='block';
 	// document.getElementById('table_container').innerHTML ="";
@@ -172,6 +179,9 @@ function edit_meal(e) {
 	// 		<th>Calories</th>
 	// 	</tr>');
 }
+
+
+
 
 
 function other(e) {
