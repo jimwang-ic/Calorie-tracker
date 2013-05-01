@@ -22,121 +22,10 @@ window.addEventListener('load', function(){
 		document.getElementById('chooseMeal').style.display='none';
 		document.getElementById('detailedForm').style.display='block';
 	});
-
-
-	// This is the part for form
-
-		
-		Meal.username = "username";
 	
-		Meal.food = [];
+	Form_eventListener();
 		
-		
-		$('#saveInJavaScript').on('click', saveFormValue);
-		
-		$('#FoodSearch').on('submit', function(e){
-			e.preventDefault();
-		
-		});
-		$('#search_query').on('keyup', function(){
-			// A Hack way to make a request to server with delay : 250 miliseconds.
-			//console.log("keyup!");
-			clearInterval(ReqInterval);
-			ReqInterval = setInterval(function(){ getResult(); }, 300);
-		});	
-		
-		$('#btn_additem').on('click', function(){
-			
-			var food_id = $('#foodid').val();
-			var food_name = $('#search_query').val();
-			var food_calories = $('#calories_field').val();
-			var food_servings = $('#fruit_servings').val();
-			var food_type = $('#mealType input:radio:checked').val();
-			var total_calories = food_calories*parseInt(food_servings);
-			
-			var delete_btn = $('<button class="delete_btn">x</button>');
-									
 					
-			var foodwrapper = '<td>'+ food_type + '</td>' + 
-							  '<td>'+ food_servings + '</td>' + 
-							  '<td>'+ food_name +'</td>' +
-							  '<td>'+ total_calories +'</td>' + 
-							  '<td>' + '<button class="delete_btn">x</button>' + '</td>'; 				 				 
-			//foodwrapper.append(delete_btn);				  
-			
-							  
-			var tofill = document.createElement('tr');
-			tofill.innerHTML = foodwrapper;
-			
-			var table_container = document.getElementById("table_container");
-			table_container.appendChild(tofill);
-			
-			// Add to meal object
-			// TODO : Must change this...
-			Meal.food.push({id : food_id, name : food_name, calories : total_calories, mealtype : food_type});
-			
-		});
-		
-		$('#btn_addmeal').on('click', function(){
-			
-			
-			console.log(Meal);
-			
-			serialize_meal = JSON.stringify(Meal);
-			console.log(serialize_meal);
-			
-			/*
-			var form = document.createElement("form");
-			form.setAttribute("method",'post');
-			form.setAttribute("action",'/addmeal');
-			
-			var hiddenField = document.createElement("input");
-			hiddenField.setAttribute("type", "hidden");
-			hiddenField.setAttribute("name", 'meal');
-			hiddenField.setAttribute("value", serialize_meal);
-			
-			form.appendChild(hiddenField);
-			
-			document.body.appendChild(form);
-			form.submit();
-*/
-			
-			
-			// Create a FormData object from out form
-			var fd = new FormData();
-			fd.append('meal', serialize_meal);
-			
-			// Send it to the server 
-			var req = new XMLHttpRequest();
-			req.open('POST', '/addmeal', true);
-
-			req.addEventListener('load', RefreshCal);
-			req.send(fd);
-		
-		});
-		
-		
-		$('.fatsecret_day_other').click(function(e) {
-        
-        
-        	console.log("shit");
-	        
-	        if ($(e.target).is('#btn-block, #btn-block *')) 
-	        {
-	            return;
-	        }
-	        else 
-	        {	        
-		        if(isClicked)
-				{
-					reduce_nickname_div();	
-					isClicked = false;
-				}
-	        }
-	        
-    	});
-
-		
 		//$('#search_query').on('focus',show);
 		//$('#search_query').on('blur',hide);
 			
@@ -219,7 +108,7 @@ function Customize_cal() {
 	transferDateToIntSetID();
 
 	// Change the span element's title to "Edit Meal"
-	$('.fatsecret_day_content div:nth-child(1) span').html('<h4><b>+</b></h4>');	
+	$('.fatsecret_day_content div:nth-child(1) span').html('<span id="plus_btn">+</span>');	
 	// remove the original onclick function
 	$('.fatsecret_day_content div:nth-child(1) a').removeAttr('onclick');
 	// bind our customize click event
@@ -243,6 +132,24 @@ function Customize_cal() {
 
 	// Hide the fat secret api logo
 	$('.fatsecret_footer').hide();
+	
+	
+	$('.fatsecret_day_other').click(function(e) {
+    
+    	//console.log(e.target);
+    	
+        if ($(e.target).is('.fatsecret_day_content span')) 
+        {
+            return;
+        }
+        else 
+        {	  
+        	var id = $(e.target).find( $('a span') ).attr('id');
+        	console.log(id);      
+	        //console.log(e);
+        }
+        
+	});
 }
 
 
@@ -263,6 +170,7 @@ function updateCalendar_ajax() {
 	    if (request.status == 200) {
 		// do something with the loaded content
 		var content = request.responseText;
+		console.log("cal_ajax" + content);
 		updateCalendar(JSON.parse(content));
 	    } else {
 		console.log('error');
@@ -412,7 +320,6 @@ function getResult () {
 		if(req.status == 200)
 		{
 			// Take JSON "stings" and returns the resulting Jabascript object
-			//console.log("what the fuck?!");
 			var content = jQuery.parseJSON(req.responseText);
 			RefreshResult(content);	
 			
@@ -471,3 +378,78 @@ function handlerGen(id, name, dsp) {
 	}
 }
 
+
+function Form_eventListener() {
+	
+	Meal.username = "username";
+	
+	Meal.food = [];
+	
+	
+	$('#saveInJavaScript').on('click', saveFormValue);
+	
+	$('#FoodSearch').on('submit', function(e){
+		e.preventDefault();
+	
+	});
+	$('#search_query').on('keyup', function(){
+		// A Hack way to make a request to server with delay : 250 miliseconds.
+		//console.log("keyup!");
+		clearInterval(ReqInterval);
+		ReqInterval = setInterval(function(){ getResult(); }, 300);
+	});	
+	
+	$('#btn_additem').on('click', function(){
+		
+		var food_id = $('#foodid').val();
+		var food_name = $('#search_query').val();
+		var food_calories = $('#calories_field').val();
+		var food_servings = $('#fruit_servings').val();
+		var food_type = $('#mealType input:radio:checked').val();
+		var total_calories = food_calories*parseInt(food_servings);
+		
+		var delete_btn = $('<button class="delete_btn">x</button>');
+								
+				
+		var foodwrapper = '<td>'+ food_type + '</td>' + 
+						  '<td>'+ food_servings + '</td>' + 
+						  '<td>'+ food_name +'</td>' +
+						  '<td>'+ total_calories +'</td>' + 
+						  '<td>' + '<button class="delete_btn">x</button>' + '</td>'; 				 				 
+	
+						  
+		var tofill = document.createElement('tr');
+		tofill.innerHTML = foodwrapper;
+		
+		var table_container = document.getElementById("table_container");
+		table_container.appendChild(tofill);
+		
+		// Add to meal object
+		// TODO : Must change this...
+		Meal.food.push({id : food_id, name : food_name, calories : total_calories, mealtype : food_type});
+		
+	});
+	
+	$('#btn_addmeal').on('click', function(){
+		
+		
+		console.log(Meal);
+		
+		serialize_meal = JSON.stringify(Meal);
+		console.log(serialize_meal);
+		
+		
+		// Create a FormData object from out form
+		var fd = new FormData();
+		fd.append('meal', serialize_meal);
+		
+		// Send it to the server 
+		var req = new XMLHttpRequest();
+		req.open('POST', '/addmeal', true);
+
+		req.addEventListener('load', RefreshCal);
+		req.send(fd);
+	
+	});
+	
+}
