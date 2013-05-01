@@ -182,26 +182,30 @@ console.log('Listen on port 8080');
  * returns dataset of pairs of coordinates datetime and other calories
 */
 app.get('/graph.json',function(req,res) {
-    console.log(req.query);
     var start = req.query['start'];
     var end = req.query['end'];
     var data = {};
     data['food'] = [];
     data['weight'] = [];
     console.log("between " + start + " " + end);
+    var dates = {};
     //as of now returns everything
     //conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
     conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2;',[start,end])
 	    .on('row',function(row) {
 		console.log(row);
 		if (row.foodweight == 1) {
-		    var day = new Date(row.datetime).getDate();
-		    
+		    if (dates[row.datetime] == undefined) {
+			console.log("here");
+			dates[row.datetime] = [];
+		    }
+		    dates[row.datetime].push([row.totalcalories,row.id,row.mealtype,row.mealname]);
 		    data['food'].push([row.datetime,row.totalcalories,row.id])
 		}
 		else {
 		    data['weight'].push([row.datetime, row.weight,row.id]);
 		}
+		
 		
 		console.log(row.mealname);
 		var day = new Date(row.datetime).getDate();
@@ -218,7 +222,17 @@ app.get('/graph.json',function(req,res) {
 
 	    })
 	    .on('end',function(row) {
-		
+		for (var day in dates) {
+		    var day_calories = 0;
+		    var hidden_items = [];
+		    for (var meal in day) {
+			day_calories += meal[0];
+			hidden_items.push(meal[1]);
+			hidden_items.push(meal[2]);
+			hidden_items.push(meal[3]);
+		    }
+		    data['food'].push([day,day_calories[hidden_items]]);
+		}
 	
 		console.log('about to return');
 		console.log(row);

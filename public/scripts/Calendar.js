@@ -259,6 +259,7 @@ function updateCalendar_ajax() {
 /**
   Displays returned information on calendar
 **/
+
 function updateCalendar(data) {
     console.log("here");
     console.log(data);
@@ -275,7 +276,6 @@ function updateCalendar(data) {
 	var calories = 0;
 	for (var i = 0; i < data[key].length; i++) {
 	    calories += parseInt(data[key][i].totalcalories);
-	    $(item).append('<p mealid=' + data[key][i].id + ' display="none"/>');
 	}
 	$(item).append(calories);
     }
