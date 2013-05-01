@@ -109,6 +109,7 @@ window.addEventListener('load', function(){
 			// Send it to the server 
 			var req = new XMLHttpRequest();
 			req.open('POST', '/addmeal', true);
+
 			req.addEventListener('load', RefreshCal);
 			req.send(fd);
 		
@@ -259,6 +260,7 @@ function updateCalendar_ajax() {
   Displays returned information on calendar
 **/
 function updateCalendar(data) {
+    console.log("here");
     console.log(data);
     var days = $('.fatsecret_day_content');
     console.log(days);
@@ -268,7 +270,14 @@ function updateCalendar(data) {
     $(days[key]).html("");
 	
 	console.log(key);
-	$(days[key]).append('<p mealid=' + data[key].id + '>' + data[key].mealname + ": " + data[key].totalcalories + '</p>');
+	var item = days[key];
+	//$(item).empty();
+	var calories = 0;
+	for (var i = 0; i < data[key].length; i++) {
+	    calories += parseInt(data[key][i].totalcalories);
+	    $(item).append('<p mealid=' + data[key][i].id + ' display="none"/>');
+	}
+	$(item).append(calories);
     }
 }
 
