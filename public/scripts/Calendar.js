@@ -56,10 +56,7 @@ window.addEventListener('load', function(){
 			
 			var delete_btn = $('<button class="delete_btn">x</button>');
 									
-									//.attr('class', btn_delete);
-			
-			//console.log(food_servings);
-			
+					
 			var foodwrapper = '<td>'+ food_type + '</td>' + 
 							  '<td>'+ food_servings + '</td>' + 
 							  '<td>'+ food_name +'</td>' +
@@ -76,7 +73,7 @@ window.addEventListener('load', function(){
 			
 			// Add to meal object
 			// TODO : Must change this...
-			Meal.food.push({id : food_id, name : food_name, calories : food_calories});
+			Meal.food.push({id : food_id, name : food_name, calories : total_calories});
 			
 		});
 		
@@ -88,6 +85,7 @@ window.addEventListener('load', function(){
 			serialize_meal = JSON.stringify(Meal);
 			console.log(serialize_meal);
 			
+			/*
 			var form = document.createElement("form");
 			form.setAttribute("method",'post');
 			form.setAttribute("action",'/addmeal');
@@ -101,18 +99,18 @@ window.addEventListener('load', function(){
 			
 			document.body.appendChild(form);
 			form.submit();
-			
-			
+*/
 			
 			
 			// Create a FormData object from out form
-			/*var fd = new FormData(document.getElementById('FoodSearch'));
+			var fd = new FormData();
 			fd.append('meal', serialize_meal);
 			
 			// Send it to the server 
 			var req = new XMLHttpRequest();
 			req.open('POST', '/addmeal', true);
-			req.send(fd);*/
+			req.addEventListener('load', RefreshCal);
+			req.send(fd);
 		
 		});
 		
@@ -130,6 +128,27 @@ window.addEventListener('load', function(){
 
 }, false);
 
+// Refresh calendar and clean up the form after adding meal
+function RefreshCal() {
+	
+	Meal.food = [];
+	
+	$('#foodid').val("");
+	$('#search_query').val("");
+	$('#calories_field').val("");
+	$('#fruit_servings').val("");
+	$('#breakfast').prop('checked', true);
+	$('#results').html("");
+	$('#table_container tr:gt(0)').remove();
+	
+	document.getElementById('light').style.display='none';
+	document.getElementById('fade').style.display='none';
+	document.getElementById('chooseMeal').style.display='block';
+	document.getElementById('detailedForm').style.display='none';
+	
+	updateCalendar_ajax();
+	
+}
 
 function transferDateToIntSetID(){
 	// selector for children in order to set id 
@@ -172,33 +191,7 @@ function Customize_cal() {
 	
 	console.log("Customize");
 	
-	var date = new Date();
-	var month = new Date().getMonth() + 1;
-	var year = new Date().getFullYear();
-	var text = year + "-" + month;
-	
-	var request = new XMLHttpRequest();
-
-	// specify the HTTP method, URL, and asynchronous flag
-	request.open('GET', '/calendar.json?date=' + text, true);
-
-	// add an event handler
-	request.addEventListener('load', function(e){
-	    if (request.status == 200) {
-		// do something with the loaded content
-		var content = request.responseText;
-		updateCalendar(JSON.parse(content));
-	    } else {
-		console.log('error');
-		// something went wrong, check the request status
-		// hint: 403 means Forbidden, maybe you forgot your username?
-	    }
-	}, false);
-
-	// start the request, optionally with a request body for POST requests
-	request.send(null);
-	
-	
+	updateCalendar_ajax();
 	
 	// in order to have the information about what date we click on, we need
 	// to set id for every edit meal link. The function handles all the nessary
@@ -232,6 +225,36 @@ function Customize_cal() {
 	$('.fatsecret_footer').hide();
 }
 
+
+function updateCalendar_ajax() {
+	
+	var date = new Date();
+	var month = new Date().getMonth() + 1;
+	var year = new Date().getFullYear();
+	var text = year + "-" + month;
+	
+	var request = new XMLHttpRequest();
+
+	// specify the HTTP method, URL, and asynchronous flag
+	request.open('GET', '/calendar.json?date=' + text, true);
+
+	// add an event handler
+	request.addEventListener('load', function(e){
+	    if (request.status == 200) {
+		// do something with the loaded content
+		var content = request.responseText;
+		updateCalendar(JSON.parse(content));
+	    } else {
+		console.log('error');
+		// something went wrong, check the request status
+		// hint: 403 means Forbidden, maybe you forgot your username?
+	    }
+	}, false);
+
+	// start the request, optionally with a request body for POST requests
+	request.send(null);
+	
+}
 /**
   Displays returned information on calendar
 **/
@@ -240,6 +263,10 @@ function updateCalendar(data) {
     var days = $('.fatsecret_day_content');
     console.log(days);
     for (var key in data) {
+    
+    // clear the info in calendar
+    $(days[key]).html("");
+	
 	console.log(key);
 	$(days[key]).append('<p mealid=' + data[key].id + '>' + data[key].mealname + ": " + data[key].totalcalories + '</p>');
     }
@@ -347,14 +374,18 @@ function getResult () {
 	req.open('GET', '/searchFood.json?food=' + $('#search_query').val() );
 	req.addEventListener('load', function(){
 		
-		//if(req.status == 200)
-		//{
+		if(req.status == 200)
+		{
 			// Take JSON "stings" and returns the resulting Jabascript object
 			//console.log("what the fuck?!");
 			var content = jQuery.parseJSON(req.responseText);
 			RefreshResult(content);	
 			
-		//}
+		}
+		else
+		{
+			console.log("check Calendar.js");
+		}
 		
 	});  
 	req.send(null);
