@@ -73,7 +73,7 @@ window.addEventListener('load', function(){
 			
 			// Add to meal object
 			// TODO : Must change this...
-			Meal.food.push({id : food_id, name : food_name, calories : total_calories});
+			Meal.food.push({id : food_id, name : food_name, calories : total_calories, mealtype : food_type});
 			
 		});
 		
@@ -116,7 +116,26 @@ window.addEventListener('load', function(){
 		});
 		
 		
-		
+		$('.fatsecret_day_other').click(function(e) {
+        
+        
+        	console.log("shit");
+	        
+	        if ($(e.target).is('#btn-block, #btn-block *')) 
+	        {
+	            return;
+	        }
+	        else 
+	        {	        
+		        if(isClicked)
+				{
+					reduce_nickname_div();	
+					isClicked = false;
+				}
+	        }
+	        
+    	});
+
 		
 		//$('#search_query').on('focus',show);
 		//$('#search_query').on('blur',hide);
@@ -260,24 +279,31 @@ function updateCalendar_ajax() {
   Displays returned information on calendar
 **/
 
+
+var current_month_data = {};
+
 function updateCalendar(data) {
     console.log("here");
     console.log(data);
+    
+    //assign the data to global variable current_month_data
+    current_month_data = data;
+    
     var days = $('.fatsecret_day_content');
+    $('.fatsecret_day_content > p, .calories').remove();
+    
     console.log(days);
     for (var key in data) {
     
-    // clear the info in calendar
-    $(days[key]).html("");
-	
 	console.log(key);
 	var item = days[key];
 	//$(item).empty();
 	var calories = 0;
 	for (var i = 0; i < data[key].length; i++) {
+	    //console.log(data
 	    calories += parseInt(data[key][i].totalcalories);
 	}
-	$(item).append(calories);
+	$(item).append('<span class=calories>' + calories + '</span>');
     }
 }
 
