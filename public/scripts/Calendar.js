@@ -199,11 +199,7 @@ function updateCalendar(data) {
     
     var days = $('.fatsecret_day_content');
     $('.fatsecret_day_content > p, .calories').remove();
-    console.log('this');
-    console.log(days);
     for (var key in data) {
-    console.log("KEY");
-	console.log(key);
 	var item = days[key-1];
 	//$(item).empty();
 	var calories = 0;

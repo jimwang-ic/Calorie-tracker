@@ -42,7 +42,7 @@ fs.exists('database.db',function(exists) {
 		    .on('end', function() {
 		    console.log('Made table!');
 		    });
-		conn.query('CREATE TABLE calendar (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, weight INTEGER, mealtype TEXT);') 
+		conn.query('CREATE TABLE calendar (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, mealtype TEXT, weight INTEGER);') 
 		.on('end', function() {
 		    console.log('Made table!');
 	    
@@ -149,9 +149,11 @@ app.post('/addmeal', function(req,res) {
 	console.log(new Date(meal['date']));
 	var food = meal['food']
 	var time = meal['date']
-	var mealtype = meal['mealtype'];
+	var mealtype = food[0]['mealtype'];
+	console.log("meal: " + mealtype);
 	ids = "";
 	names = "";
+	mealtypes = "";
 	calories = 0;
 	for (var i = 0; i < food.length-1; i++) {
 		ids += food[i]['id'] + ",";
@@ -202,6 +204,7 @@ app.get('/graph.json',function(req,res) {
 			dates[row.datetime] = [];
 		    }
 		    dates[row.datetime].push([row.totalcalories,row.id,row.mealtype,row.mealname]);
+		    console.log('pulling ' + row.mealtype);
 		}
 		else {
 		    data['weight'].push([row.datetime, row.weight,row.id]);
