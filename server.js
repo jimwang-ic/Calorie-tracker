@@ -193,36 +193,37 @@ app.get('/graph.json',function(req,res) {
     //conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
     conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2;',[start,end])
 	    .on('row',function(row) {
-		    console.log(row);
-		    if (row.foodweight == 1) {
-			var day = new Date(row.datetime).getDate();
-			
-			data['food'].push([row.datetime,row.totalcalories,row.id])
-		    }
-		    else {
-			data['weight'].push([row.datetime, row.weight,row.id]);
-		    }
-		    
-		    console.log(row.mealname);
+		console.log(row);
+		if (row.foodweight == 1) {
 		    var day = new Date(row.datetime).getDate();
-		    var entry = {};
-		    entry['mealname'] = row.mealname;
-		    entry['id'] = row.id;
-		    entry['totalcalories'] = row.totalcalories;
-		    entry['mealtype'] = row.mealtype;
-		    if (data[day] == undefined) {
-			data[day] = [];
-		    }
-		    data[day].push(entry);
+		    
+		    data['food'].push([row.datetime,row.totalcalories,row.id])
+		}
+		else {
+		    data['weight'].push([row.datetime, row.weight,row.id]);
+		}
+		
+		console.log(row.mealname);
+		var day = new Date(row.datetime).getDate();
+		var entry = {};
+		entry['mealname'] = row.mealname;
+		entry['id'] = row.id;
+		entry['totalcalories'] = row.totalcalories;
+		entry['mealtype'] = row.mealtype;
+		if (data[day] == undefined) {
+		    data[day] = [];
+		}
+		data[day].push(entry);
 		
 
 	    })
 	    .on('end',function(row) {
+		
 	
-		    console.log('about to return');
-		    console.log(row);
-		    examinePrevious();
-		    res.json(data);
+		console.log('about to return');
+		console.log(row);
+		examinePrevious();
+		res.json(data);
 	    })
 
 });
