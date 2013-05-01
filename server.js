@@ -34,14 +34,16 @@ app.set('views', __dirname + '/view');  // tell Express where to find templates
 //what db to use?
 var conn = anyDB.createConnection('sqlite3://database.db');
 fs.exists('database.db',function(exists) {
-    if (exists == false) {
-	conn.query('CREATE TABLE users (userid INTEGER PRIMARY KEY, username TEXT, password TEXT);') 
-	    .on('end', function() {
-	    console.log('Made table!');
-	    });
-	conn.query('CREATE TABLE calendar (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, weight INTEGER, mealtype TEXT);') 
-	.on('end', function() {
-	    console.log('Made table!');
+	console.log(exists);
+    if (exists == true) {
+    	console.log("making table");
+		conn.query('CREATE TABLE users (userid INTEGER PRIMARY KEY, username TEXT, password TEXT);') 
+		    .on('end', function() {
+		    console.log('Made table!');
+		    });
+		conn.query('CREATE TABLE calendar (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, weight INTEGER, mealtype TEXT);') 
+		.on('end', function() {
+		    console.log('Made table!');
 	    
 	    //UNCOMMENT FOR TEST POINTS
 	    //test();
