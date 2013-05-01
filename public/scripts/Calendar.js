@@ -73,7 +73,7 @@ window.addEventListener('load', function(){
 			
 			// Add to meal object
 			// TODO : Must change this...
-			Meal.food.push({id : food_id, name : food_name, calories : total_calories});
+			Meal.food.push({id : food_id, name : food_name, calories : total_calories, type : food_type});
 			
 		});
 		
