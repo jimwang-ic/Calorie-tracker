@@ -160,10 +160,10 @@
 					<span id="choosemealtoenter">Choose Meal to Enter: </span>
 					<form id="mealType">
 
-						<span class="rad"><input class ="mealType" type="radio" name="group1" id="breakfast" value="breakfast" checked><span class="m" >Breakfast</span></span>
-						<span class="rad" ><input type="radio" name="group1" id="lunch" value="lunch"><span class="m" >Lunch</span> </span>
-						<span class="rad"><input type="radio" name="group1" id="dinner" value="dinner"><span class="m" >Dinner</span></span>
-						<span class="rad"><input type="radio" name="group1" id="snack" value="snack"><span class="m" >Snack</span></span>
+						<label><span class="rad"><input class ="mealType" type="radio" name="group1" id="breakfast" value="breakfast" checked><span class="m" >Breakfast</span></span></label>
+						<label>	<span class="rad" ><input type="radio" name="group1" id="lunch" value="lunch"><span class="m" >Lunch</span> </span></label>
+						<label><span class="rad"><input type="radio" name="group1" id="dinner" value="dinner"><span class="m" >Dinner</span></span></label>
+						<label><span class="rad"><input type="radio" name="group1" id="snack" value="snack"><span class="m" >Snack</span></span></label>
 					</form>
 				</div>
 				<div id="next"> Next </div> <!-- next page button -->
@@ -171,37 +171,45 @@
 
 
 			<div id="detailedForm">
-			<form id="FoodSearch">
-				Search For Food Item: <input type="text" id="search_query"> <br>
+				<div id="searchpref">
+					<div id="fd">
+						<form id="FoodSearch">
+
+							<div id="searcherbar">Search For Food Item: <input type="text" id="search_query">
+								<div id="food_choose"></div>
+
+								<!-- <input type="submit" value="Search" id="search"> -->
+								<input type="hidden" id="calories_field"> 
+								<input type="hidden" id="foodid">
+
+							</div>
+				<div id="results_wrapper">
+					<div id="results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
+							<input type="button" id="btn_additem" value="Add!">
+						</form> 
+
+						<div id="selector">
+							<span>Servings:  </span>
+							<select id="fruit_servings" name="fruit_servings">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+								<option value="5">5</option>
+								<option value="6">6</option>
+								<option value="7">7</option>
+								<option value="8">8</option>
+								<option value="9">9</option>
+								<option value="10">10</option>
+							</select>
+						</div>
+					</div>
+				</div>
 				<div id="food_choose"></div>
 
-				<!-- <input type="submit" value="Search" id="search"> -->
-				<input type="hidden" id="calories_field"> 
-				<input type="hidden" id="foodid">
+				</div>
 
-				<input type="button" id="btn_additem" value="Add!">
-			</form> 
 
-			<span>Servings:</span>
-			<select id="fruit_servings" name="fruit_servings">
-				<option value="1">1</option>
-				<option value="2">2</option>
-				<option value="3">3</option>
-				<option value="4">4</option>
-				<option value="5">5</option>
-				<option value="6">6</option>
-				<option value="7">7</option>
-				<option value="8">8</option>
-				<option value="9">9</option>
-				<option value="10">10</option>
-			</select>
-
-			<div id="food_choose"></div>
-			<div id="results_wrapper">
-				<div id="results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
-			</div>
-
-		
 
 
 				<!--
