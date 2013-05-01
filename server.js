@@ -32,16 +32,19 @@ app.set('views', __dirname + '/view');  // tell Express where to find templates
 
 //likely migrate this way down the page
 //what db to use?
-var conn = anyDB.createConnection('sqlite3://database.db');
+var conn;
 fs.exists('database.db',function(exists) {
-    if (exists == false) {
-	conn.query('CREATE TABLE users (userid INTEGER PRIMARY KEY, username TEXT, password TEXT);') 
-	    .on('end', function() {
-	    console.log('Made table!');
-	    });
-	conn.query('CREATE TABLE calendar (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, weight INTEGER, mealtype TEXT);') 
-	.on('end', function() {
-	    console.log('Made table!');
+	conn = anyDB.createConnection('sqlite3://database.db');
+	console.log(exists);
+    if (exists === false) {
+    	console.log("making table");
+		conn.query('CREATE TABLE users (userid INTEGER PRIMARY KEY, username TEXT, password TEXT);') 
+		    .on('end', function() {
+		    console.log('Made table!');
+		    });
+		conn.query('CREATE TABLE calendar (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, mealtype TEXT, weight INTEGER);') 
+		.on('end', function() {
+		    console.log('Made table!');
 	    
 	    //UNCOMMENT FOR TEST POINTS
 	    //test();
@@ -135,21 +138,22 @@ entry {
 	date: 4-23-13
 	food: [[calories,id,name][calories2,id2,name2]]
 	OR weight: int
-}
 
 
 
 **/
 app.post('/addmeal', function(req,res) {
-	console.log("here!");
+	console.log("adding meal");
 	var meal = JSON.parse(req.body.meal);
+	console.log(meal);
+	console.log(new Date(meal['date']));
 	var food = meal['food']
 	var time = meal['date']
-	var mealtype = meal['mealtype'];
-	console.log(meal);
-	console.log(mealtype);
+	var mealtype = food[0]['mealtype'];
+	console.log("meal: " + mealtype);
 	ids = "";
 	names = "";
+	mealtypes = "";
 	calories = 0;
 	for (var i = 0; i < food.length-1; i++) {
 		ids += food[i]['id'] + ",";
@@ -160,7 +164,7 @@ app.post('/addmeal', function(req,res) {
 	names += food[food.length-1]['name'];
 	calories += parseInt(food[food.length-1]['calories']);
 	//id,date,foodorweight,name,calories,id,weight
-	conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6,$7,$8)', [null,meal['date'],1,names,calories,ids,0,mealtype],function(error,result){
+	conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6,$7,$8)', [null,meal['date'],1,names,calories,ids,mealtype,0],function(error,result){
 		console.log("insert : " + error);
 	});
 	console.log("after");
@@ -200,6 +204,7 @@ app.get('/graph.json',function(req,res) {
 			dates[row.datetime] = [];
 		    }
 		    dates[row.datetime].push([row.totalcalories,row.id,row.mealtype,row.mealname]);
+		    console.log('pulling ' + row.mealtype);
 		}
 		else {
 		    data['weight'].push([row.datetime, row.weight,row.id]);
@@ -235,7 +240,7 @@ app.get('/graph.json',function(req,res) {
 			hidden_items.push(meal[2]);
 			hidden_items.push(meal[3]);
 		    }
-		    data['food'].push([parseInt(day),day_calories,[hidden_items]]);
+		    data['food'].push([parseInt(time),day_calories,[hidden_items]]);
 		}
 	
 		console.log('about to return');
@@ -294,6 +299,7 @@ CALENDAR TO DATABASE
 SENDS: month/year (mm-yy), username
 returns: rows of database: meal name, day, id, totalcalories, mealtype
 
+
 **/
 app.get('/calendar.json',function(req,res) {
     var data = {};
@@ -303,7 +309,7 @@ app.get('/calendar.json',function(req,res) {
     }
     catch(err) {
 	console.log(err);
-	var date = [2013,05]; //default april 2013
+	var date = [2013,05]; //default may 2013
     }
     var start = new Date(date[0],date[1]-1,1);
     var end = new Date(date[0],date[1],0);
@@ -319,8 +325,8 @@ app.get('/calendar.json',function(req,res) {
 	    entry['id'] = row.id;
 	    entry['totalcalories'] = row.totalcalories;
 	    entry['mealtype'] = row.mealtype;
-		if (data[day] == undefined) {
-		data[day] = [];
+	    if (data[day] == undefined) {
+			data[day] = [];
 	    }
 	    data[day].push(entry);
 	})

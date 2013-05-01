@@ -208,12 +208,9 @@ function updateCalendar(data) {
     
     var days = $('.fatsecret_day_content');
     $('.fatsecret_day_content > p, .calories').remove();
-    
-    //console.log(days);
+
     for (var key in data) {
-    
-	console.log("key" + key);
-	var item = days[key];
+	var item = days[key-1];
 	//$(item).empty();
 	var calories = 0;
 	for (var i = 0; i < data[key].length; i++) {
@@ -229,7 +226,7 @@ function edit_meal(e) {
 	console.log(e.currentTarget.id);
 	var items = e.currentTarget.id.split('/');
 	
-	Meal.date = new Date(items[2],items[1]-1,items[0]-1).getTime();
+	Meal.date = new Date(items[2],items[1]-1,items[0]).getTime();
 	
 	
 	document.getElementById('light').style.display='block';
@@ -434,8 +431,7 @@ function Form_eventListener() {
 		table_container.appendChild(tofill);
 		
 		// Add to meal object	
-		Meal.food.push({id : food_id, name : food_name, calories : total_calories});
-		Meal.mealtype = food_type;
+		Meal.food.push({id : food_id, name : food_name, calories : total_calories, mealtype: food_type});
 		
 	});
 	

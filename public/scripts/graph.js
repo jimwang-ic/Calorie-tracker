@@ -2,8 +2,8 @@ window.addEventListener('load', function(){
 	
 	// Customize our Calendar  
 	//for now april 2013
-	var start = new Date(2013,3,1).getTime();
-	var end = new Date(2013,4,0).getTime();
+	var start = new Date(2013,4,1).getTime();
+	var end = new Date(2013,5,0).getTime();
 	console.log("between " + start + " " + end);
 	Customize("username",start,end);
 	
