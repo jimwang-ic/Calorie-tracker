@@ -63,9 +63,9 @@ function update(data) {
 	var values = item.datapoint.toString().split(',');
 	var date = new Date(parseInt(values[0]));
 	console.log(item.datapoint);
-        //alert("You clicked a point!  On " + date + " you ate " + values[1] + " calories.  Also " + pointToId[item.datapoint]);
+        alert("You clicked a point!  On " + date + " you ate " + values[1] + " calories.  Also " + pointToId[item.datapoint]);
 	// create a request object
-	var request = new XMLHttpRequest();
+	/*var request = new XMLHttpRequest();
 
 	// specify the HTTP method, URL, and asynchronous flag
 	request.open('GET', '/entry.json?id=' + pointToId[item.datapoint], true);
@@ -84,7 +84,7 @@ function update(data) {
 	}, false);
 
 	// start the request, optionally with a request body for POST requests
-	request.send(null);
+	request.send(null);*/
 	
     	if (item.selected) {
     	  item.selected = true;

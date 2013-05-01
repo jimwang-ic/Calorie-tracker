@@ -24,10 +24,10 @@ window.addEventListener('load', function(){
 	});
 	
 	Form_eventListener();
+	
 		
-					
-		//$('#search_query').on('focus',show);
-		//$('#search_query').on('blur',hide);
+	//$('#search_query').on('focus',show);
+	//$('#search_query').on('blur',hide);
 			
 		/*
 	$('#foodentry').on('focus',show);
@@ -187,6 +187,7 @@ function updateCalendar_ajax() {
   Displays returned information on calendar
 **/
 
+
 var current_month_data = {};
 
 function updateCalendar(data) {
@@ -209,7 +210,6 @@ function updateCalendar(data) {
 	for (var i = 0; i < data[key].length; i++) {
 	    //console.log(data
 	    calories += parseInt(data[key][i].totalcalories);
-	    //$(item).append('<p mealid=' + data[key][i].id + ' display="none"/>');
 	}
 	$(item).append('<span class=calories>' + calories + '</span>');
     }

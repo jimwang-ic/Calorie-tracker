@@ -182,26 +182,29 @@ console.log('Listen on port 8080');
  * returns dataset of pairs of coordinates datetime and other calories
 */
 app.get('/graph.json',function(req,res) {
-    console.log(req.query);
     var start = req.query['start'];
     var end = req.query['end'];
     var data = {};
     data['food'] = [];
     data['weight'] = [];
     console.log("between " + start + " " + end);
+    var dates = {};
     //as of now returns everything
     //conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
     conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2;',[start,end])
 	    .on('row',function(row) {
 		console.log(row);
 		if (row.foodweight == 1) {
-		    var day = new Date(row.datetime).getDate();
-		    
-		    data['food'].push([row.datetime,row.totalcalories,row.id])
+		    if (dates[row.datetime] == undefined) {
+			console.log("here");
+			dates[row.datetime] = [];
+		    }
+		    dates[row.datetime].push([row.totalcalories,row.id,row.mealtype,row.mealname]);
 		}
 		else {
 		    data['weight'].push([row.datetime, row.weight,row.id]);
 		}
+		
 		
 		console.log(row.mealname);
 		var day = new Date(row.datetime).getDate();
@@ -218,11 +221,26 @@ app.get('/graph.json',function(req,res) {
 
 	    })
 	    .on('end',function(row) {
-		
+		for (var time in dates) {
+		    console.log("counting");
+		    console.log(dates[day]);
+		    var day_calories = 0;
+		    var hidden_items = [];
+		    var day = dates[time];
+		    for (var i = 0; i < day.length; i++) {
+			var meal = day[i];
+			console.log(meal);
+			day_calories += meal[0];
+			hidden_items.push(meal[1]);
+			hidden_items.push(meal[2]);
+			hidden_items.push(meal[3]);
+		    }
+		    data['food'].push([parseInt(day),day_calories,[hidden_items]]);
+		}
 	
 		console.log('about to return');
 		console.log(row);
-		examinePrevious();
+		//examinePrevious();
 		res.json(data);
 	    })
 
@@ -285,7 +303,7 @@ app.get('/calendar.json',function(req,res) {
     }
     catch(err) {
 	console.log(err);
-	var date = [2013,04]; //default april 2013
+	var date = [2013,05]; //default april 2013
     }
     var start = new Date(date[0],date[1]-1,1);
     var end = new Date(date[0],date[1],0);
