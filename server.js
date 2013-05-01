@@ -32,10 +32,11 @@ app.set('views', __dirname + '/view');  // tell Express where to find templates
 
 //likely migrate this way down the page
 //what db to use?
-var conn = anyDB.createConnection('sqlite3://database.db');
+var conn;
 fs.exists('database.db',function(exists) {
+	conn = anyDB.createConnection('sqlite3://database.db');
 	console.log(exists);
-    if (exists == true) {
+    if (exists === false) {
     	console.log("making table");
 		conn.query('CREATE TABLE users (userid INTEGER PRIMARY KEY, username TEXT, password TEXT);') 
 		    .on('end', function() {
@@ -137,19 +138,18 @@ entry {
 	date: 4-23-13
 	food: [[calories,id,name][calories2,id2,name2]]
 	OR weight: int
-}
 
 
 
 **/
 app.post('/addmeal', function(req,res) {
-	console.log("here!");
+	console.log("adding meal");
 	var meal = JSON.parse(req.body.meal);
 	console.log(meal);
+	console.log(new Date(meal['date']));
 	var food = meal['food']
 	var time = meal['date']
 	var mealtype = meal['mealtype'];
-	console.log(meal);
 	ids = "";
 	names = "";
 	calories = 0;
@@ -237,7 +237,7 @@ app.get('/graph.json',function(req,res) {
 			hidden_items.push(meal[2]);
 			hidden_items.push(meal[3]);
 		    }
-		    data['food'].push([parseInt(day),day_calories,[hidden_items]]);
+		    data['food'].push([parseInt(time),day_calories,[hidden_items]]);
 		}
 	
 		console.log('about to return');
@@ -306,7 +306,7 @@ app.get('/calendar.json',function(req,res) {
     }
     catch(err) {
 	console.log(err);
-	var date = [2013,05]; //default april 2013
+	var date = [2013,05]; //default may 2013
     }
     var start = new Date(date[0],date[1]-1,1);
     var end = new Date(date[0],date[1],0);
@@ -323,7 +323,7 @@ app.get('/calendar.json',function(req,res) {
 	    entry['totalcalories'] = row.totalcalories;
 	    entry['mealtype'] = row.mealtype;
 	    if (data[day] == undefined) {
-		data[day] = [];
+			data[day] = [];
 	    }
 	    data[day].push(entry);
 	})
