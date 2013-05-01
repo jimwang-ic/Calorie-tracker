@@ -29,7 +29,7 @@ window.addEventListener('load', function(){
 	//$('#search_query').on('focus',show);
 	//$('#search_query').on('blur',hide);
 			
-		/*
+	/*
 	$('#foodentry').on('focus',show);
 		$('#foodentry').on('blur',hide);
 	*/
@@ -145,7 +145,16 @@ function Customize_cal() {
         else 
         {	  
         	var id = $(e.target).find( $('a span') ).attr('id');
-        	console.log(id);      
+        	//console.log(id);   
+        	//console.log(current_month_data);   
+	        
+	        var day = id.split("/");
+	        var date = parseInt(day[0]);
+	        
+	        var meals = current_month_data[date-1];
+	         
+	        console.log(date);
+	        console.log(meals);
 	        //console.log(e);
         }
         
@@ -191,8 +200,8 @@ function updateCalendar_ajax() {
 var current_month_data = {};
 
 function updateCalendar(data) {
-    console.log("here");
-    console.log(data);
+    
+    console.log("Calendar data" +  data);
     
     //assign the data to global variable current_month_data
     current_month_data = data;
@@ -200,10 +209,10 @@ function updateCalendar(data) {
     var days = $('.fatsecret_day_content');
     $('.fatsecret_day_content > p, .calories').remove();
     
-    console.log(days);
+    //console.log(days);
     for (var key in data) {
     
-	console.log(key);
+	console.log("key" + key);
 	var item = days[key];
 	//$(item).empty();
 	var calories = 0;
@@ -424,9 +433,9 @@ function Form_eventListener() {
 		var table_container = document.getElementById("table_container");
 		table_container.appendChild(tofill);
 		
-		// Add to meal object
-		// TODO : Must change this...
-		Meal.food.push({id : food_id, name : food_name, calories : total_calories, mealtype : food_type});
+		// Add to meal object	
+		Meal.food.push({id : food_id, name : food_name, calories : total_calories});
+		Meal.mealtype = food_type;
 		
 	});
 	

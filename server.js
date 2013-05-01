@@ -143,11 +143,11 @@ entry {
 app.post('/addmeal', function(req,res) {
 	console.log("here!");
 	var meal = JSON.parse(req.body.meal);
-	console.log(meal);
 	var food = meal['food']
 	var time = meal['date']
 	var mealtype = meal['mealtype'];
 	console.log(meal);
+	console.log(mealtype);
 	ids = "";
 	names = "";
 	calories = 0;
@@ -160,8 +160,8 @@ app.post('/addmeal', function(req,res) {
 	names += food[food.length-1]['name'];
 	calories += parseInt(food[food.length-1]['calories']);
 	//id,date,foodorweight,name,calories,id,weight
-	conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6,$7,$8)', [null,meal['date'],1,names,calories,ids,mealtype,0],function(error,result){
-		console.log(error);
+	conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6,$7,$8)', [null,meal['date'],1,names,calories,ids,0,mealtype],function(error,result){
+		console.log("insert : " + error);
 	});
 	console.log("after");
 	console.log('done');
@@ -319,7 +319,7 @@ app.get('/calendar.json',function(req,res) {
 	    entry['id'] = row.id;
 	    entry['totalcalories'] = row.totalcalories;
 	    entry['mealtype'] = row.mealtype;
-	    if (data[day] == undefined) {
+		if (data[day] == undefined) {
 		data[day] = [];
 	    }
 	    data[day].push(entry);
