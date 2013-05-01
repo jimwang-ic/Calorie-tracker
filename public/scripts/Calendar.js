@@ -116,25 +116,6 @@ window.addEventListener('load', function(){
 		});
 		
 		
-		$('.fatsecret_day_other').click(function(e) {
-        
-        
-        	console.log("shit");
-	        
-	        if ($(e.target).is('#btn-block, #btn-block *')) 
-	        {
-	            return;
-	        }
-	        else 
-	        {	        
-		        if(isClicked)
-				{
-					reduce_nickname_div();	
-					isClicked = false;
-				}
-	        }
-	        
-    	});
 
 		
 		//$('#search_query').on('focus',show);

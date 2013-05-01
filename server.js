@@ -200,7 +200,6 @@ app.get('/graph.json',function(req,res) {
 			dates[row.datetime] = [];
 		    }
 		    dates[row.datetime].push([row.totalcalories,row.id,row.mealtype,row.mealname]);
-		    data['food'].push([row.datetime,row.totalcalories,row.id])
 		}
 		else {
 		    data['weight'].push([row.datetime, row.weight,row.id]);
@@ -222,21 +221,26 @@ app.get('/graph.json',function(req,res) {
 
 	    })
 	    .on('end',function(row) {
-		for (var day in dates) {
+		for (var time in dates) {
+		    console.log("counting");
+		    console.log(dates[day]);
 		    var day_calories = 0;
 		    var hidden_items = [];
-		    for (var meal in day) {
+		    var day = dates[time];
+		    for (var i = 0; i < day.length; i++) {
+			var meal = day[i];
+			console.log(meal);
 			day_calories += meal[0];
 			hidden_items.push(meal[1]);
 			hidden_items.push(meal[2]);
 			hidden_items.push(meal[3]);
 		    }
-		    data['food'].push([day,day_calories[hidden_items]]);
+		    data['food'].push([parseInt(day),day_calories,[hidden_items]]);
 		}
 	
 		console.log('about to return');
 		console.log(row);
-		examinePrevious();
+		//examinePrevious();
 		res.json(data);
 	    })
 
@@ -299,7 +303,7 @@ app.get('/calendar.json',function(req,res) {
     }
     catch(err) {
 	console.log(err);
-	var date = [2013,04]; //default april 2013
+	var date = [2013,05]; //default april 2013
     }
     var start = new Date(date[0],date[1]-1,1);
     var end = new Date(date[0],date[1],0);
