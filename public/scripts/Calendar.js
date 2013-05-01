@@ -96,6 +96,7 @@ function transferDateToIntSetID(){
 	}
 }
 
+
 function Customize_cal() {
 	
 	console.log("Customize");
@@ -134,7 +135,7 @@ function Customize_cal() {
 	$('.fatsecret_footer').hide();
 	
 	
-	$('.fatsecret_day_other').click(function(e) {
+	$('.fatsecret_day_other, .fatsecret_day_today').click(function(e) {
     
     	//console.log(e.target);
     	
@@ -145,17 +146,48 @@ function Customize_cal() {
         else 
         {	  
         	var id = $(e.target).find( $('a span') ).attr('id');
-        	//console.log(id);   
-        	//console.log(current_month_data);   
-	        
-	        var day = id.split("/");
+     	    var day = id.split("/");
 	        var date = parseInt(day[0]);
+	        var meals = current_month_data[date];
+	       	
+	       	//console.log(meals);
+	       	
+	       	var mealtypeTable = {
+				'breakfast': 1,
+				'lunch':2,
+				'dinner':3,
+				'snack':4
+			};  
+			
+		
+			$("#box-table-a tr td:nth-child(2)").html("Unrecorded");
+			$("#box-table-a tr td:nth-child(3)").html("n/a");
+			
+			// Combine the meals base on their types
+			var CombineMeal = {};
+			
+			for(var key in meals)
+			{
+				var meal = meals[key];
+				var mealtype_n =  mealtypeTable[meal.mealtype];
+				
+				if(CombineMeal[mealtype_n] === undefined)
+				{
+					CombineMeal[mealtype_n] = {};
+					CombineMeal[mealtype_n].names = "";
+					CombineMeal[mealtype_n].calories = 0;
+				}
+				
+				CombineMeal[mealtype_n].calories += meal.totalcalories;  
+				CombineMeal[mealtype_n].names += (meal.mealname + ',');
+	        }
 	        
-	        var meals = current_month_data[date-1];
-	         
-	        console.log(date);
-	        console.log(meals);
-	        //console.log(e);
+	        for(key in CombineMeal)
+	        {
+	        	var mealnames = CombineMeal[key].names;
+	        	$("#box-table-a tr:eq(" + key + ") td:eq(1)").html(mealnames.substring(0, mealnames.length-1));
+				$("#box-table-a tr:eq(" + key + ") td:eq(2)").html(CombineMeal[key].calories);
+	        }
         }
         
 	});
