@@ -34,7 +34,6 @@ BODY STYLING
 }
 
 body {
-	background: url(../images/bg.png) repeat;
 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
 	font-weight:300;
 	text-align: left;
@@ -45,11 +44,12 @@ body {
 	/* Center wrapper perfectly */
 	width: 300px;
 	height: 400px;
-	position: absolute;
-	left: 50%;
-	top: 50%;
-	margin-left: -150px;
-	margin-top: -200px;
+	position: relative;
+	left: 600px;
+	top: -115px;
+	display: inline-block;	
+
+	
 }
 
 /*

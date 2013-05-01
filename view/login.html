@@ -4,27 +4,92 @@
 	<title>ShapeUp Calorie Counter Login</title>
 
 	<!--Style/Javascript links-->
-	<link rel="stylesheet" href="../css/style.css" type="text/css"/>
+	<link rel="stylesheet" href="../css/login.css" type="text/css"/>
+	<!--Style for login box-->
+	<link href="loginboxsupport/css/style.css" rel="stylesheet" type="text/css"/>
+
+	<!--Javascript for login box-->
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+	<!--Slider-in icons-->
+	<script type="text/javascript">
+	$(document).ready(function() {
+	$(".username").focus(function() {
+		$(".user-icon").css("left","-48px");
+	});
+	$(".username").blur(function() {
+		$(".user-icon").css("left","0px");
+	});
+	
+	$(".password").focus(function() {
+		$(".pass-icon").css("left","-48px");
+	});
+	$(".password").blur(function() {
+		$(".pass-icon").css("left","0px");
+	});
+	});
+	</script>
+	
 
 </head>
-<body style="height: 100%;">
+<body id="hello" background="../images/sky.JPG" style="height: 100%">
 
 <!--Top Bar-->
 <div id="toploginbar">
-Home News Careers What is Shapeup? Contact 
+<h2><a href="http://www.shapeup.com">Home</a> <a href="http://www.shapeup.com/about/">About</a> <a href="http://www.shapeup.com/resources/">Resources</a> <a href="http://www.shapeup.com/blog/">Blog</a></h2>  
 </div>
 
-<!--Left Side-->
+<!--Main Content-->
 <div id="leftlogincolumn">
-<img src="../images/logo.png">
-<h2 id="motto">Caloire Tracking</h2>
-<h2 id="motto">Made Easy.</h2>
-<img src="../images/solutions-progress-tracking-icon.png">
-</div>
+	<!--Logo and Motto-->
+	<div id="logoandmottoimage"> 
+		<img src="../images/logo.png">
+		<div style="margin-top:15px">
+		<h2 id="motto">Calorie Tracking Made Easy.</h2>
+		</div>
+		<br>
 
-<!--Right Side-->
-<div id="rightlogincolumn">
-Greetings
+	<div id="exerciseimage" style="margin-top: 15px">
+	<img src="../images/Elderly_exercise.jpg"> 
+	</div>
+	<!--Form-->
+	<div id="wrapper">
+
+	<!--SLIDE-IN ICONS-->
+    	<div class="user-icon"></div>
+    	<div class="pass-icon"></div>
+    	<!--END SLIDE-IN ICONS-->
+
+	<!--LOGIN FORM-->
+	<form name="login-form" class="login-form" action="" method="post">
+
+	<!--HEADER-->
+    	<div class="header">
+    	<!--TITLE--><h1>Login</h1><!--END TITLE-->
+   	<!--DESCRIPTION--><span>Sign into ShapeUp. Or create an account</span><!--END DESCRIPTION-->
+   	</div>
+   	<!--END HEADER-->
+	
+	<!--CONTENT-->
+   	<div class="content">
+	<!--USERNAME--><input name="username" type="text" class="input username" value="Username" onfocus="this.value=''" /><!--END USERNAME-->
+    	<!--PASSWORD--><input name="password" type="password" class="input password" value="Password" onfocus="this.value=''" /><!--END PASSWORD-->
+    	</div>
+    	<!--END CONTENT-->
+    
+    	<!--FOOTER-->
+    	<div class="footer">
+   	<!--LOGIN BUTTON--><input type="submit" name="submit" value="Login" class="button" /><!--END LOGIN BUTTON-->
+    	<!--REGISTER BUTTON--><input type="submit" name="submit" value="Register" class="register" /><!--END REGISTER BUTTON-->
+    	</div>
+    	<!--END FOOTER-->
+
+	</form>
+	<!--END LOGIN FORM-->
+
+	</div>
+	<!--END WRAPPER-->
+
+<!--END MAIN PANEL-->
 </div>
 
 
@@ -32,7 +97,7 @@ Greetings
 
 <!--Bottom Bar-->
 <div id="bottomloginbar">
-Copyright &copy 2013 ShapeUp. All rights reserved.
+<b>Copyright &copy 2013 ShapeUp. All rights reserved.</b>
 </div>
 
 <body>
