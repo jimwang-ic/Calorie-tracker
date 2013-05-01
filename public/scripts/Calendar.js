@@ -112,7 +112,10 @@ window.addEventListener('load', function(){
 			// Send it to the server 
 			var req = new XMLHttpRequest();
 			req.open('POST', '/addmeal', true);
-			req.send(fd);*/
+			req.send(fd);
+			document.getElementById('light').style.display='none';
+			document.getElementById('fade').style.display='none';
+			Customize_cal();*/
 		
 		});
 		
@@ -236,12 +239,20 @@ function Customize_cal() {
   Displays returned information on calendar
 **/
 function updateCalendar(data) {
+    console.log("here");
     console.log(data);
     var days = $('.fatsecret_day_content');
     console.log(days);
     for (var key in data) {
 	console.log(key);
-	$(days[key]).append('<p mealid=' + data[key].id + '>' + data[key].mealname + ": " + data[key].totalcalories + '</p>');
+	var item = days[key];
+	//$(item).empty();
+	var calories = 0;
+	for (var i = 0; i < data[key].length; i++) {
+	    calories += parseInt(data[key][i].totalcalories);
+	    $(item).append('<p mealid=' + data[key][i].id + ' display="none"/>');
+	}
+	$(item).append(calories);
     }
 }
 
