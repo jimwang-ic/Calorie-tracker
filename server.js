@@ -375,11 +375,6 @@ function test() {
 
 
 
-
-
-
-
-
 /**
 * Adds new user to database.  Should also create new CALENDAR?  Returns userid?
 **/
