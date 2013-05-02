@@ -1,3 +1,5 @@
+/* CSS for tabs on Calendar.html */
+
 a:active {
 	outline:none;
 }
@@ -15,19 +17,22 @@ a:focus {
 	background:transparent;
 	position:relative;
 	overflow:auto;
-
 }
 
 .tabs{
 	background-color:transparent;
 }
 
+ul.tabs li  a{
+	-webkit-border-radius:4px 4px 0 0;
+	-moz-border-radius:4px 4px 0 0;
+	border-radius:4px 4px 0 0;
+}
+
 #tabs_container ul.tabs {
 	list-style: none;
 	height: 21px;
-	margin: 0;
 }
-
 
 #tabs_container ul.tabs li{
 	float: left;
@@ -49,17 +54,15 @@ a:focus {
 	padding-top:4px;
 }
 
-
-
 div.tab_contents_container{
 	border: 1px solid #ccc;
 	border-top: none;
 	padding: 10px;
 	overflow:auto;
 	background:#fff;
-	-webkit-border-radius:5px;
-	-moz-border-radius:5px;
-	border-radius:5px;
+	-webkit-border-radius:0px 4px 4px 4px;
+	-moz-border-radius:0px 4px 4px 4px;
+	border-radius:0px 4px 4px 4px;
 }
 
 div.tab_contents{
@@ -72,15 +75,14 @@ div.tab_contents_active{
 
 #calendar_tab{
 	overflow:auto;
-	/*border:2px blue dotted;*/
+	margin-top:55px;
+	margin-bottom:40px;
 }
+
+
 
 div.clear {
 	clear:both;
 }
 
 
-#holder{
-	margin:0;
-	overflow:auto;
-}

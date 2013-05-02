@@ -1,4 +1,7 @@
-/* calendar */
+/* CSS FOR THE CALENDAR, SPECIFICALLY */
+
+
+/* CSS FOR THE CALENDAR */
 .fatsecret_calendar
 {
 	font-size: 125%;
@@ -7,16 +10,7 @@
 	float:left;
 	margin: 20px 0px 20px 15px;	
 	border: 2px solid #AABCFE;
-
 }
-
-
-#fatsecret_output_3{
-	float:left;
-	margin:0;
-
-}
-
 .fatsecret_day_number{
 	font-size:9pt;
 	color: #669;
@@ -107,93 +101,10 @@
 	padding: 1px 0 0 4px;
 }
 
-/* net gain/loss image (up or down arrow) */
-/*
-.fatsecret_day_net_image
-{
-}
-*/
 
 .date{
 	width: 200px;
 	margin:0 0 0 100px !important;
 }
-
-
-
-/* CSS FOR DAILY DATA */
-#dayData{
-	display:block;
-	background:white;
-	width:300px;
-	height:300px;
-	border:#ccc 1px solid;
-	margin: auto;
-	margin-top:120px;
-	margin-left:20px;
-	margin-bottom:30px;
-	padding:20px;
-	padding-left:0px;
-	float:left;
-}
-
-
-#dayDataHeader{
-	float left;
-	display:inline-block;
-	padding-left:20px;
-}
-
-#box-table-a {
-	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
-	font-size: 12px;
-	width: 280px;
-	text-align: left;
-	border-collapse: collapse;
-	display:block;
-	float:right;
-	position:relative;
-	margin: 30px 0px 0px auto;
-}
-
-#box-table-a th {
-	font-size: 13px;
-	font-weight: normal;
-	background: #B9C9FE;
-	border-top: 4px solid #AABCFE;
-	border-bottom: 1px solid white;
-	color: #039;
-	padding: 8px;
-}
-
-#box-table-a td {
-	background: #E8EDFF;
-	border-bottom: 1px solid white;
-	color: #669;
-	border-top: 1px solid transparent;
-	padding: 14px 4px 14px 4px;
-}
-
-#box-table-a td:last-child {
-	text-align:center;
-}
-
-#jason{
-	width:0px;
-}
-
-#holder{
-	width:615px;
-}
-
-
-
-
-
-
-
-
-
-
 
 
