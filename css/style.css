@@ -148,3 +148,21 @@ a.monthbutton{
 #motto {
 	color: #FFFFFF;
 }
+
+#tabandday_cont{
+	overflow:auto;
+	margin:auto;
+	display:block;
+	position:absolute;
+	top:140px;
+	left:10%;
+	width:1050px;
+}
+
+#dayDataholder{
+	height:580px;
+	margin-top:22px;
+	width:400px;
+	background-image:url('../public/images/navy_blue.png');
+	overflow:auto;
+}
