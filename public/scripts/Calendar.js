@@ -420,6 +420,23 @@ function updateCalendar(data) {
 	}
 	$(item).append('<span class=calories>' + calories + '</span>');
     }
+    console.log("days:");
+    console.log(days);
+    
+    var today = new Date();
+    for (var i = 0; i < days.length; i++) {
+	$(days[i]).parent().removeClass("missing");
+    }
+    for (var i = 0; i < days.length; i++) {
+	if ($(days[i]).parent().attr('class') == 'fatsecret_day_today') {
+	    return;
+	}
+	var val = i+1;
+	if (!(val in data)) {
+	    $(days[i]).parent().addClass("missing");
+	}
+    }
+
 }
 
 // make lightbox appear
