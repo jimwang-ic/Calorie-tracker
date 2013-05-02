@@ -58,6 +58,22 @@ function RefreshCal() {
 	updateCalendar_ajax();
 	load_graph();
 }
+
+// hashtable for hashing text to numbers
+var monthTable = {
+	'January':'01',
+	'February':'02',
+	'March':'03',
+	'April':'04',
+	'May':'05',
+	'June':'06',
+	'July':'07',
+	'August':'08',
+	'September':'09',
+	'October':'10',
+	'November':'11',
+	'December':'12'
+};
 	
 
 function transferDateToIntSetID(){
@@ -69,21 +85,6 @@ function transferDateToIntSetID(){
 	var datetext = date.replace(/\n/g, '');
 	var dateArray = datetext.split(' ');
 	
-	// hashtable for hashing text to numbers
-	var monthTable = {
-		'January':'01',
-		'February':'02',
-		'March':'03',
-		'April':'04',
-		'May':'05',
-		'June':'06',
-		'July':'07',
-		'August':'08',
-		'September':'09',
-		'October':'10',
-		'November':'11',
-		'December':'12'
-	};
 
 	// set id for edit meal link
 	for(var i=0; i<daylink.length/2; i++){
@@ -96,6 +97,8 @@ function transferDateToIntSetID(){
 		daylink[2*i].setAttribute("id",id+'/'+monthTable[dateArray[0]]+'/'+dateArray[1]);	
 	}
 }
+
+
 
 
 function Customize_cal() {
@@ -146,50 +149,13 @@ function Customize_cal() {
         }
         else 
         {	  
-        	var id = $(e.target).find( $('a span') ).attr('id');
+	    var id = $(e.target).find( $('a span') ).attr('id');
      	    var day = id.split("/");
-	        var date = parseInt(day[0]);
-	        var meals = current_month_data[date];
+	    var date = parseInt(day[0]);
+	    var meals = current_month_data[date];
 	       	
-	       	console.log("meals");
-	       	console.log(meals);
 	       	
-	       	var mealtypeTable = {
-				'breakfast': 1,
-				'lunch':2,
-				'dinner':3,
-				'snack':4
-			};  
-			
-		
-			$("#box-table-a tr td:nth-child(2)").html("Unrecorded");
-			$("#box-table-a tr td:nth-child(3)").html("n/a");
-			
-			// Combine the meals base on their types
-			var CombineMeal = {};
-			
-			for(var key in meals)
-			{
-				var meal = meals[key];
-				var mealtype_n =  mealtypeTable[meal.mealtype];
-				
-				if(CombineMeal[mealtype_n] === undefined)
-				{
-					CombineMeal[mealtype_n] = {};
-					CombineMeal[mealtype_n].names = "";
-					CombineMeal[mealtype_n].calories = 0;
-				}
-				
-				CombineMeal[mealtype_n].calories += meal.totalcalories;  
-				CombineMeal[mealtype_n].names += (meal.mealname + ',');
-	        }
-	        
-	        for(key in CombineMeal)
-	        {
-	        	var mealnames = CombineMeal[key].names;
-	        	$("#box-table-a tr:eq(" + key + ") td:eq(1)").html(mealnames.substring(0, mealnames.length-1));
-				$("#box-table-a tr:eq(" + key + ") td:eq(2)").html(CombineMeal[key].calories);
-	        }
+	    fill_date_screen(meals);
         }
         
 	});
@@ -240,10 +206,11 @@ function fill_date_screen(meals) {
 
 function updateCalendar_ajax() {
 	
-	var date = new Date();
-	var month = new Date().getMonth() + 1;
-	var year = new Date().getFullYear();
-	var text = year + "-" + month;
+	var date = $("#fatsecret_output_1").text();
+	// regular expression to get rid of '\n'
+	var datetext = date.replace(/\n/g, '');
+	var dateArray = datetext.split(' ');
+	var text = dateArray[1] + "-" + monthTable[dateArray[0]];
 	
 	var request = new XMLHttpRequest();
 
