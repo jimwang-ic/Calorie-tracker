@@ -162,6 +162,15 @@ app.post('/addmeal', function(req,res) {
 	res.render('Calendar.html');
 });
 
+/**
+  Delete Meal
+**/
+app.post('/deletemeal',function(req,res) {
+    var id = req.body.id;
+    conn.query('DELETE FROM calendar WHERE id=$1;',[id]);
+    res.render('Calendar.html');
+}
+
 
 
 
@@ -202,7 +211,7 @@ app.get('/graph.json',function(req,res) {
 		entry['mealtype'] = row.mealtype;
 		if (data[day] == undefined) {
 		    data[day] = [];
-		}
+		}app.post
 		data[day].push(entry);
 		
 
@@ -226,7 +235,7 @@ app.get('/graph.json',function(req,res) {
 			hidden_items.push(items);
 		    }
 		    data['food'].push([parseInt(time),day_calories,hidden_items]);
-		}
+		}app.post
 	
 		console.log('about to return');
 		console.log(row);
@@ -275,6 +284,8 @@ app.get('/entry.json',function(req,res) {
     }
 	
 });
+
+
 
 
 

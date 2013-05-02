@@ -7,7 +7,7 @@ window.addEventListener('load', function(){
 	Customize_cal();
 	
 	fatsecret.onTabChanged = function(tab_id){
-			
+		//change from analysis to calendar
 		if(tab_id == 8)
 			Customize_cal();
 	};
@@ -26,10 +26,6 @@ window.addEventListener('load', function(){
 		document.getElementById('chooseMeal').style.display='none';
 		document.getElementById('detailedForm').style.display='block';
 	});
-	
-	/*$('#prevMonth a,#nextMonth a').on('click',function() {
-	    Customize_cal();
-	});*/
 	
 	Form_eventListener();
 		
@@ -74,6 +70,9 @@ var monthTable = {
 };
 	
 
+/**
+  Sets id within span of "+" for access to query backend.
+**/
 function transferDateToIntSetID(){
 	// selector for children in order to set id 
 	var daynumber = $(".fatsecret_day_number");
@@ -98,10 +97,12 @@ function transferDateToIntSetID(){
 
 
 
+/**
 
+  Main function for setting up calendar.
+
+**/
 function Customize_cal() {
-	
-	console.log("Customize");
 	
 	updateCalendar_ajax();
 	
