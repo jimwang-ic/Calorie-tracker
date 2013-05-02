@@ -14,10 +14,13 @@ a:focus {
 	background:#fff;
 	position:relative;
 	overflow:auto;
+	-webkit-border-radius:9px;
+	-moz-border-radius:9px;
+	border-radius:9px;
 }
 
 .tabs{
-	background:#eee;
+	background-image:url('../public/images/bedge_grunge.png');
 }
 
 #tabs_container ul.tabs {
@@ -47,6 +50,8 @@ a:focus {
 	background-color: #fff;
 	padding-top:4px;
 }
+
+
 
 div.tab_contents_container{
 	border: 1px solid #ccc;
