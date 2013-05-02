@@ -11,6 +11,7 @@ window.addEventListener('load', function(){
 
 
 function load_graph(start,end) {
+    var date = new Date(), y = date.getFullYear(), m = date.getMonth();
     if (start == null) {
 	start = new Date(y, m, 1);
     }

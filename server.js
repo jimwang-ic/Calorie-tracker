@@ -15,7 +15,14 @@ app.use('/public/scripts', express.static(__dirname + '/public/scripts'));
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/img', express.static(__dirname + '/img'));
 app.use('/fonts', express.static(__dirname + '/fonts'));
+app.use('/view', express.static(__dirname + '/view'));
+app.use('/images', express.static(__dirname + '/images'));
+//app.use('/view/loginboxsupport', express.static(__dirname + '/view/loginboxsupport'));
+//app.use('/view/loginboxsupport/css', express.static(__dirname + '/view/loginboxsupport/css'));
+//app.use('/view/loginboxsupport/fonts/Bree_Serif', express.static(__dirname + '/view/loginboxsupport/fonts/Bree_Serif'));
+//app.use('/view/loginboxsupport/images', express.static(__dirname + '/view/loginboxsupport/images'));
 app.use(express.cookieParser());
+app.use(express.bodyParser());
 
 app.use(express.session({
 	secret: 'session_key',
@@ -29,6 +36,9 @@ app.use(app.router);
 app.engine('html', engines.hogan);     // tell Express to run .html files through Hogan
 app.set('views', __dirname + '/view');  // tell Express where to find templates
 
+app.listen(8080);
+console.log('Listen on port 8080');
+
 
 //likely migrate this way down the page
 //what db to use?
@@ -37,18 +47,17 @@ fs.exists('database.db',function(exists) {
 	conn = anyDB.createConnection('sqlite3://database.db');
 	console.log(exists);
     if (exists === false) {
-    	console.log("making table");
 		conn.query('CREATE TABLE users (userid INTEGER PRIMARY KEY, username TEXT, password TEXT);') 
-		    .on('end', function() {
+		    .on('end', function(end) {
 		    console.log('Made table!');
 		    });
-		conn.query('CREATE TABLE calendar (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, mealtype TEXT, weight INTEGER, servings TEXT);') 
+		/*conn.query('CREATE TABLE calendar (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, mealtype TEXT, weight INTEGER);') 
 		.on('end', function() {
 		    console.log('Made table!');
 	    
 	    //UNCOMMENT FOR TEST POINTS
 	    //test();
-	});
+	});*/
     }
   
 });
@@ -56,9 +65,73 @@ fs.exists('database.db',function(exists) {
 
 
 
-app.get('/', function(req,res){
 
-	res.render('Calendar.html');
+app.post('/login', function(req, res) {
+		//Use this variable in other functions to call correct user 
+		req.session.userID = req.body.username;
+
+
+		if (req.body.submit == "Register") {
+		//check if user is already registered 
+			conn.query('SELECT userid FROM users WHERE username = $1;', [req.body.username],function(error,result){
+			    console.log(result);
+				if (result.rows.length > 0) {
+					//Alert user that either that username is taken, or user has already registered 
+					console.log("username taken or already registered");
+					console.log(result);
+					res.render('login.html');
+				}
+				//Otherwise, create new username/password entry in user database 
+				else {
+				    var userid;
+					conn.query('INSERT INTO users VALUES ($1, $2, $3);', [null, req.body.username, req.body.password],function(error,result) {
+					    conn.query('SELECT last_insert_rowid() AS userid',function(error,result) {
+						userid = result.rows[0].userid;
+						console.log('userid ' + userid);
+						conn.query('CREATE TABLE table_' + userid + ' (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, mealtype TEXT, weight INTEGER, servings TEXT);')
+						.on('end',function() {
+						    console.log('Made userid TABLEEEEE');
+						    //UNCOMMENT FOR TEST POINTS
+						    //test();
+						    req.session.userid = userid;
+						    console.log(req.session.userid);
+						    res.render('Calendar.html'); 
+						});
+						
+					    });
+					});
+				}
+		
+			});
+		}
+
+		
+		if (req.body.submit == "Login") {
+		    console.log(req.body.password);
+			conn.query('SELECT * FROM users WHERE username=$1 AND password=$2;', [req.body.username, req.body.password],function(error,result) {
+				if (result.rows.length == 0) {
+					//Alert user that username/password pair is incorrect, or user is not registered 
+					console.log("username or password incorrect, or user has not registered");
+					res.render('login.html');
+				}
+				//Otherwise, log user in
+				else { 
+				    console.log(result);
+				    var userid = result.rows[0].userid;
+				    req.session.userid = userid;
+				    console.log(req.session.userid);
+				    res.render('Calendar.html'); 
+				}
+			
+			});
+		
+		}
+});
+
+
+app.get('/', function(req,res){
+	res.render('login.html');
+	//res.render('Calendar.html');
 		
 });
 
@@ -74,7 +147,7 @@ app.get('/searchFood.json', function(req,res){
 	console.log('Search Food:', req.query.food);
 	
 	var Search_string = req.query.food;
-	var ip = 'ec2-54-244-185-162.us-west-2.compute.amazonaws.com';
+	var ip = 'ec2-54-244-185-162.us-west-2.compute.amazonaws.com';0
 	var port = 8811;
 	
 	// Connect to DNode server for FatSecretAPI.php running in above ip with TCP port 8811 
@@ -123,14 +196,6 @@ app.get('/getFood.json', function(req,res){
 			
 });
 
-//Displays Graph
-app.get('/graph', function(req,res) {
-  
-  res.render('graph.html');
-  
-});
-
-
 
 /**
 JSON format
@@ -138,9 +203,6 @@ entry {
 	date: 4-23-13
 	food: [[calories,id,name][calories2,id2,name2]]
 	OR weight: int
-
-
-
 **/
 app.post('/addmeal', function(req,res) {
 	console.log("adding meal");
@@ -166,10 +228,8 @@ app.post('/addmeal', function(req,res) {
 	names += food[food.length-1]['name'];
 	calories += parseInt(food[food.length-1]['calories']);
 	servings += food[food.length-1]['servings'] + "*" + food[food.length-1]['calories']/food[food.length-1]['servings'];
-	console.log('###################');
-	console.log(servings);
-	//id,date,foodorweight,name,calories,id,weight,servings
-	conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)', [null,meal['date'],1,names,calories,ids,mealtype,0,servings],function(error,result){
+	//id,date,foodorweight,name,calories,id,weight
+	conn.query('INSERT INTO table_' + req.session.userid + ' VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)', [null,meal['date'],1,names,calories,ids,mealtype,0,servings],function(error,result){
 		console.log("insert : " + error);
 	});
 	console.log("after");
@@ -178,11 +238,16 @@ app.post('/addmeal', function(req,res) {
 	res.render('Calendar.html');
 });
 
+/**
+  Delete Meal
+**/
+app.post('/deletemeal',function(req,res) {
+    var id = req.body.id;
+    conn.query('DELETE FROM table_' + req.session.userid + ' WHERE id=$1;',[id]);
+    res.render('Calendar.html');
+});
 
 
-
-app.listen(8080);
-console.log('Listen on port 8080');
 
 
 /**
@@ -190,26 +255,24 @@ console.log('Listen on port 8080');
  * returns all entries within given time
  * returns dataset of pairs of coordinates datetime and other calories
 */
-app.get('/graph.json',function(req,res) {
+app.get('/graph.json', function(req,res){
+
     var start = req.query['start'];
     var end = req.query['end'];
     var data = {};
     data['food'] = [];
     data['weight'] = [];
-    console.log("between " + start + " " + end);
     var dates = {};
     //as of now returns everything
     //conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
-    conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2 ORDER BY datetime;',[start,end])
+    conn.query('SELECT * FROM table_' + req.session.userid + ' WHERE datetime BETWEEN $1 AND $2 ORDER BY datetime;',[start,end])
 	    .on('row',function(row) {
 		console.log(row);
 		if (row.foodweight == 1) {
 		    if (dates[row.datetime] == undefined) {
-			console.log("here");
 			dates[row.datetime] = [];
 		    }
 		    dates[row.datetime].push([row.totalcalories,row.id,row.mealtype,row.mealname]);
-		    console.log('pulling ' + row.mealtype);
 		}
 		else {
 		    data['weight'].push([row.datetime, row.weight,row.id]);
@@ -225,7 +288,7 @@ app.get('/graph.json',function(req,res) {
 		entry['mealtype'] = row.mealtype;
 		if (data[day] == undefined) {
 		    data[day] = [];
-		}
+		}app.post
 		data[day].push(entry);
 		
 
@@ -234,15 +297,12 @@ app.get('/graph.json',function(req,res) {
 	    .on('end',function(row) {
 		var hidden_items = {};
 		for (var time in dates) {
-		    console.log("counting");
-		    console.log(dates[day]);
 		    var day_calories = 0;
 		    var hidden_items = [];
 		    var day = dates[time];
 		    for (var i = 0; i < day.length; i++) {
 			var meal = day[i];
 			var items = {};
-			console.log(meal);
 			//array cooresponds to [row.totalcalories,row.id,row.mealtype,row.mealname]
 			day_calories += meal[0];
 			items['id'] = meal[1];
@@ -252,7 +312,7 @@ app.get('/graph.json',function(req,res) {
 			hidden_items.push(items);
 		    }
 		    data['food'].push([parseInt(time),day_calories,hidden_items]);
-		}
+		}app.post
 	
 		console.log('about to return');
 		console.log(row);
@@ -279,7 +339,7 @@ app.get('/entry.json',function(req,res) {
 	res.json(entry);
     }
     else {
-	conn.query('SELECT * FROM calendar WHERE id = $1;',[req.query['id']])
+	conn.query('SELECT * FROM table_' + req.session.userid + ' WHERE id = $1;',[req.query['id']])
 	    .on('row',function(row) {
 		console.log(row);
 		if (row.foodweight == 1) {
@@ -306,6 +366,8 @@ app.get('/entry.json',function(req,res) {
 
 
 
+
+
 /**e
 
 CALENDAR TO DATABASE
@@ -324,27 +386,44 @@ app.get('/calendar.json',function(req,res) {
 	console.log(err);
 	var date = [2013,05]; //default may 2013
     }
-    var start = new Date(date[0],date[1]-1,1);
-    var end = new Date(date[0],date[1],0);
-    var name = req.username;
-    console.log("start " + start);
+    var month = date[1] - 1;
+    //we want five days before first day of the month for pulling previous meals
+    var start = new Date(date[0],month,1);
+    start.setDate(start.getDate()-5);
+    console.log("start");
+    console.log(start);
+    var end = new Date(date[0],month+1,0);
     console.log(end);
-    conn.query('SELECT mealname,datetime,totalcalories,id,mealtype FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
+    console.log('USERID');
+    console.log(req.session.userid);
+    conn.query('SELECT mealname,datetime,totalcalories,id,mealtype,foodid FROM table_' + req.session.userid + ' WHERE datetime BETWEEN $1 AND $2',[start,end])
+
 	.on('row',function(row) {
-	    console.log(row.mealname);
-	    var day = new Date(row.datetime).getDate();
+	    console.log('HEREEREJ');
+	    var d = new Date(row.datetime);
+	    var day = parseInt(d.getDate());
+	    if (d.getMonth() != month) {
+		//prev 5 days
+		var last = new Date(date[0],d.getMonth() +1,0);
+		console.log(last.getDate());
+		day =  parseInt(parseInt(day) - parseInt(last.getDate()));
+		console.log('this ' + day);
+	    }
 	    var entry = {};
 	    entry['mealname'] = row.mealname;
 	    entry['id'] = row.id;
 	    entry['totalcalories'] = row.totalcalories;
 	    entry['mealtype'] = row.mealtype;
+	    entry['foodid'] = row.foodid;
 	    if (data[day] == undefined) {
-			data[day] = [];
+		data[day] = [];
 	    }
 	    data[day].push(entry);
 	})
 	.on('end',function(row) {
 	    //examinePrevious(); add later
+	    console.log('to return');
+	    console.log(data);
 	    res.json(data);
 	});
 });
@@ -399,7 +478,8 @@ function test() {
 * Adds new user to database.  Should also create new CALENDAR?  Returns userid?
 **/
 function addUser(username,password) {
-	conn.query('INSERT INTO users VALUES ($1,$2,$3)',userscount,username,password);
+	userscount = 15; //Temporary dummy value 
+	conn.query('INSERT INTO users VALUES ($1,$2,$3);', [userscount,username,password]);
 	return userscount; //unique id is count?
 }
 
