@@ -26,6 +26,7 @@
 {
 	padding: 2px;
 	border: 1px solid #AABCFE;
+	float:left;
 }
 
 /* days row (Sun, Mon, Tues, etc) */
@@ -91,12 +92,6 @@
 	font-weight:700;
 }
 
-/* link of there isnt an entry */
-/*
-.fatsecret_day_link
-{
-}
-*/
 
 /* the net gain/loss if there is an entry for both exercise and food */
 .fatsecret_day_summary
@@ -130,12 +125,12 @@
 #dayData{
 	display:block;
 	background:white;
-	width:320px;
+	width:300px;
 	height:300px;
 	border:#ccc 1px solid;
 	margin: auto;
-	margin-top:140px;
-	margin-left:30px;
+	margin-top:120px;
+	margin-left:20px;
 	margin-bottom:30px;
 	padding:20px;
 	padding-left:0px;
@@ -152,7 +147,7 @@
 #box-table-a {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 	font-size: 12px;
-	width: 300px;
+	width: 280px;
 	text-align: left;
 	border-collapse: collapse;
 	display:block;
@@ -183,8 +178,13 @@
 	text-align:center;
 }
 
+#jason{
+	width:0px;
+}
 
-
+#holder{
+	width:615px;
+}
 
 
 

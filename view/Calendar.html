@@ -26,175 +26,135 @@
 	</head>
 
 	<body>
-		<h2>ShapeUp Calorie Tracker</h2>
+		<div id="headerHolder">
+			<img src="../images/logo.png">
+			<h2>Calorie Tracker</h2>
+		</div>
 		<div id="tabandday_cont">
-		<div id="tabs_container">
-			<ul class="tabs">
-				<li class="active">
-				<a href="#" rel="#calendar_tab" class="tab">Calendar View</a>
-				</li>
-				<li><a href="#" rel="#graph_tab" class="tab">Analysis View</a></li>
-			</ul>	
+			<div id="tabs_container">
+				<ul class="tabs">
+					<li class="active">
+					<a href="#" rel="#calendar_tab" class="tab">Calendar View</a>
+					</li>
+					<li><a href="#" rel="#graph_tab" class="tab">Analysis View</a></li>
+				</ul>	
 
 
-			<div class="clear"></div> <!-- Used so the contents don't appear to right of tabs -->
+				<div class="clear"></div> <!-- Used so the contents don't appear to right of tabs -->
 
-			<!-- Contents of each tab -->
-			<div class="tab_contents_container">
+				<!-- Contents of each tab -->
+				<div class="tab_contents_container">
 
-				<!-- Calendar Tab contents -->
-				<div id="calendar_tab" class="tab_contents tab_contents_active">
+					<!-- Calendar Tab contents -->
+					<div id="calendar_tab" class="tab_contents tab_contents_active">
 
-					<!-- FatSecret API Embeds -->
-					<div style="width:1000px; margin:0 auto;" id="holder">
+						<!-- FatSecret API Embeds -->
+						<div  id="holder">
 
-						<script>
-							// Must set a container to initialize the application
-							// or it would have error message 
-							fatsecret.setContainer('container'); 
-							fatsecret.setCanvas("calendar.get_month"); 
-						</script> 
+							<script>
+								// Must set a container to initialize the application
+								// or it would have error message 
+								fatsecret.setContainer('container'); 
+								fatsecret.setCanvas("calendar.get_month"); 
+							</script> 
 
-						<div id="prevMonth" class="monthbutton">
-							<script>fatsecret.writeHolder("previousmonth");</script> 
-						</div>
+							<div id="prevMonth" class="monthbutton">
+								<script>fatsecret.writeHolder("previousmonth");</script> 
+							</div>
 
-						<div class="date">
-							<script>fatsecret.writeHolder("date");</script>
-						</div>
+							<div class="date">
+								<script>fatsecret.writeHolder("date");</script>
+							</div>
 
-						<div id ="nextMonth" class="monthbutton">
-							<script>fatsecret.writeHolder("nextmonth");</script> 	
-						</div>
+							<div id ="nextMonth" class="monthbutton">
+								<script>fatsecret.writeHolder("nextmonth");</script> 	
+							</div>
 
-						<div id="calendar">
-							<script>fatsecret.writeHolder("calendar");</script> 
-						</div>
+							<div id="calendar">
+								<script>fatsecret.writeHolder("calendar");</script> 
+							</div>
 
-						<!-- a empty container, don't remove this -->
-						<div>
-							<script>fatsecret.writeHolder("	dateselector");</script> 
-						</div>
+							<!-- a empty container, don't remove this -->
+							<div id="jason">
+								<script>fatsecret.writeHolder("	dateselector");</script> 
+							</div>
 
-						<div id="container"></div> 
-					</div> <!-- end FatSecret API Embeds -->
+							<div id="container"></div> 
+						</div> <!-- end FatSecret API Embeds -->
 
-	<!-- Data for a single day box -->
-		<div id="dayDataholder">
-			<div id = "dayData">
-				<div id = "dayDataHeader">
-					<h3>Detailed Day Information</h3>
-					<h4>Click on a calendar date to view</h4>
-				</div>
-				<table id="box-table-a">
-					<thead>
-						<tr>
-							<th>Meal</th>
-							<th>Status</th>
-							<th>Calorie Count</th>
-						</tr>
-					</thead>
-					<tr>
-						<td>Breakfast</td>
-						<td>Unrecorded</td>
-						<td> n/a </td>
-					</tr>
-					<tr>
-						<td>Lunch</td>
-						<td>Unrecorded</td>
-						<td> n/a </td>
+					</div> <!-- end Calendar Tab contents -->
 
-					</tr>
-					<tr>
-						<td>Dinner</td>
-						<td>Unrecorded</td>
-						<td> n/a </td>
-					</tr>
-					<tr>
-						<td>Snack/Other</td>
-						<td>Unrecorded</td>
-						<td> n/a </td>
-					</tr>
-				</table>
-			</div> <!-- end data for a single day box -->
-		</div>
+					<!-- Analysis Tab contents -->
+					<div id="graph_tab" class="tab_contents">
 
-				</div> <!-- end Calendar Tab contents -->
+						<!-- Graph -->
+						<table id="graph" style="text-align:center">
+							<tr>
+								<td></td>
+								<td>Calories and Weight for Month</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>Calories In (Cal)/Weight (lbs)</td>
+								<td>
+									<div id="placeholder" style="width:600px;height:300px"></div>
+									<p id="choices" style="float:right; width:135px;"></p>
+									<p>Start: <input type="text" id="start"/> End: <input type="text" id="end"/></p>
+								</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td></td>
+								<td>Days of Month</td>
+								<td></td>
+							</tr>
+						</table> <!-- End Graph-->
+					</div> <!-- end graph_tab -->
 
-				<!-- Analysis Tab contents -->
-				<div id="graph_tab" class="tab_contents">
+					<!-- Data for a single day box -->
+					<div id="dayDataholder">
+						<div id = "dayData">
+							<div id = "dayDataHeader">
+								<h3>Detailed Day Information</h3>
+								<h4>Click on a calendar date to view</h4>
+							</div>
+							<table id="box-table-a">
+								<thead>
+									<tr>
+										<th>Meal</th>
+										<th>Status</th>
+										<th>Calorie Count</th>
+									</tr>
+								</thead>
+								<tr>
+									<td>Breakfast</td>
+									<td>Unrecorded</td>
+									<td> n/a </td>
+								</tr>
+								<tr>
+									<td>Lunch</td>
+									<td>Unrecorded</td>
+									<td> n/a </td>
+								</tr>
+								<tr>
+									<td>Dinner</td>
+									<td>Unrecorded</td>
+									<td> n/a </td>
+								</tr>
+								<tr>
+									<td>Snack/Other</td>
+									<td>Unrecorded</td>
+									<td> n/a </td>
+								</tr>
+							</table>
+						</div> <!-- end data for a single day box -->
+					</div>
 
-					<!-- Graph -->
-					<table id="graph" style="text-align:center">
-						<tr>
-							<td></td>
-							<td>Calories and Weight for Month</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td>Calories In (Cal)/Weight (lbs)</td>
-							<td>
-								<div id="placeholder" style="width:600px;height:300px"></div>
-								<p id="choices" style="float:right; width:135px;"></p>
-								<p>Start: <input type="text" id="start"/> End: <input type="text" id="end"/></p>
-							</td>
-							<td></td>
-						</tr>
-						<tr>
-							<td></td>
-							<td>Days of Month</td>
-							<td></td>
-						</tr>
-					</table> <!-- End Graph-->
+				</div> <!-- end tabs contents container -->
 
-	<!-- Data for a single day box -->
-		<div id="dayDataholder">
-			<div id = "dayData">
-				<div id = "dayDataHeader">
-					<h3>Detailed Day Information</h3>
-					<h4>Click on a calendar date to view</h4>
-				</div>
-				<table id="box-table-a">
-					<thead>
-						<tr>
-							<th>Meal</th>
-							<th>Status</th>
-							<th>Calorie Count</th>
-						</tr>
-					</thead>
-					<tr>
-						<td>Breakfast</td>
-						<td>Unrecorded</td>
-						<td> n/a </td>
-					</tr>
-					<tr>
-						<td>Lunch</td>
-						<td>Unrecorded</td>
-						<td> n/a </td>
+			</div> <!-- end tabs container -->
 
-					</tr>
-					<tr>
-						<td>Dinner</td>
-						<td>Unrecorded</td>
-						<td> n/a </td>
-					</tr>
-					<tr>
-						<td>Snack/Other</td>
-						<td>Unrecorded</td>
-						<td> n/a </td>
-					</tr>
-				</table>
-			</div> <!-- end data for a single day box -->
-		</div>
-
-
-				</div> <!-- end graph_tab -->
-			</div> <!-- end tabs contents container -->
-
-		</div> <!-- end tabs container -->
-
-	
-	</div> <!-- end calendar/detailed day container -->
+		</div> <!-- end calendar/detailed day container -->
 
 
 		<!-- HTML FOR LIGHTBOX -->
@@ -234,33 +194,31 @@
 								<input type="hidden" id="foodid">
 
 							</div>
-				<div id="results_wrapper">
-					<div id="results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
-							<input type="button" id="btn_additem" value="Add!">
-						</form> 
+							<div id="results_wrapper">
+								<div id="results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
+								<input type="button" id="btn_additem" value="Add!">
+							</form> 
 
-						<div id="selector">
-							<span>Servings:  </span>
-							<select id="fruit_servings" name="fruit_servings">
-								<option value="1">1</option>
-								<option value="2">2</option>
-								<option value="3">3</option>
-								<option value="4">4</option>
-								<option value="5">5</option>
-								<option value="6">6</option>
-								<option value="7">7</option>
-								<option value="8">8</option>
-								<option value="9">9</option>
-								<option value="10">10</option>
-							</select>
+							<div id="selector">
+								<span>Servings:  </span>
+								<select id="fruit_servings" name="fruit_servings">
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+									<option value="6">6</option>
+									<option value="7">7</option>
+									<option value="8">8</option>
+									<option value="9">9</option>
+									<option value="10">10</option>
+								</select>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div id="food_choose"></div>
+					<div id="food_choose"></div>
 
 				</div>
-
-
 
 
 				<!--
@@ -299,7 +257,7 @@
 					-->
 
 					<!-- </form> -->
-						
+
 				<div id="data_container">
 					<table class="box-table-b" id="table_container">
 						<tr>
@@ -317,7 +275,7 @@
 
 
 			</div>
-			</div>
-			<div id="fade" class="black_overlay"></div>
-		</body>
-	</html>
+		</div>
+		<div id="fade" class="black_overlay"></div>
+	</body>
+</html>
