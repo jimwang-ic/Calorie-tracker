@@ -1,17 +1,22 @@
-var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-var start = new Date(y, m, 1).getTime();
-var end = new Date(y, m + 1, 0).getTime();
-var datasets;
+
 
 window.addEventListener('load', function(){
-	
-	load_graph();
+	var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+	start = new Date(y, m, 1);
+	end = new Date(y, m + 1, 0);
+	load_graph(start,end);
 	
 	
 }, false);
 
 
-function load_graph() {
+function load_graph(start,end) {
+    if (start == null) {
+	start = new Date(y, m, 1);
+    }
+    if (end == null) {
+	end = new Date(y, m + 1, 0);
+    }
 
 
   var data = {};
@@ -20,7 +25,7 @@ function load_graph() {
   
 
   // specify the HTTP method, URL, and asynchronous flag
-  request.open('GET', '/graph.json?start=' + start + "&end=" + end, true);
+  request.open('GET', '/graph.json?start=' + start.getTime() + "&end=" + end.getTime(), true);
 
   // add an event handler
   request.addEventListener('load', function(e){
@@ -56,7 +61,7 @@ function update(data) {
   }
   console.log(pointToId);
   
-  datasets = {"calories": {data:calories,yaxis:1,label:"Calories Consumed"},"weight":{data:weight,yaxis:2,label:"Weight"}};
+  var datasets = {"calories": {data:calories,yaxis:1,label:"Calories Consumed"},"weight":{data:weight,yaxis:2,label:"Weight"}};
   $("#placeholder").bind("plotclick", function (event, pos, item) {
     if (item) {
 	plot.unhighlight();
@@ -114,17 +119,20 @@ function update(data) {
   // insert datepickers
   $("#start").datepicker();
   $("#end").datepicker();
-  var date = new Date(), y = date.getFullYear(), m = date.getMonth();
-  var firstDay = new Date(y, m, 1);
-  var lastDay = new Date(y, m + 1, 0);
-  $("#start").datepicker("setDate",firstDay);
-  $("#end").datepicker("setDate",lastDay);
+  console.log("dates");
+  console.log(new Date(start));
+  console.log(new Date(end));
+  $("#start").datepicker("setDate",start);
+  $("#end").datepicker("setDate",end);
   $("#start").change(function() {
-      plotAccordingToChoices();
+      start = $("#start").datepicker("getDate");
+      load_graph(start,end);
   });
   $("#end").change(function() {
-      plotAccordingToChoices();
+      end = $("#end").datepicker("getDate");
+      load_graph(start,end);
   });
+  console.log($("#end").datepicker("getDate"));
   
 
   function plotAccordingToChoices() {

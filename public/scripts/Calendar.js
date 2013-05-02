@@ -27,6 +27,10 @@ window.addEventListener('load', function(){
 		document.getElementById('detailedForm').style.display='block';
 	});
 	
+	/*$('#prevMonth a,#nextMonth a').on('click',function() {
+	    Customize_cal();
+	});*/
+	
 	Form_eventListener();
 		
 }, false);
@@ -50,7 +54,7 @@ function RefreshCal() {
 	document.getElementById('detailedForm').style.display='none';
 	
 	updateCalendar_ajax();
-	load_graph();
+	load_graph(null,null);
 }
 
 // hashtable for hashing text to numbers
@@ -140,18 +144,29 @@ function Customize_cal() {
             return;
         }
         else 
-        {	  
-	    	var id = $(e.target).find( $('a span') ).attr('id');
-     	    var day = id.split("/");
-     	    var date = parseInt(day[0]);
-     	    var meals = current_month_data[date];
-	   
-     	    fill_date_screen(meals);
+        {
+		    var id = $(e.target).find( $('a span') ).attr('id');
+		    try {
+				var day = id.split("/");
+				var date = parseInt(day[0],10);
+				var meals = current_month_data[date];
+				fill_date_screen(meals);
+		    }
+		    catch (error) {
+				clear_date_screen();
+		    } //blank day
+
         }
 	});
 	
 	
 }
+
+function clear_date_screen() {
+    $("#box-table-a tr td:nth-child(2)").html("Unrecorded");
+    $("#box-table-a tr td:nth-child(3)").html("n/a");
+}
+
 //id mealname mealtype totalcalories
 function fill_date_screen(meals) {
     
@@ -281,11 +296,6 @@ function edit_meal(e) {
 
 
 
-
-
-function other(e) {
-	alert("Other features!");
-}
 
 
 var myHash = {}; // New object
