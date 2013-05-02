@@ -15,6 +15,12 @@ app.use('/public/scripts', express.static(__dirname + '/public/scripts'));
 app.use('/css', express.static(__dirname + '/css'));
 app.use('/img', express.static(__dirname + '/img'));
 app.use('/fonts', express.static(__dirname + '/fonts'));
+app.use('/view', express.static(__dirname + '/view'));
+app.use('/images', express.static(__dirname + '/images'));
+app.use('/view/loginboxsupport', express.static(__dirname + '/view/loginboxsupport'));
+app.use('/view/loginboxsupport/css', express.static(__dirname + '/view/loginboxsupport/css'));
+app.use('/view/loginboxsupport/fonts/Bree_Serif', express.static(__dirname + '/view/loginboxsupport/fonts/Bree_Serif'));
+app.use('/view/loginboxsupport/images', express.static(__dirname + '/view/loginboxsupport/images'));
 app.use(express.cookieParser());
 
 app.use(express.session({
@@ -54,11 +60,19 @@ fs.exists('database.db',function(exists) {
 });
 
 
+app.post('/login', function(req, res) {
+	if (req.value = "Register") {
+		res.render('Calendar.html');
+	}
+
+
+});
+
 
 
 app.get('/', function(req,res){
-
-	res.render('Calendar.html');
+	res.render('login.html');
+	//res.render('Calendar.html');
 		
 });
 
