@@ -334,7 +334,6 @@ function updateCalendar_ajax() {
 			var content = request.responseText;
 			updateCalendar(JSON.parse(content));
 			
-			// Show the newest update information
 			var editmeal_date = 0;
 			
 			if(Meal.date === undefined)
@@ -348,6 +347,7 @@ function updateCalendar_ajax() {
 			}
 			
 			var meals = current_month_data[editmeal_date];
+			// Show the newest update information
 			fill_date_screen(meals);
 			
 			
@@ -365,7 +365,6 @@ function updateCalendar_ajax() {
 /**
   Displays returned information on calendar
 **/
-
 function updateCalendar(data) {
     
     console.log("Calendar data");
