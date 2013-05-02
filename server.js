@@ -17,10 +17,10 @@ app.use('/img', express.static(__dirname + '/img'));
 app.use('/fonts', express.static(__dirname + '/fonts'));
 app.use('/view', express.static(__dirname + '/view'));
 app.use('/images', express.static(__dirname + '/images'));
-app.use('/view/loginboxsupport', express.static(__dirname + '/view/loginboxsupport'));
-app.use('/view/loginboxsupport/css', express.static(__dirname + '/view/loginboxsupport/css'));
-app.use('/view/loginboxsupport/fonts/Bree_Serif', express.static(__dirname + '/view/loginboxsupport/fonts/Bree_Serif'));
-app.use('/view/loginboxsupport/images', express.static(__dirname + '/view/loginboxsupport/images'));
+//app.use('/view/loginboxsupport', express.static(__dirname + '/view/loginboxsupport'));
+//app.use('/view/loginboxsupport/css', express.static(__dirname + '/view/loginboxsupport/css'));
+//app.use('/view/loginboxsupport/fonts/Bree_Serif', express.static(__dirname + '/view/loginboxsupport/fonts/Bree_Serif'));
+//app.use('/view/loginboxsupport/images', express.static(__dirname + '/view/loginboxsupport/images'));
 app.use(express.cookieParser());
 app.use(express.bodyParser());
 
@@ -63,11 +63,6 @@ fs.exists('database.db',function(exists) {
   
 });
 
-
-/* I  didn't understand the function above. So I just create users here*/
-conn = anyDB.createConnection('sqlite3://database.db');
-//Delete after first usage 
-conn.query('CREATE TABLE users (userid INTEGER PRIMARY KEY, username TEXT, password TEXT);');
 
 
 
