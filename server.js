@@ -22,6 +22,7 @@ app.use('/view/loginboxsupport/css', express.static(__dirname + '/view/loginboxs
 app.use('/view/loginboxsupport/fonts/Bree_Serif', express.static(__dirname + '/view/loginboxsupport/fonts/Bree_Serif'));
 app.use('/view/loginboxsupport/images', express.static(__dirname + '/view/loginboxsupport/images'));
 app.use(express.cookieParser());
+app.use(express.bodyParser());
 
 app.use(express.session({
 	secret: 'session_key',
@@ -60,12 +61,53 @@ fs.exists('database.db',function(exists) {
 });
 
 
+/* I  didn't understand the function above. So I just create users here*/
+conn = anyDB.createConnection('sqlite3://database.db');
+//Delete after first usage 
+conn.query('CREATE TABLE users (userid INTEGER PRIMARY KEY, username TEXT, password TEXT);');
+
+
+
+
 app.post('/login', function(req, res) {
-	if (req.value = "Register") {
-		res.render('Calendar.html');
-	}
+		//Use this variable in other functions to call correct user 
+		req.session.userID = req.body.username;
 
 
+		if (req.body.submit == "Register") {
+		//check if user is already registered 
+			conn.query('SELECT username FROM users WHERE username = $1;', [req.body.username]).on('end', function(end) {
+				if (end.rowCount == 1) {
+					//Alert user that either that username is taken, or user has already registered 
+					console.log("username taked, or already registered");
+					res.render('login.html');				
+				}
+				//Otherwise, create new username/password entry in user database 
+				else {
+					conn.query('INSERT INTO users VALUES ($1, $2, $3);', [null, req.body.username, req.body.password]);
+					console.log("inserted name");
+					res.render('Calendar.html'); 
+				}
+		
+			});
+		}
+
+		
+		if (req.body.submit == "Login") {
+			conn.query('SELECT username FROM users WHERE username = $1 AND password = $2', [req.body.username, req.body.password]).on('end', function(end) {
+				if (end.rowCount == 0) {
+					//Alert user that username/password pair is incorrect, or user is not registered 
+					console.log("username or password incorrect, or user has not registered");
+					res.render('login.html');
+				}
+				//Otherwise, log user in
+				else { 
+					res.render('Calendar.html'); 
+				}
+			
+			});
+		
+		}
 });
 
 
@@ -400,7 +442,8 @@ function test() {
 * Adds new user to database.  Should also create new CALENDAR?  Returns userid?
 **/
 function addUser(username,password) {
-	conn.query('INSERT INTO users VALUES ($1,$2,$3)',userscount,username,password);
+	userscount = 15; //Temporary dummy value 
+	conn.query('INSERT INTO users VALUES ($1,$2,$3);', [userscount,username,password]);
 	return userscount; //unique id is count?
 }
 
