@@ -1,5 +1,6 @@
 var ReqInterval = null;
 var Meal = {};
+var current_month_data = {};
 window.addEventListener('load', function(){
 	
 	// Customize our Calendar  
@@ -16,6 +17,9 @@ window.addEventListener('load', function(){
 		document.getElementById('fade').style.display='none';
 		document.getElementById('chooseMeal').style.display='block';
 		document.getElementById('detailedForm').style.display='none';
+		// Show today's calorie infomation
+		var today = $('.fatsecret_day_today > span').text();
+		ShowMealInfo(parseInt(today));
 	});
 			
 	$('#next').on('click',function(){
@@ -24,7 +28,6 @@ window.addEventListener('load', function(){
 	});
 	
 	Form_eventListener();
-	
 		
 	//$('#search_query').on('focus',show);
 	//$('#search_query').on('blur',hide);
@@ -33,7 +36,7 @@ window.addEventListener('load', function(){
 	$('#foodentry').on('focus',show);
 		$('#foodentry').on('blur',hide);
 	*/
-
+	
 
 }, false);
 
@@ -137,60 +140,21 @@ function Customize_cal() {
 	
 	$('.fatsecret_day_other, .fatsecret_day_today').click(function(e) {
     
-    	//console.log(e.target);
-    	
-        if ($(e.target).is('.fatsecret_day_content span')) 
-        {
-            return;
-        }
-        else 
-        {	  
-        	var id = $(e.target).find( $('a span') ).attr('id');
-     	    var day = id.split("/");
+    	if ($(e.target).is('.fatsecret_day_content span')) 
+	    {
+	        return;
+	    }
+	    else 
+	    {	  
+	    	var id = $(e.target).find( $('a span') ).attr('id');
+	 	    var day = id.split("/");
 	        var date = parseInt(day[0]);
-	        var meals = current_month_data[date];
-	       	
-	       	//console.log(meals);
-	       	
-	       	var mealtypeTable = {
-				'breakfast': 1,
-				'lunch':2,
-				'dinner':3,
-				'snack':4
-			};  
-			
-		
-			$("#box-table-a tr td:nth-child(2)").html("Unrecorded");
-			$("#box-table-a tr td:nth-child(3)").html("n/a");
-			
-			// Combine the meals base on their types
-			var CombineMeal = {};
-			
-			for(var key in meals)
-			{
-				var meal = meals[key];
-				var mealtype_n =  mealtypeTable[meal.mealtype];
-				
-				if(CombineMeal[mealtype_n] === undefined)
-				{
-					CombineMeal[mealtype_n] = {};
-					CombineMeal[mealtype_n].names = "";
-					CombineMeal[mealtype_n].calories = 0;
-				}
-				
-				CombineMeal[mealtype_n].calories += meal.totalcalories;  
-				CombineMeal[mealtype_n].names += (meal.mealname + ',');
-	        }
-	        
-	        for(key in CombineMeal)
-	        {
-	        	var mealnames = CombineMeal[key].names;
-	        	$("#box-table-a tr:eq(" + key + ") td:eq(1)").html(mealnames.substring(0, mealnames.length-1));
-				$("#box-table-a tr:eq(" + key + ") td:eq(2)").html(CombineMeal[key].calories);
-	        }
-        }
-        
+	        ShowMealInfo(date);
+	    }
+    	 
 	});
+	
+	
 }
 
 
@@ -209,14 +173,21 @@ function updateCalendar_ajax() {
 	// add an event handler
 	request.addEventListener('load', function(e){
 	    if (request.status == 200) {
-		// do something with the loaded content
-		var content = request.responseText;
-		console.log("cal_ajax" + content);
-		updateCalendar(JSON.parse(content));
+			
+			// do something with the loaded content
+			var content = request.responseText;
+			console.log("cal_ajax" + content);
+			updateCalendar(JSON.parse(content));
+			
+			// Show today's calorie infomation
+			var today = $('.fatsecret_day_today > span').text();
+			ShowMealInfo(parseInt(today));
+
+			
 	    } else {
-		console.log('error');
-		// something went wrong, check the request status
-		// hint: 403 means Forbidden, maybe you forgot your username?
+			console.log('error');
+			// something went wrong, check the request status
+			// hint: 403 means Forbidden, maybe you forgot your username?
 	    }
 	}, false);
 
@@ -227,9 +198,6 @@ function updateCalendar_ajax() {
 /**
   Displays returned information on calendar
 **/
-
-
-var current_month_data = {};
 
 function updateCalendar(data) {
     
@@ -446,14 +414,15 @@ function Form_eventListener() {
 		var food_type = $('#mealType input:radio:checked').val();
 		var total_calories = food_calories*parseInt(food_servings);
 		
-		var delete_btn = $('<button class="delete_btn">x</button>');
+		//var delete_btn = $('<button class="delete_btn">x</button>');
 								
 				
 		var foodwrapper = '<td>'+ food_type + '</td>' + 
 						  '<td>'+ food_servings + '</td>' + 
 						  '<td>'+ food_name +'</td>' +
 						  '<td>'+ total_calories +'</td>' + 
-						  '<td>' + '<button class="delete_btn">x</button>' + '</td>'; 				 				 
+						  '<td>' + '<button class="delete_btn">x</button>' + '</td>' + 
+						  '<td class="foodID" style = "display:none">' + food_id + '</td>'; 				 				 
 	
 						  
 		var tofill = document.createElement('tr');
@@ -468,7 +437,6 @@ function Form_eventListener() {
 	});
 	
 	$('#btn_addmeal').on('click', function(){
-		
 		
 		console.log(Meal);
 		
@@ -488,5 +456,67 @@ function Form_eventListener() {
 		req.send(fd);
 	
 	});
+	
+	
+	$('.delete_btn').live('click', function(e){
+		
+		var foodId = $(e.target).parent().parent().find($('.foodID')).text();
+	
+		for(var key in Meal.food)
+		{	
+			if( parseInt(Meal.food[key].id,10) === parseInt(foodId,10) )
+			{
+				index = key;
+				break;
+			}
+		}
+		// Delete the food in Meal object 
+		Meal.food.splice(index,1);
+		// Remove the element
+		$(e.target).parent().parent().remove();
+		
+	});
+}
+
+function ShowMealInfo(date)
+{
+	var meals = current_month_data[date];	       	       	
+   	var mealtypeTable = {
+		'breakfast': 1,
+		'lunch':2,
+		'dinner':3,
+		'snack':4
+	};  
+	
+
+	$("#box-table-a tr td:nth-child(2)").html("Unrecorded");
+	$("#box-table-a tr td:nth-child(3)").html("n/a");
+	
+	// Combine the meals base on their types
+	var CombineMeal = {};
+	
+	for(var key in meals)
+	{
+		var meal = meals[key];
+		var mealtype_n =  mealtypeTable[meal.mealtype];
+		
+		if(CombineMeal[mealtype_n] === undefined)
+		{
+			CombineMeal[mealtype_n] = {};
+			CombineMeal[mealtype_n].names = "";
+			CombineMeal[mealtype_n].calories = 0;
+		}
+		
+		CombineMeal[mealtype_n].calories += meal.totalcalories;  
+		CombineMeal[mealtype_n].names += (meal.mealname + ',');
+    }
+    
+    for(key in CombineMeal)
+    {
+    	var mealnames = CombineMeal[key].names;
+    	$("#box-table-a tr:eq(" + key + ") td:eq(1)").html(mealnames.substring(0, mealnames.length-1));
+		$("#box-table-a tr:eq(" + key + ") td:eq(2)").html(CombineMeal[key].calories);
+    }
+	
 	
 }
