@@ -42,7 +42,7 @@ fs.exists('database.db',function(exists) {
 		    .on('end', function() {
 		    console.log('Made table!');
 		    });
-		conn.query('CREATE TABLE calendar (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, mealtype TEXT, weight INTEGER);') 
+		conn.query('CREATE TABLE calendar (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, mealtype TEXT, weight INTEGER, servings TEXT);') 
 		.on('end', function() {
 		    console.log('Made table!');
 	    
@@ -154,17 +154,22 @@ app.post('/addmeal', function(req,res) {
 	ids = "";
 	names = "";
 	mealtypes = "";
+	servings = "";
 	calories = 0;
 	for (var i = 0; i < food.length-1; i++) {
 		ids += food[i]['id'] + ",";
 		names += food[i]['name'] + " , ";
 		calories = calories + parseInt(food[i]['calories']);
+		servings += food[i]['servings'] + "*" + food[i]['calories']/food[i]['servings'] + ",";
 	}
 	ids += food[food.length-1]['id'];
 	names += food[food.length-1]['name'];
 	calories += parseInt(food[food.length-1]['calories']);
-	//id,date,foodorweight,name,calories,id,weight
-	conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6,$7,$8)', [null,meal['date'],1,names,calories,ids,mealtype,0],function(error,result){
+	servings += food[food.length-1]['servings'] + "*" + food[food.length-1]['calories']/food[food.length-1]['servings'];
+	console.log('###################');
+	console.log(servings);
+	//id,date,foodorweight,name,calories,id,weight,servings
+	conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)', [null,meal['date'],1,names,calories,ids,mealtype,0,servings],function(error,result){
 		console.log("insert : " + error);
 	});
 	console.log("after");
@@ -280,9 +285,11 @@ app.get('/entry.json',function(req,res) {
 		if (row.foodweight == 1) {
 		    if (row.foodid.toString().indexOf(",") !== -1) { //there is more than one
 			entry['food'] = row.foodid.split(','); //undo CSV
+			entry['servings'] = row.servings.split(',');
 		    }
 		    else {
 			entry['food'] = [row.foodid];
+			entry['servings'] = [row.servings];
 		    }
 		    entry['mealtype'] = row.mealtype;
 		}
