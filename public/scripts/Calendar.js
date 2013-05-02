@@ -418,13 +418,21 @@ function RefreshResult(content,yesterday) {
 	if(yesterday == true){
 
 		var n = content.total_results > 10 ? content.max_results : content.total_results;
-		console.log("n"+n);
-		
+		console.log("n:"+n);
+		console.log(content);
+		console.log(content.name);
+
+		/*
+			Bug here, when only 1 object, I will have object has no method on
+		*/
 		for(var i = 0 ; i < n ; i++)
 		{
+			console.log(content.name);
+			console.log(content[i].name);
 			
-			var inner_html = (n == 1) ? content.name : content[i].name;
+			var inner_html = content[i].name//(n == 1) ? content.name : content[i].name;
 			//console.log(content[i].id+" "+content[i].name+" "+content[i].calories);
+			console.log(inner_html);
 			$('#results').append($('<div></div')
 						  .html(inner_html)
 						  .on('click', handlerGen(content[i].id, 
@@ -558,7 +566,7 @@ function Form_eventListener() {
 
 		req.addEventListener('load', RefreshCal);
 		req.send(fd);
-	
+		
 	});
 	
 	
