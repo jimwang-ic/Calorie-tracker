@@ -29,15 +29,6 @@ window.addEventListener('load', function(){
 	
 	Form_eventListener();
 		
-	//$('#search_query').on('focus',show);
-	//$('#search_query').on('blur',hide);
-			
-	/*
-	$('#foodentry').on('focus',show);
-		$('#foodentry').on('blur',hide);
-	*/
-	
-
 }, false);
 
 // Refresh calendar and clean up the form after adding meal
@@ -59,8 +50,25 @@ function RefreshCal() {
 	document.getElementById('detailedForm').style.display='none';
 	
 	updateCalendar_ajax();
-	
+	load_graph();
 }
+
+// hashtable for hashing text to numbers
+var monthTable = {
+	'January':'01',
+	'February':'02',
+	'March':'03',
+	'April':'04',
+	'May':'05',
+	'June':'06',
+	'July':'07',
+	'August':'08',
+	'September':'09',
+	'October':'10',
+	'November':'11',
+	'December':'12'
+};
+	
 
 function transferDateToIntSetID(){
 	// selector for children in order to set id 
@@ -71,21 +79,6 @@ function transferDateToIntSetID(){
 	var datetext = date.replace(/\n/g, '');
 	var dateArray = datetext.split(' ');
 	
-	// hashtable for hashing text to numbers
-	var monthTable = {
-		'January':'01',
-		'February':'02',
-		'March':'03',
-		'April':'04',
-		'May':'05',
-		'June':'06',
-		'July':'07',
-		'August':'08',
-		'September':'09',
-		'October':'10',
-		'November':'11',
-		'December':'12'
-	};
 
 	// set id for edit meal link
 	for(var i=0; i<daylink.length/2; i++){
@@ -98,6 +91,8 @@ function transferDateToIntSetID(){
 		daylink[2*i].setAttribute("id",id+'/'+monthTable[dateArray[0]]+'/'+dateArray[1]);	
 	}
 }
+
+
 
 
 function Customize_cal() {
@@ -139,31 +134,75 @@ function Customize_cal() {
 	
 	
 	$('.fatsecret_day_other, .fatsecret_day_today').click(function(e) {
-    
-    	if ($(e.target).is('.fatsecret_day_content span')) 
-	    {
-	        return;
-	    }
-	    else 
-	    {	  
+        	
+        if ($(e.target).is('.fatsecret_day_content span')) 
+        {
+            return;
+        }
+        else 
+        {	  
 	    	var id = $(e.target).find( $('a span') ).attr('id');
-	 	    var day = id.split("/");
-	        var date = parseInt(day[0]);
-	        ShowMealInfo(date);
-	    }
-    	 
+     	    var day = id.split("/");
+     	    var date = parseInt(day[0]);
+     	    var meals = current_month_data[date];
+	   
+     	    fill_date_screen(meals);
+        }
 	});
 	
 	
+}
+//id mealname mealtype totalcalories
+function fill_date_screen(meals) {
+    
+    //console.log(meals);
+    
+    var mealtypeTable = {
+		    'breakfast': 1,
+		    'lunch':2,
+		    'dinner':3,
+		    'snack':4
+	    };  
+	    
+    
+	    $("#box-table-a tr td:nth-child(2)").html("Unrecorded");
+	    $("#box-table-a tr td:nth-child(3)").html("n/a");
+	    
+	    // Combine the meals base on their types
+	    var CombineMeal = {};
+	    
+	    for(var key in meals)
+	    {
+		    var meal = meals[key];
+		    var mealtype_n =  mealtypeTable[meal.mealtype];
+		    
+		    if(CombineMeal[mealtype_n] === undefined)
+		    {
+			    CombineMeal[mealtype_n] = {};
+			    CombineMeal[mealtype_n].names = "";
+			    CombineMeal[mealtype_n].calories = 0;
+		    }
+		    
+		    CombineMeal[mealtype_n].calories += meal.totalcalories;  
+		    CombineMeal[mealtype_n].names += (meal.mealname + ',');
+    }
+    
+    for(key in CombineMeal)
+    {
+	    var mealnames = CombineMeal[key].names;
+	    $("#box-table-a tr:eq(" + key + ") td:eq(1)").html(mealnames.substring(0, mealnames.length-1));
+		    $("#box-table-a tr:eq(" + key + ") td:eq(2)").html(CombineMeal[key].calories);
+    }
 }
 
 
 function updateCalendar_ajax() {
 	
-	var date = new Date();
-	var month = new Date().getMonth() + 1;
-	var year = new Date().getFullYear();
-	var text = year + "-" + month;
+	var date = $("#fatsecret_output_1").text();
+	// regular expression to get rid of '\n'
+	var datetext = date.replace(/\n/g, '');
+	var dateArray = datetext.split(' ');
+	var text = dateArray[1] + "-" + monthTable[dateArray[0]];
 	
 	var request = new XMLHttpRequest();
 
@@ -181,8 +220,9 @@ function updateCalendar_ajax() {
 			
 			// Show today's calorie infomation
 			var today = $('.fatsecret_day_today > span').text();
-			ShowMealInfo(parseInt(today));
-
+			var meals = current_month_data[today];
+     	    fill_date_screen(meals);
+			
 			
 	    } else {
 			console.log('error');
@@ -476,47 +516,4 @@ function Form_eventListener() {
 		$(e.target).parent().parent().remove();
 		
 	});
-}
-
-function ShowMealInfo(date)
-{
-	var meals = current_month_data[date];	       	       	
-   	var mealtypeTable = {
-		'breakfast': 1,
-		'lunch':2,
-		'dinner':3,
-		'snack':4
-	};  
-	
-
-	$("#box-table-a tr td:nth-child(2)").html("Unrecorded");
-	$("#box-table-a tr td:nth-child(3)").html("n/a");
-	
-	// Combine the meals base on their types
-	var CombineMeal = {};
-	
-	for(var key in meals)
-	{
-		var meal = meals[key];
-		var mealtype_n =  mealtypeTable[meal.mealtype];
-		
-		if(CombineMeal[mealtype_n] === undefined)
-		{
-			CombineMeal[mealtype_n] = {};
-			CombineMeal[mealtype_n].names = "";
-			CombineMeal[mealtype_n].calories = 0;
-		}
-		
-		CombineMeal[mealtype_n].calories += meal.totalcalories;  
-		CombineMeal[mealtype_n].names += (meal.mealname + ',');
-    }
-    
-    for(key in CombineMeal)
-    {
-    	var mealnames = CombineMeal[key].names;
-    	$("#box-table-a tr:eq(" + key + ") td:eq(1)").html(mealnames.substring(0, mealnames.length-1));
-		$("#box-table-a tr:eq(" + key + ") td:eq(2)").html(CombineMeal[key].calories);
-    }
-	
-	
 }
