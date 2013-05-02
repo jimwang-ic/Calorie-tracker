@@ -195,7 +195,7 @@ app.get('/graph.json',function(req,res) {
     var dates = {};
     //as of now returns everything
     //conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
-    conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2;',[start,end])
+    conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2 ORDER BY datetime;',[start,end])
 	    .on('row',function(row) {
 		console.log(row);
 		if (row.foodweight == 1) {
@@ -225,7 +225,9 @@ app.get('/graph.json',function(req,res) {
 		
 
 	    })
+	    //id mealname mealtype totalcalories
 	    .on('end',function(row) {
+		var hidden_items = {};
 		for (var time in dates) {
 		    console.log("counting");
 		    console.log(dates[day]);
@@ -234,13 +236,16 @@ app.get('/graph.json',function(req,res) {
 		    var day = dates[time];
 		    for (var i = 0; i < day.length; i++) {
 			var meal = day[i];
+			var items = {};
 			console.log(meal);
 			day_calories += meal[0];
-			hidden_items.push(meal[1]);
-			hidden_items.push(meal[2]);
-			hidden_items.push(meal[3]);
+			items['id'] = meal[1];
+			items['mealname'] = meal[3];
+			items['mealtype']=meal[2];
+			items['totalcalories']=meal[0];
+			hidden_items.push(items);
 		    }
-		    data['food'].push([parseInt(time),day_calories,[hidden_items]]);
+		    data['food'].push([parseInt(time),day_calories,hidden_items]);
 		}
 	
 		console.log('about to return');

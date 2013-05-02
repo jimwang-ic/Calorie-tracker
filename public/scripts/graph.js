@@ -1,22 +1,23 @@
+var date = new Date(), y = date.getFullYear(), m = date.getMonth();
+var start = new Date(y, m, 1).getTime();
+var end = new Date(y, m + 1, 0).getTime();
+var datasets;
+
 window.addEventListener('load', function(){
 	
-	// Customize our Calendar  
-	//for now april 2013
-	var start = new Date(2013,4,1).getTime();
-	var end = new Date(2013,5,0).getTime();
-	console.log("between " + start + " " + end);
-	Customize("username",start,end);
+	load_graph();
 	
 	
 }, false);
 
 
-function Customize(user,start,end) {
+function load_graph() {
 
 
   var data = {};
   // create a request object
   var request = new XMLHttpRequest();
+  
 
   // specify the HTTP method, URL, and asynchronous flag
   request.open('GET', '/graph.json?start=' + start + "&end=" + end, true);
@@ -39,6 +40,7 @@ function Customize(user,start,end) {
 }
 
 function update(data) {
+  $.plot("#placeholder", [],{});
 
   calories = data['food'];
   weight = data['weight'];
@@ -54,16 +56,16 @@ function update(data) {
   }
   console.log(pointToId);
   
-  var datasets = {"calories": {data:calories,yaxis:1,label:"Calories Consumed"},"weight":{data:weight,yaxis:2,label:"Weight"}};
-  var plot; //defined below when its plotted
+  datasets = {"calories": {data:calories,yaxis:1,label:"Calories Consumed"},"weight":{data:weight,yaxis:2,label:"Weight"}};
   $("#placeholder").bind("plotclick", function (event, pos, item) {
     if (item) {
 	plot.unhighlight();
         plot.highlight(item.series, item.datapoint);
 	var values = item.datapoint.toString().split(',');
 	var date = new Date(parseInt(values[0]));
-	console.log(item.datapoint);
-        alert("You clicked a point!  On " + date + " you ate " + values[1] + " calories.  Also " + pointToId[item.datapoint]);
+	console.log('filling');
+	console.log(pointToId[item.datapoint]);
+	fill_date_screen(pointToId[item.datapoint]);
 	// create a request object
 	/*var request = new XMLHttpRequest();
 
@@ -96,6 +98,7 @@ function update(data) {
   
   // insert checkboxes 
   var choiceContainer = $("#choices");
+  choiceContainer.empty();
   $.each(datasets, function(key, val) {
 	  choiceContainer.append("<br/><input type='checkbox' name='" + key +
 		  "' checked='checked' id='id" + key + "'></input>" +
@@ -141,7 +144,7 @@ function update(data) {
        xaxes: [ { position: "top" } ],
        yaxes: [ { }, { position: "right", min: 20 } ],
        legend: {show: true}, 
-       yaxis: { min: 0, max: 500 }, 
+       yaxis: { min: 0 }, 
        xaxis: {mode: "time", timeformat: "%m-%d",min:$("#start").datepicker("getDate"),max:$("#end").datepicker("getDate")}, 
        series: {
         lines: { show: true }, points: { show: true } },
