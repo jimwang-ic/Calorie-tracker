@@ -56,8 +56,9 @@ function RefreshCal() {
 	document.getElementById('detailedForm').style.display='none';
 	
 	updateCalendar_ajax();
-	
+	load_graph();
 }
+	
 
 function transferDateToIntSetID(){
 	// selector for children in order to set id 
@@ -150,7 +151,8 @@ function Customize_cal() {
 	        var date = parseInt(day[0]);
 	        var meals = current_month_data[date];
 	       	
-	       	//console.log(meals);
+	       	console.log("meals");
+	       	console.log(meals);
 	       	
 	       	var mealtypeTable = {
 				'breakfast': 1,
@@ -191,6 +193,48 @@ function Customize_cal() {
         }
         
 	});
+}
+//id mealname mealtype totalcalories
+function fill_date_screen(meals) {
+    
+    //console.log(meals);
+    
+    var mealtypeTable = {
+		    'breakfast': 1,
+		    'lunch':2,
+		    'dinner':3,
+		    'snack':4
+	    };  
+	    
+    
+	    $("#box-table-a tr td:nth-child(2)").html("Unrecorded");
+	    $("#box-table-a tr td:nth-child(3)").html("n/a");
+	    
+	    // Combine the meals base on their types
+	    var CombineMeal = {};
+	    
+	    for(var key in meals)
+	    {
+		    var meal = meals[key];
+		    var mealtype_n =  mealtypeTable[meal.mealtype];
+		    
+		    if(CombineMeal[mealtype_n] === undefined)
+		    {
+			    CombineMeal[mealtype_n] = {};
+			    CombineMeal[mealtype_n].names = "";
+			    CombineMeal[mealtype_n].calories = 0;
+		    }
+		    
+		    CombineMeal[mealtype_n].calories += meal.totalcalories;  
+		    CombineMeal[mealtype_n].names += (meal.mealname + ',');
+    }
+    
+    for(key in CombineMeal)
+    {
+	    var mealnames = CombineMeal[key].names;
+	    $("#box-table-a tr:eq(" + key + ") td:eq(1)").html(mealnames.substring(0, mealnames.length-1));
+		    $("#box-table-a tr:eq(" + key + ") td:eq(2)").html(CombineMeal[key].calories);
+    }
 }
 
 
