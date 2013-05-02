@@ -19,8 +19,12 @@ h5{
 }
 
 
-#chooseMeal{
+#optionSelect{
 	display:block;
+}
+
+#chooseMeal{
+	display:none;
 	overflow:auto;
 
 }
@@ -37,7 +41,7 @@ h5{
 	margin-bottom:10px;
 }
 
-#next{
+.next{
 	color:#eee;
 	background:#5983FF;
 	width:80px;
@@ -61,6 +65,11 @@ h5{
 #detailedForm{
 	display:none;
 }
+
+#weightInput{
+	display:none;
+}
+
 /* CSS FOR DETAILED MEAL ENTRY FORM */
 #results {
 	width:400px;
@@ -140,7 +149,7 @@ h5{
 	background:#ff8d8d;
 }
 
-#btn_addmeal{
+#btn_addmeal, #btn_addweight{
 	height: 40px;
 	width:90px;
 	color:#eee;
