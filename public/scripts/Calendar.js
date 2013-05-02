@@ -1,5 +1,6 @@
 var ReqInterval = null;
 var Meal = {};
+var current_month_data = {};
 window.addEventListener('load', function(){
 	
 	// Customize our Calendar  
@@ -16,6 +17,9 @@ window.addEventListener('load', function(){
 		document.getElementById('fade').style.display='none';
 		document.getElementById('chooseMeal').style.display='block';
 		document.getElementById('detailedForm').style.display='none';
+		// Show today's calorie infomation
+		var today = $('.fatsecret_day_today > span').text();
+		ShowMealInfo(parseInt(today));
 	});
 			
 	$('#next').on('click',function(){
@@ -28,17 +32,7 @@ window.addEventListener('load', function(){
 	});*/
 	
 	Form_eventListener();
-	
 		
-	//$('#search_query').on('focus',show);
-	//$('#search_query').on('blur',hide);
-			
-	/*
-	$('#foodentry').on('focus',show);
-		$('#foodentry').on('blur',hide);
-	*/
-
-
 }, false);
 
 // Refresh calendar and clean up the form after adding meal
@@ -144,34 +138,28 @@ function Customize_cal() {
 	
 	
 	$('.fatsecret_day_other, .fatsecret_day_today').click(function(e) {
-    
-    	//console.log(e.target);
-    	
+        	
         if ($(e.target).is('.fatsecret_day_content span')) 
         {
             return;
         }
         else 
-        {	  
-	    var id = $(e.target).find( $('a span') ).attr('id');
-	    try {
-		console.log('shit');
-		console.log(id);
-		var day = id.split("/");
-		console.log(day);
-		var date = parseInt(day[0],10);
-		console.log(date);
-
-		var meals = current_month_data[date];
-		fill_date_screen(meals);
-	    }
-	    catch (error) {
-		clear_date_screen();
-	    } //blank day
+        {
+		    var id = $(e.target).find( $('a span') ).attr('id');
+		    try {
+				var day = id.split("/");
+				var date = parseInt(day[0],10);
+				var meals = current_month_data[date];
+				fill_date_screen(meals);
+		    }
+		    catch (error) {
+				clear_date_screen();
+		    } //blank day
 
         }
-        
 	});
+	
+	
 }
 
 function clear_date_screen() {
@@ -239,14 +227,22 @@ function updateCalendar_ajax() {
 	// add an event handler
 	request.addEventListener('load', function(e){
 	    if (request.status == 200) {
-		// do something with the loaded content
-		var content = request.responseText;
-		console.log("cal_ajax" + content);
-		updateCalendar(JSON.parse(content));
+			
+			// do something with the loaded content
+			var content = request.responseText;
+			console.log("cal_ajax" + content);
+			updateCalendar(JSON.parse(content));
+			
+			// Show today's calorie infomation
+			var today = $('.fatsecret_day_today > span').text();
+			var meals = current_month_data[today];
+     	    fill_date_screen(meals);
+			
+			
 	    } else {
-		console.log('error');
-		// something went wrong, check the request status
-		// hint: 403 means Forbidden, maybe you forgot your username?
+			console.log('error');
+			// something went wrong, check the request status
+			// hint: 403 means Forbidden, maybe you forgot your username?
 	    }
 	}, false);
 
@@ -257,9 +253,6 @@ function updateCalendar_ajax() {
 /**
   Displays returned information on calendar
 **/
-
-
-var current_month_data = {};
 
 function updateCalendar(data) {
     
@@ -471,14 +464,15 @@ function Form_eventListener() {
 		var food_type = $('#mealType input:radio:checked').val();
 		var total_calories = food_calories*parseInt(food_servings);
 		
-		var delete_btn = $('<button class="delete_btn">x</button>');
+		//var delete_btn = $('<button class="delete_btn">x</button>');
 								
 				
 		var foodwrapper = '<td>'+ food_type + '</td>' + 
 						  '<td>'+ food_servings + '</td>' + 
 						  '<td>'+ food_name +'</td>' +
 						  '<td>'+ total_calories +'</td>' + 
-						  '<td>' + '<button class="delete_btn">x</button>' + '</td>'; 				 				 
+						  '<td>' + '<button class="delete_btn">x</button>' + '</td>' + 
+						  '<td class="foodID" style = "display:none">' + food_id + '</td>'; 				 				 
 	
 						  
 		var tofill = document.createElement('tr');
@@ -493,7 +487,6 @@ function Form_eventListener() {
 	});
 	
 	$('#btn_addmeal').on('click', function(){
-		
 		
 		console.log(Meal);
 		
@@ -514,4 +507,23 @@ function Form_eventListener() {
 	
 	});
 	
+	
+	$('.delete_btn').live('click', function(e){
+		
+		var foodId = $(e.target).parent().parent().find($('.foodID')).text();
+	
+		for(var key in Meal.food)
+		{	
+			if( parseInt(Meal.food[key].id,10) === parseInt(foodId,10) )
+			{
+				index = key;
+				break;
+			}
+		}
+		// Delete the food in Meal object 
+		Meal.food.splice(index,1);
+		// Remove the element
+		$(e.target).parent().parent().remove();
+		
+	});
 }
