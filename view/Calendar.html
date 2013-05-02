@@ -26,7 +26,10 @@
 	</head>
 
 	<body>
-		<h2>ShapeUp Calorie Tracker</h2>
+		<div id="headerHolder">
+			<img src="../images/logo.png">
+			<h2>Calorie Tracker</h2>
+		</div>
 		<div id="tabandday_cont">
 		<div id="tabs_container">
 			<ul class="tabs">
@@ -46,7 +49,7 @@
 				<div id="calendar_tab" class="tab_contents tab_contents_active">
 
 					<!-- FatSecret API Embeds -->
-					<div style="width:1000px; margin:0 auto;" id="holder">
+					<div  id="holder">
 
 						<script>
 							// Must set a container to initialize the application
@@ -72,52 +75,12 @@
 						</div>
 
 						<!-- a empty container, don't remove this -->
-						<div>
+						<div id="jason">
 							<script>fatsecret.writeHolder("	dateselector");</script> 
 						</div>
 
 						<div id="container"></div> 
 					</div> <!-- end FatSecret API Embeds -->
-
-	<!-- Data for a single day box -->
-		<div id="dayDataholder">
-			<div id = "dayData">
-				<div id = "dayDataHeader">
-					<h3>Detailed Day Information</h3>
-					<h4>Click on a calendar date to view</h4>
-				</div>
-				<table id="box-table-a">
-					<thead>
-						<tr>
-							<th>Meal</th>
-							<th>Status</th>
-							<th>Calorie Count</th>
-						</tr>
-					</thead>
-					<tr>
-						<td>Breakfast</td>
-						<td>Unrecorded</td>
-						<td> n/a </td>
-					</tr>
-					<tr>
-						<td>Lunch</td>
-						<td>Unrecorded</td>
-						<td> n/a </td>
-
-					</tr>
-					<tr>
-						<td>Dinner</td>
-						<td>Unrecorded</td>
-						<td> n/a </td>
-					</tr>
-					<tr>
-						<td>Snack/Other</td>
-						<td>Unrecorded</td>
-						<td> n/a </td>
-					</tr>
-				</table>
-			</div> <!-- end data for a single day box -->
-		</div>
 
 				</div> <!-- end Calendar Tab contents -->
 
@@ -147,7 +110,10 @@
 						</tr>
 					</table> <!-- End Graph-->
 
-	<!-- Data for a single day box -->
+	
+
+				</div> <!-- end graph_tab -->
+<!-- Data for a single day box -->
 		<div id="dayDataholder">
 			<div id = "dayData">
 				<div id = "dayDataHeader">
@@ -187,8 +153,6 @@
 			</div> <!-- end data for a single day box -->
 		</div>
 
-
-				</div> <!-- end graph_tab -->
 			</div> <!-- end tabs contents container -->
 
 		</div> <!-- end tabs container -->
