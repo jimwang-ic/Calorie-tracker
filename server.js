@@ -29,6 +29,9 @@ app.use(app.router);
 app.engine('html', engines.hogan);     // tell Express to run .html files through Hogan
 app.set('views', __dirname + '/view');  // tell Express where to find templates
 
+app.listen(8080);
+console.log('Listen on port 8080');
+
 
 //likely migrate this way down the page
 //what db to use?
@@ -55,16 +58,13 @@ fs.exists('database.db',function(exists) {
 
 
 
-
+/**
+  base page
+**/
 app.get('/', function(req,res){
 
 	res.render('Calendar.html');
 		
-});
-
-app.get('/form',function(req,res) {
-	res.render('form.html');
-
 });
 
 
@@ -123,14 +123,6 @@ app.get('/getFood.json', function(req,res){
 			
 });
 
-//Displays Graph
-app.get('/graph', function(req,res) {
-  
-  res.render('graph.html');
-  
-});
-
-
 
 /**
 JSON format
@@ -138,9 +130,6 @@ entry {
 	date: 4-23-13
 	food: [[calories,id,name][calories2,id2,name2]]
 	OR weight: int
-
-
-
 **/
 app.post('/addmeal', function(req,res) {
 	console.log("adding meal");
@@ -176,10 +165,6 @@ app.post('/addmeal', function(req,res) {
 
 
 
-app.listen(8080);
-console.log('Listen on port 8080');
-
-
 /**
  * Get data for graph from DB
  * returns all entries within given time
@@ -191,7 +176,6 @@ app.get('/graph.json',function(req,res) {
     var data = {};
     data['food'] = [];
     data['weight'] = [];
-    console.log("between " + start + " " + end);
     var dates = {};
     //as of now returns everything
     //conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
@@ -200,11 +184,9 @@ app.get('/graph.json',function(req,res) {
 		console.log(row);
 		if (row.foodweight == 1) {
 		    if (dates[row.datetime] == undefined) {
-			console.log("here");
 			dates[row.datetime] = [];
 		    }
 		    dates[row.datetime].push([row.totalcalories,row.id,row.mealtype,row.mealname]);
-		    console.log('pulling ' + row.mealtype);
 		}
 		else {
 		    data['weight'].push([row.datetime, row.weight,row.id]);
@@ -229,15 +211,12 @@ app.get('/graph.json',function(req,res) {
 	    .on('end',function(row) {
 		var hidden_items = {};
 		for (var time in dates) {
-		    console.log("counting");
-		    console.log(dates[day]);
 		    var day_calories = 0;
 		    var hidden_items = [];
 		    var day = dates[time];
 		    for (var i = 0; i < day.length; i++) {
 			var meal = day[i];
 			var items = {};
-			console.log(meal);
 			//array cooresponds to [row.totalcalories,row.id,row.mealtype,row.mealname]
 			day_calories += meal[0];
 			items['id'] = meal[1];
@@ -317,22 +296,35 @@ app.get('/calendar.json',function(req,res) {
 	console.log(err);
 	var date = [2013,05]; //default may 2013
     }
-    var start = new Date(date[0],date[1]-1,1);
-    var end = new Date(date[0],date[1],0);
-    var name = req.username;
-    console.log("start " + start);
+    var month = date[1] - 1;
+    //we want five days before first day of the month for pulling previous meals
+    var start = new Date(date[0],month,1);
+    start.setDate(start.getDate()-5);
+    console.log("start");
+    console.log(start);
+    var end = new Date(date[0],month+1,0);
     console.log(end);
+    var name = req.username;
     conn.query('SELECT mealname,datetime,totalcalories,id,mealtype FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
 	.on('row',function(row) {
-	    console.log(row.mealname);
-	    var day = new Date(row.datetime).getDate();
+	    console.log(new Date(row.datetime));
+	    var d = new Date(row.datetime);
+	    var day = parseInt(d.getDate());
+	    console.log(day);
+	    if (d.getMonth() != month) {
+		//prev 5 days
+		var last = new Date(date[0],d.getMonth() +1,0);
+		console.log(last.getDate());
+		day =  parseInt(parseInt(day) - parseInt(last.getDate()));
+		console.log('this ' + day);
+	    }
 	    var entry = {};
 	    entry['mealname'] = row.mealname;
 	    entry['id'] = row.id;
 	    entry['totalcalories'] = row.totalcalories;
 	    entry['mealtype'] = row.mealtype;
 	    if (data[day] == undefined) {
-			data[day] = [];
+		data[day] = [];
 	    }
 	    data[day].push(entry);
 	})
