@@ -6,8 +6,6 @@
 		<!-- JAVASCRIPT API source -->
 		<script src="http://platform.fatsecret.com/js?key=1d1e36bf07f84761b76cd39e0ad1c1dd&auto_template=false"></script>
 
-	
-
 		<!-- TABBING JS -->
 		<script src="/public/scripts/tab.js"></script>
 		<!-- Calendar JS -->
@@ -24,12 +22,12 @@
 		<link rel="stylesheet" href="css/style.css" type="text/css" />
 		<link rel="stylesheet" href="css/tab.css" type="text/css" />
 		<link rel="stylesheet" href="css/lightbox.css" type="text/css" />	
-		
+
 	</head>
 
 	<body>
 		<h2>ShapeUp Calorie Tracker</h2>
-
+		<div id="tabandday_cont">
 		<div id="tabs_container">
 			<ul class="tabs">
 				<li class="active">
@@ -60,38 +58,42 @@
 						<div id="prevMonth" class="monthbutton">
 							<script>fatsecret.writeHolder("previousmonth");</script> 
 						</div>
+
 						<div class="date">
 							<script>fatsecret.writeHolder("date");</script>
 						</div>
+
 						<div id ="nextMonth" class="monthbutton">
 							<script>fatsecret.writeHolder("nextmonth");</script> 	
 						</div>
+
 						<div id="calendar">
 							<script>fatsecret.writeHolder("calendar");</script> 
 						</div>
+
 						<!-- a empty container, don't remove this -->
 						<div>
 							<script>fatsecret.writeHolder("	dateselector");</script> 
-						
 						</div>
+
 						<div id="container"></div> 
-					
+					</div> <!-- end FatSecret API Embeds -->
 
-					</div>
-
-					<div id = "dayData">
-						<div id = "dayDataHeader">
-							<h3>Detailed Day Information</h3>
-							<h4>Click on a calendar date to view</h4>
-						</div>
-			<table id="box-table-a">
-				<thead>
-					<tr>
-						<th>Meal</th>
-						<th>Status</th>
-						<th>Calorie Count</th>
-					</tr>
-				</thead>
+	<!-- Data for a single day box -->
+		<div id="dayDataholder">
+			<div id = "dayData">
+				<div id = "dayDataHeader">
+					<h3>Detailed Day Information</h3>
+					<h4>Click on a calendar date to view</h4>
+				</div>
+				<table id="box-table-a">
+					<thead>
+						<tr>
+							<th>Meal</th>
+							<th>Status</th>
+							<th>Calorie Count</th>
+						</tr>
+					</thead>
 					<tr>
 						<td>Breakfast</td>
 						<td>Unrecorded</td>
@@ -114,9 +116,10 @@
 						<td> n/a </td>
 					</tr>
 				</table>
-			</div>
+			</div> <!-- end data for a single day box -->
+		</div>
 
-				</div>
+				</div> <!-- end Calendar Tab contents -->
 
 				<!-- Analysis Tab contents -->
 				<div id="graph_tab" class="tab_contents">
@@ -142,12 +145,56 @@
 							<td>Days of Month</td>
 							<td></td>
 						</tr>
-					</table>
+					</table> <!-- End Graph-->
 
+	<!-- Data for a single day box -->
+		<div id="dayDataholder">
+			<div id = "dayData">
+				<div id = "dayDataHeader">
+					<h3>Detailed Day Information</h3>
+					<h4>Click on a calendar date to view</h4>
 				</div>
-			</div> <!-- end tabs_container -->
+				<table id="box-table-a">
+					<thead>
+						<tr>
+							<th>Meal</th>
+							<th>Status</th>
+							<th>Calorie Count</th>
+						</tr>
+					</thead>
+					<tr>
+						<td>Breakfast</td>
+						<td>Unrecorded</td>
+						<td> n/a </td>
+					</tr>
+					<tr>
+						<td>Lunch</td>
+						<td>Unrecorded</td>
+						<td> n/a </td>
 
+					</tr>
+					<tr>
+						<td>Dinner</td>
+						<td>Unrecorded</td>
+						<td> n/a </td>
+					</tr>
+					<tr>
+						<td>Snack/Other</td>
+						<td>Unrecorded</td>
+						<td> n/a </td>
+					</tr>
+				</table>
+			</div> <!-- end data for a single day box -->
 		</div>
+
+
+				</div> <!-- end graph_tab -->
+			</div> <!-- end tabs contents container -->
+
+		</div> <!-- end tabs container -->
+
+	
+	</div> <!-- end calendar/detailed day container -->
 
 
 		<!-- HTML FOR LIGHTBOX -->
@@ -169,6 +216,10 @@
 				<div id="next"> Next </div> <!-- next page button -->
 			</div>
 
+			<div id="yesterdayMealContainer">
+				<div id="yesterdayMealContent"></div>
+				<button id="showYesterday">Show Yesterday Meal!</button>
+			</div>
 
 			<div id="detailedForm">
 				<div id="searchpref">
