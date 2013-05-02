@@ -30,9 +30,9 @@ window.addEventListener('load', function(){
 	});
 	
 
-	$('#showYesterday').on('click',function(){
+	$('#showPrevious').on('click',function(){
 		console.log("show!!!");
-		addYesterDayMeal();
+		addpreviousMeal();
 	});
 
 
@@ -368,7 +368,8 @@ function updateCalendar_ajax() {
 
 function updateCalendar(data) {
     
-    console.log("Calendar data" +  data);
+    console.log("Calendar data");
+    console.log(data);
     
     //assign the data to global variable current_month_data
     current_month_data = data;
@@ -390,6 +391,8 @@ function updateCalendar(data) {
 
 // make lightbox appear
 function edit_meal(e) {
+	$('#results').html("");
+
 	console.log(e.currentTarget.id);
 	var items = e.currentTarget.id.split('/');
 	//console.log(
@@ -445,13 +448,20 @@ function RefreshResult(content,yesterday) {
 	if(yesterday == true){
 
 		var n = content.total_results > 10 ? content.max_results : content.total_results;
-		console.log("n"+n);
-		
+		console.log("n:"+n);
+		console.log(content);
+		console.log(content.name);
+
+		/*
+			Bug here, when only 1 object, I will have object has no method on
+		*/
 		for(var i = 0 ; i < n ; i++)
 		{
 			
-			var inner_html = (n == 1) ? content.name : content[i].name;
+			
+			var inner_html = content[i].name//(n == 1) ? content.name : content[i].name;
 			//console.log(content[i].id+" "+content[i].name+" "+content[i].calories);
+			console.log(inner_html);
 			$('#results').append($('<div></div')
 						  .html(inner_html)
 						  .on('click', handlerGen(content[i].id, 
@@ -486,9 +496,9 @@ function handlerGen(id, name, dsp, yesterday) {
 
 	if(yesterday == false){
 		return function() {
-			console.log("id:"+id);
-			console.log("name:"+name);
-			console.log("dsp:"+dsp);
+			// console.log("id:"+id);
+			// console.log("name:"+name);
+			// console.log("dsp:"+dsp);
 
 			var Re = /\d+kcal/;
 			var arr = Re.exec(dsp);
@@ -560,12 +570,9 @@ function Form_eventListener() {
 	});
 	
 	$('#btn_addmeal').on('click', function(){
-		
-		console.log("~~~~~~~~Add Meal!~~~~~~~~~~");	
-		console.log(Meal);
-		
+				
 		serialize_meal = JSON.stringify(Meal);
-		console.log(serialize_meal);
+		// console.log(serialize_meal);
 		
 		
 		// Create a FormData object from out form
@@ -578,7 +585,7 @@ function Form_eventListener() {
 
 		req.addEventListener('load', RefreshCal);
 		req.send(fd);
-	
+		
 	});
 	
 	
@@ -602,37 +609,48 @@ function Form_eventListener() {
 	});
 }
 
-function addYesterDayMeal(){
+function addpreviousMeal(){
+	console.log("current month data");
+	console.log(current_month_data);
 	if(Meal.date != undefined){
 		var date = new Date(Meal.date).getDate();
 		var food_type = $('#mealType input:radio:checked').val();
-		var yesterdayMeal =[];
-		if(current_month_data.hasOwnProperty(date-1)){
-			// This will return the arrays of the food yesterday 
-			var foodYesterday = current_month_data[date-1];
-			var food = document.createElement("div");
-			for(var i=0; i<foodYesterday.length; i++){
+		var previousMeal =[];
 
-				console.log("radio:"+food_type);
-				console.log("table:"+foodYesterday[i].mealtype);
-				console.log("Yesterday");
-				console.log(foodYesterday[i]);
+		 for(var d =date-1; d >= date-5; d=d-1){
+			
+			if(current_month_data.hasOwnProperty(d)){
+				// This will return the arrays of the food yesterday 
+				var foodPrevious = current_month_data[d];
+							console.log("has property:" + d);
 
-				if(foodYesterday[i].mealtype == food_type){
-					// yesterdayMeal foodYesterday[i].mealname+'\n';
-					yesterdayMeal.push({id : foodYesterday[i].foodid, name : foodYesterday[i].mealname, calories : foodYesterday[i].totalcalories, 
-						mealtype: foodYesterday[i].mealtype});
+				var food = document.createElement("div");
+				for(var i=0; i<foodPrevious.length; i++){
+
+					// console.log("radio:"+food_type);
+					// console.log("table:"+foodPrevious[i].mealtype);
+					// console.log("Yesterday");
+					// console.log(foodPrevious[i]);
+
+					if(foodPrevious[i].mealtype == food_type){
+						// previousMeal foodPrevious[i].mealname+'\n';
+						previousMeal.push({id : foodPrevious[i].foodid, name : foodPrevious[i].mealname, calories : foodPrevious[i].totalcalories, 
+							mealtype: foodPrevious[i].mealtype});
+
+					}
 
 				}
+		 }
 
-			}
-			yesterdayMeal['total_results'] = foodYesterday.length;
-			yesterdayMeal['max_results'] = 10;
 		}
-		console.log(yesterdayMeal);
-		console.log("call refresh results");
-		RefreshResult(yesterdayMeal,true);
-		// $("#yesterdayMealContent").html(totalmeal);
+
+		previousMeal['total_results'] = Object.keys(previousMeal).length;
+		previousMeal['max_results'] = 10;
+
+		// console.log(previousMeal);
+		// console.log("call refresh results");
+		RefreshResult(previousMeal,true);
+		// $("#previousMealContent").html(totalmeal);
 
 	}
 
