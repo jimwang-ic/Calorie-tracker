@@ -238,6 +238,7 @@ app.get('/graph.json',function(req,res) {
 			var meal = day[i];
 			var items = {};
 			console.log(meal);
+			//array cooresponds to [row.totalcalories,row.id,row.mealtype,row.mealname]
 			day_calories += meal[0];
 			items['id'] = meal[1];
 			items['mealname'] = meal[3];
