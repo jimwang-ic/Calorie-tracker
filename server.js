@@ -315,8 +315,8 @@ app.get('/calendar.json',function(req,res) {
     console.log(start);
     var end = new Date(date[0],month+1,0);
     console.log(end);
-    var name = req.username;
-    conn.query('SELECT mealname,datetime,totalcalories,id,mealtype FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
+    conn.query('SELECT mealname,datetime,totalcalories,id,mealtype,foodid FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
+
 	.on('row',function(row) {
 	    console.log(new Date(row.datetime));
 	    var d = new Date(row.datetime);
@@ -334,6 +334,7 @@ app.get('/calendar.json',function(req,res) {
 	    entry['id'] = row.id;
 	    entry['totalcalories'] = row.totalcalories;
 	    entry['mealtype'] = row.mealtype;
+	    entry['foodid'] = row.foodid;
 	    if (data[day] == undefined) {
 		data[day] = [];
 	    }

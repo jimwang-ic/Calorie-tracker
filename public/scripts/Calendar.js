@@ -27,7 +27,21 @@ window.addEventListener('load', function(){
 		document.getElementById('detailedForm').style.display='block';
 	});
 	
+
+	$('#showYesterday').on('click',function(){
+		console.log("show!!!");
+		addYesterDayMeal();
+	});
+
+
+
 	Form_eventListener();
+	
+	$('#prevMonth a,#nextMonth a').on('click',function() {
+	    Customize_cal();
+	});
+	
+
 		
 }, false);
 
@@ -105,7 +119,7 @@ function transferDateToIntSetID(){
 function Customize_cal() {
 	
 	updateCalendar_ajax();
-	
+
 	// in order to have the information about what date we click on, we need
 	// to set id for every edit meal link. The function handles all the nessary
 	// operation, for example: selector, string conversion.
@@ -284,7 +298,7 @@ function edit_meal(e) {
 	
 	Meal.date = new Date(items[2],items[1]-1,items[0]).getTime();
 	
-	
+
 	document.getElementById('light').style.display='block';
 	document.getElementById('fade').style.display='block';
 	// document.getElementById('table_container').innerHTML ="";
@@ -378,7 +392,9 @@ function getResult () {
 		{
 			// Take JSON "stings" and returns the resulting Jabascript object
 			var content = jQuery.parseJSON(req.responseText);
-			RefreshResult(content);	
+			console.log("content");
+			console.log(content);
+			RefreshResult(content,false);	
 			
 		}
 		else
@@ -394,44 +410,81 @@ function getResult () {
 }
 
 
-function RefreshResult(content) {
+function RefreshResult(content,yesterday) {
 	
 	$('#results').html("");
 	
-	var n = content.total_results > 10 ? content.max_results : content.total_results;
-	
-	// If have time, deal with edge case with only one result
-	for(var i = 0 ; i < n ; i++)
-	{
-		// 
-		var inner_html = (n == 1) ? content.food.food_name : content.food[i].food_name
+	// This happened where we are using yesterday meal
+	if(yesterday == true){
+
+		var n = content.total_results > 10 ? content.max_results : content.total_results;
+		console.log("n"+n);
 		
-		$('#results').append($('<div></div')
-					  .html(inner_html)
-					  .on('click', handlerGen(content.food[i].food_id, 
-					                          content.food[i].food_name,
-					                          content.food[i].food_description))
-					  );	
+		for(var i = 0 ; i < n ; i++)
+		{
+			
+			var inner_html = (n == 1) ? content.name : content[i].name;
+			//console.log(content[i].id+" "+content[i].name+" "+content[i].calories);
+			$('#results').append($('<div></div')
+						  .html(inner_html)
+						  .on('click', handlerGen(content[i].id, 
+						                          content[i].name,
+						                          content[i].calories,true))
+			);	
+			
+		}
+
+	}
+	else{
+		var n = content.total_results > 10 ? content.max_results : content.total_results;
 		
+		// If have time, deal with edge case with only one result
+		for(var i = 0 ; i < n ; i++)
+		{
+			
+			var inner_html = (n == 1) ? content.food.food_name : content.food[i].food_name;
+			
+			$('#results').append($('<div></div')
+						  .html(inner_html)
+						  .on('click', handlerGen(content.food[i].food_id, 
+						                          content.food[i].food_name,
+						                          content.food[i].food_description,false))
+						  );	
+			
+		}
 	}
 }
 
-function handlerGen(id, name, dsp) {
-	
-	return function() {
-		
-		var Re = /\d+kcal/;
-		var arr = Re.exec(dsp);
-		var calories = parseInt(arr[0]);
-		
-		//console.log(id);
-		//console.log(name);
-		//console.log(parseInt(arr[0]));
-		
-		$('#search_query').val(name);
-		$('#calories_field').val(calories);
-		$('#foodid').val(id);
+function handlerGen(id, name, dsp, yesterday) {
 
+	if(yesterday == false){
+		return function() {
+			console.log("id:"+id);
+			console.log("name:"+name);
+			console.log("dsp:"+dsp);
+
+			var Re = /\d+kcal/;
+			var arr = Re.exec(dsp);
+			console.log(arr);
+			var calories = parseInt(arr[0]);
+			
+			//console.log(id);
+			//console.log(name);
+			//console.log(parseInt(arr[0]));
+			
+			$('#search_query').val(name);
+			$('#calories_field').val(calories);
+			$('#foodid').val(id);
+
+		}
+	}else{
+
+		return function() {
+
+			$('#search_query').val(name);
+			$('#calories_field').val(dsp);
+			$('#foodid').val(id);
+		}
 	}
 }
 
@@ -528,3 +581,42 @@ function Form_eventListener() {
 		
 	});
 }
+
+function addYesterDayMeal(){
+	if(Meal.date != undefined){
+		var date = new Date(Meal.date).getDate();
+		var food_type = $('#mealType input:radio:checked').val();
+		var yesterdayMeal =[];
+		if(current_month_data.hasOwnProperty(date-1)){
+			// This will return the arrays of the food yesterday 
+			var foodYesterday = current_month_data[date-1];
+			var food = document.createElement("div");
+			for(var i=0; i<foodYesterday.length; i++){
+
+				console.log("radio:"+food_type);
+				console.log("table:"+foodYesterday[i].mealtype);
+				console.log("Yesterday");
+				console.log(foodYesterday[i]);
+
+				if(foodYesterday[i].mealtype == food_type){
+					// yesterdayMeal foodYesterday[i].mealname+'\n';
+					yesterdayMeal.push({id : foodYesterday[i].foodid, name : foodYesterday[i].mealname, calories : foodYesterday[i].totalcalories, 
+						mealtype: foodYesterday[i].mealtype});
+
+				}
+
+			}
+			yesterdayMeal['total_results'] = foodYesterday.length;
+			yesterdayMeal['max_results'] = 10;
+		}
+		console.log(yesterdayMeal);
+		console.log("call refresh results");
+		RefreshResult(yesterdayMeal,true);
+		// $("#yesterdayMealContent").html(totalmeal);
+
+	}
+
+
+	return;
+}
+
