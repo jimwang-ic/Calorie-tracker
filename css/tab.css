@@ -67,12 +67,11 @@ div.tab_contents{
 }
 
 div.tab_contents_active{
-	display:block;
+	display:inline-block;
 }
 
 #calendar_tab{
 	overflow:auto;
-	display:inline-block;
 	/*border:2px blue dotted;*/
 }
 
