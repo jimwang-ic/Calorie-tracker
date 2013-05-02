@@ -130,8 +130,8 @@ app.post('/login', function(req, res) {
 
 
 app.get('/', function(req,res){
-	//res.render('login.html');
-	res.render('Calendar.html');
+	res.render('login.html');
+	//res.render('Calendar.html');
 		
 });
 
