@@ -169,7 +169,7 @@ app.post('/deletemeal',function(req,res) {
     var id = req.body.id;
     conn.query('DELETE FROM calendar WHERE id=$1;',[id]);
     res.render('Calendar.html');
-}
+});
 
 
 
@@ -179,7 +179,8 @@ app.post('/deletemeal',function(req,res) {
  * returns all entries within given time
  * returns dataset of pairs of coordinates datetime and other calories
 */
-app.get('/graph.json',function(req,res) {
+app.get('/graph.json', function(req,res){
+
     var start = req.query['start'];
     var end = req.query['end'];
     var data = {};
