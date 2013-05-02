@@ -19,6 +19,10 @@ a:focus {
 	overflow:auto;
 }
 
+#tab_contents_container{
+
+}
+
 .tabs{
 	background-color:transparent;
 }
@@ -58,11 +62,12 @@ div.tab_contents_container{
 	border: 1px solid #ccc;
 	border-top: none;
 	padding: 10px;
-	overflow:auto;
+	overflow:hidden;
 	background:#fff;
 	-webkit-border-radius:0px 4px 4px 4px;
 	-moz-border-radius:0px 4px 4px 4px;
 	border-radius:0px 4px 4px 4px;
+	height:581px;
 }
 
 div.tab_contents{

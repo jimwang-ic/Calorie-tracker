@@ -87,13 +87,13 @@ h2{
 #prevMonth{
 	margin-bottom:10px;
 	position:absolute;
-	left:15px;
+	left:0px;
 	top:40px;
 }
 
 #nextMonth{
 	position:absolute;
-	left:487px;
+	left:474px;
 	top:40px;
 }
 
