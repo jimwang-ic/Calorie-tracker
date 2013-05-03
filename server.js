@@ -382,6 +382,14 @@ app.get('/entry.json',function(req,res) {
 });
 
 
+app.get('/history.json',function(req,res){
+	conn.query('SELECT * FROM table_' + req.session.userid).on('row',function(row){
+		console.log("query everything");
+		console.log(row);
+	}).on('end',function(row){
+		res.json(row);
+	});
+});
 
 
 

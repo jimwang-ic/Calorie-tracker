@@ -192,7 +192,6 @@ function Customize_cal() {
 	// Hide the fat secret api logo
 	$('.fatsecret_footer').hide();
 	
-	
 	$('.fatsecret_day_other, .fatsecret_day_today').click(function(e) {
         	
         if ($(e.target).is('.fatsecret_day_content span')) 
