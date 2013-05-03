@@ -403,6 +403,8 @@ function updateCalendar(data) {
 	    $(days[i]).parent().addClass("missing");
 	}
     }
+    
+    console.log("AUTOMATIC: " + automaticMeal("big"));
 
 }
 
@@ -673,5 +675,29 @@ function addpreviousMeal(){
 
 
 	return;
+}
+
+/**
+  Takes in mealtype or calculates average across meals
+  Returns meal object with calorie value averaged across all meals client side
+**/
+function automaticMeal(mealtype) {
+    console.log("AUTO");
+    var calories = 0;
+    var meals = 0;
+    var data = current_month_data;
+    if (mealtype == "big") { //want to create one big meal
+	console.log("HERE");
+	for (var day in data) {
+	    var meals = data[day];
+	    for (var i = 0; i < meals.length; i++) {
+		var meal = meals[i];
+		calories += meals.totalcalories;
+		meals += 1;
+	    }
+	}
+    }
+    return calories/meals;
+    
 }
 
