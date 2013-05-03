@@ -215,6 +215,9 @@ app.post('/addmeal', function(req,res) {
 	    });
 	    console.log("done adding meal");
 	}
+	
+	console.log(meal.weight);
+	
 	if (meal['weight'] != undefined) {
 		//console.log("adding weight");
 		//console.log(meal.date);
@@ -237,6 +240,29 @@ app.post('/deletemeal',function(req,res) {
     res.render('Calendar.html');
 });
 
+/**
+	Edit Meal
+**/
+app.post('/editmeal', function(req,res){
+	console.log("edit meal");
+	var meal = JSON.parse(req.body.meal);
+	console.log(req.body.meal.ids);
+	var ids = req.body.meal.ids;
+	var where_condition = "";
+	
+	for(key in ids)
+	{
+		where_condition += "'" +  ids[key]  + "'";	
+	}
+	
+	console.log(where_condition.substring(0, where_condition.length -1));
+	
+	//conn.query('DELETE FROM table_' + req.session.userid + ' WHERE id=$1;',[id]);
+	
+	
+	res.send();
+	
+});
 
 
 
@@ -320,6 +346,7 @@ app.get('/graph.json', function(req,res){
     date: datetime (integer)
     food: [id1,id2,id3]
     OR weight: int
+    servings : [servings*calories]
     entry id
 }
 **/

@@ -273,12 +273,7 @@ function editMeal(ids) {
 	return function(){
 		
 		Meal.ids = [];
-		
-		for(var keys in ids)
-		{
-			queryMeal(ids[keys]);
-		}
-		
+		displayMeal(ids);
 		document.getElementById('light').style.display='block';
 		document.getElementById('fade').style.display='block';
 		document.getElementById('optionSelect').style.display='none';
@@ -286,6 +281,22 @@ function editMeal(ids) {
 		document.getElementById('detailedForm').style.display='block';
 	}
 	
+}
+
+// !displayMeal
+/**
+  Takes meal ids as input.
+  
+  Display the meal on the form
+  
+**/
+function displayMeal(mealIds) {
+	
+	for(var key in mealIds)
+	{
+		queryMeal(mealIds[key]);
+	}
+		
 }
 
 function queryMeal(id) {
@@ -638,6 +649,10 @@ function Form_eventListener() {
 	$('#btn_additem').on('click', function(){
 		
 		var food_id = $('#foodid').val();
+		
+		if(food_id == 0)
+			return;
+		
 		var food_name = $('#search_query').val();
 		var food_calories = $('#calories_field').val();
 		var food_servings = $('#fruit_servings').val();
@@ -676,8 +691,13 @@ function Form_eventListener() {
 		
 		// Send it to the server 
 		var req = new XMLHttpRequest();
-		req.open('POST', '/addmeal', true);
-
+		
+		if(Meal.ids === undefined)
+			req.open('POST', '/addmeal', true);
+		else
+			req.open('POST', '/editmeal',true);
+		
+		
 		req.addEventListener('load', RefreshCal);
 		req.send(fd);
 		
