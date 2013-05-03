@@ -36,7 +36,7 @@ app.use(app.router);
 app.engine('html', engines.hogan);     // tell Express to run .html files through Hogan
 app.set('views', __dirname + '/view');  // tell Express where to find templates
 
-app.listen(9090);
+app.listen(8080);
 console.log('Listen on port 8080');
 
 

@@ -13,22 +13,43 @@ window.addEventListener('load', function(){
 	};
 	
 	$('#fade').on('click',function(){
-		document.getElementById('light').style.display='none';
-		document.getElementById('fade').style.display='none';
-		document.getElementById('chooseMeal').style.display='block';
-		document.getElementById('detailedForm').style.display='none';
+				
 		// Show today's calorie infomation
 		var today = $('.fatsecret_day_today > span').text();
 		var meals = current_month_data[today];
 		fill_date_screen(meals);
 		RefreshCal();
+		
 	});
 			
-	$('#next').on('click',function(){
-		document.getElementById('chooseMeal').style.display='none';
-		document.getElementById('detailedForm').style.display='block';
+	$('#next_choosemeal').on('click',function(){
+	
+		if( $('#auto_gen:checked').prop("checked") )
+		{
+			alert("auto generate!");
+		}
+		else
+		{
+			document.getElementById('chooseMeal').style.display='none';
+			document.getElementById('detailedForm').style.display='block';
+		}
 	});
 	
+	$('#next_optionselect').on('click',function(){
+		
+		if( $('#addMeal:checked').prop("checked") )
+		{
+			document.getElementById('optionSelect').style.display='none';
+			document.getElementById('chooseMeal').style.display='block';
+			document.getElementById('detailedForm').style.display='none';
+		}
+		else
+		{
+			document.getElementById('optionSelect').style.display='none';
+			document.getElementById('weightInput').style.display='block';
+		}
+		
+	});
 
 	$('#showPrevious').on('click',function(){
 		console.log("show!!!");
@@ -60,15 +81,22 @@ function RefreshCal() {
 	$('#results').html("");
 	$('#table_container tr:gt(0)').remove();
 	
-	document.getElementById('light').style.display='none';
-	document.getElementById('fade').style.display='none';
-	document.getElementById('chooseMeal').style.display='block';
-	document.getElementById('detailedForm').style.display='none';
-	
+	fadeout();
 	updateCalendar_ajax();
 	load_graph(null,null);
 }
 
+
+function fadeout() {
+	
+	document.getElementById('light').style.display='none';
+	document.getElementById('fade').style.display='none';
+	document.getElementById('optionSelect').style.display='block';
+	document.getElementById('chooseMeal').style.display='none';
+	document.getElementById('detailedForm').style.display='none';
+	document.getElementById('weightInput').style.display='none';
+	
+}
 // Hashtable for hashing text to numbers
 var monthTable = {
 	'January':'01',
@@ -234,46 +262,52 @@ function fill_date_screen(meals) {
 function editMeal(ids) {
 	return function(){
 		
-		// Only handle the case which user enter each meal one time per day	
-		var request = new XMLHttpRequest();
-		request.open('GET', '/entry.json?id=' + ids[0], true);
-		request.addEventListener('load', function(e){
-			
-			if(request.status == 200)
-			{
-				var content = JSON.parse(request.responseText);
-				var foodids = content.food;	
-				var mealtype = content.mealtype;
-				var servings = content.servings;
-				
-				console.log(content);
-				for(var key in foodids)
-				{
-					var servings_cal = servings[key].split("*");
-					//console.log(foodids[key]);
-					getFood(foodids[key],mealtype,servings_cal[0],servings_cal[1]);
-					
-				}
-				
-				document.getElementById('light').style.display='block';
-				document.getElementById('fade').style.display='block';
-				document.getElementById('chooseMeal').style.display='none';
-				document.getElementById('detailedForm').style.display='block';
-				
-				Meal.id = ids[0];
-				
-			}
-			else
-			{
-				console.log('error');
-			}
-			
-		});
-		request.send(null);
+		Meal.ids = [];
+		
+		for(var keys in ids)
+		{
+			queryMeal(ids[keys]);
+		}
+		
+		document.getElementById('light').style.display='block';
+		document.getElementById('fade').style.display='block';
+		document.getElementById('optionSelect').style.display='none';
+		document.getElementById('chooseMeal').style.display='none';
+		document.getElementById('detailedForm').style.display='block';
 	}
 	
 }
 
+function queryMeal(id) {
+
+	$.ajax({
+		type: "GET",
+		url: "/entry.json",
+		data: "id=" + id,
+		success: function(msg)
+		{
+			var content = msg;
+			var foodids = content.food;	
+			var mealtype = content.mealtype;
+			var servings = content.servings;
+			
+			//console.log(content);
+			for(var key in foodids)
+			{
+				var servings_cal = servings[key].split("*");
+				//console.log(foodids[key]);
+				getFood(foodids[key],mealtype,servings_cal[0],servings_cal[1]);	
+			}
+			
+			Meal.ids.push(id);
+		},
+		error: function()
+		{
+			console.log("error");	
+		}
+	});
+	
+}
 
 function getFood(foodid,mealtype,servings,calories) {
 	
@@ -334,7 +368,6 @@ function updateCalendar_ajax() {
 			var content = request.responseText;
 			updateCalendar(JSON.parse(content));
 			
-			// Show the newest update information
 			var editmeal_date = 0;
 			
 			if(Meal.date === undefined)
@@ -348,6 +381,7 @@ function updateCalendar_ajax() {
 			}
 			
 			var meals = current_month_data[editmeal_date];
+			// Show the newest update information
 			fill_date_screen(meals);
 			
 			
@@ -365,7 +399,6 @@ function updateCalendar_ajax() {
 /**
   Displays returned information on calendar
 **/
-
 function updateCalendar(data) {
     
     console.log("Calendar data");
@@ -550,6 +583,14 @@ function Form_eventListener() {
 	
 	Meal.food = [];
 	
+	$('#weightInput').on('submit', function(e){
+		e.preventDefault();
+	});
+	
+	$('#btn_addweight').on('click', function(e){
+		alert("add weight!");
+	});
+	
 	$('#FoodSearch').on('submit', function(e){
 		e.preventDefault();
 	
@@ -589,6 +630,9 @@ function Form_eventListener() {
 	});
 	
 	$('#btn_addmeal').on('click', function(){
+		
+		console.log("====== save to database ======");
+		console.log(Meal);
 				
 		serialize_meal = JSON.stringify(Meal);
 		// console.log(serialize_meal);
