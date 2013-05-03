@@ -72,28 +72,6 @@ function update(data) {
 	console.log('filling');
 	console.log(pointToId[item.datapoint]);
 	fill_date_screen(pointToId[item.datapoint]);
-	// create a request object
-	/*var request = new XMLHttpRequest();
-
-	// specify the HTTP method, URL, and asynchronous flag
-	request.open('GET', '/entry.json?id=' + pointToId[item.datapoint], true);
-
-	// add an event handler
-	request.addEventListener('load', function(e){
-	    if (request.status == 200) {
-		// do something with the loaded content
-		var content = request.responseText;
-		alert(content); //pull up edit meal window!
-	    } else {
-		console.log('error');
-		// something went wrong, check the request status
-		// hint: 403 means Forbidden, maybe you forgot your username?
-	    }
-	}, false);
-
-	// start the request, optionally with a request body for POST requests
-	request.send(null);*/
-	
     	if (item.selected) {
     	  item.selected = true;
     	  plot.highlight(item.series, item.datapoint);

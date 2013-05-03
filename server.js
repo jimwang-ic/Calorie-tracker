@@ -75,10 +75,8 @@ app.post('/login', function(req, res) {
 						userid = result.rows[0].userid;
 						conn.query('CREATE TABLE table_' + userid + ' (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, mealtype TEXT, weight INTEGER, servings TEXT);')
 						.on('end',function() {
-						    console.log('Made userid TABLEEEEE');
-						    //UNCOMMENT FOR TEST POINTS
-						    //test();
 						    req.session.userid = userid;
+						    req.session.username = req.body.username;
 						    res.render('Calendar.html'); 
 						});
 						
@@ -103,6 +101,7 @@ app.post('/login', function(req, res) {
 				    console.log(result);
 				    var userid = result.rows[0].userid;
 				    req.session.userid = userid;
+				    req.session.username = req.body.username;
 				    res.render('Calendar.html'); 
 				}
 			
