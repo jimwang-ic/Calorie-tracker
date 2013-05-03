@@ -191,6 +191,27 @@ app.post('/addmeal', function(req,res) {
 	var meal = JSON.parse(req.body.meal);
 	console.log(meal);
 	var time = meal['date'];
+	
+	// Edit meal
+	// delete the sperate meals in database, then add the combined one
+	if(meal.ids != undefined)
+	{
+		var ids = meal.ids;
+		var where_condition = "";
+		
+		for(key in ids)
+		{
+			where_condition += "'" +  ids[key]  + "',";	
+		}
+		
+		where_condition = where_condition.substring(0, where_condition.length -1);
+		
+		console.log(where_condition);
+		
+		conn.query('DELETE FROM table_' + req.session.userid + ' WHERE id in (' +  where_condition + ')')
+			.on('error', console.error);
+	}
+	
 	if (meal['food'] != undefined) {
 	    var food = meal['food'];
 	    var mealtype = food[0]['mealtype'];
@@ -235,31 +256,58 @@ app.post('/addmeal', function(req,res) {
   Delete Meal
 **/
 app.post('/deletemeal',function(req,res) {
-    var id = req.body.id;
+	
+	console.log("============ delete meal!! =========")
+	var meal = JSON.parse(req.body.meal);
+	var ids = meal.ids;
+	console.log(ids);
+	var where_condition = "";
+	
+	for(key in ids)
+	{
+		where_condition += "'" +  ids[key]  + "',";	
+	}
+	
+	where_condition = where_condition.substring(0, where_condition.length -1);
+	
+	console.log(where_condition);
+	
+	conn.query('DELETE FROM table_' + req.session.userid + ' WHERE id in (' +  where_condition + ')')
+		.on('error', console.error);
+			
+	res.send();
+	
+   /*
+ var id = req.body.id;
     conn.query('DELETE FROM table_' + req.session.userid + ' WHERE id=$1;',[id]);
     res.render('Calendar.html');
+*/
 });
 
 /**
 	Edit Meal
 **/
 app.post('/editmeal', function(req,res){
-	console.log("edit meal");
+	console.log("============ edit meal");
 	var meal = JSON.parse(req.body.meal);
-	console.log(req.body.meal.ids);
-	var ids = req.body.meal.ids;
+	//console.log(req.body.meal.ids);
+	var ids = meal.ids;
 	var where_condition = "";
 	
 	for(key in ids)
 	{
-		where_condition += "'" +  ids[key]  + "'";	
+		where_condition += "'" +  ids[key]  + "',";	
 	}
 	
-	console.log(where_condition.substring(0, where_condition.length -1));
+	where_condition = where_condition.substring(0, where_condition.length -1);
+	console.log(where_condition);
 	
-	//conn.query('DELETE FROM table_' + req.session.userid + ' WHERE id=$1;',[id]);
+	conn.query('DELETE FROM table_' + req.session.userid + ' WHERE id in (' +  where_condition + ')')
+		.on('error', console.error);
 	
 	
+	
+	console.log("============ edit meal finished");
 	res.send();
 	
 });
