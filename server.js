@@ -222,15 +222,18 @@ app.post('/addmeal', function(req,res) {
 		    console.log("insert : " + error);
 	    });
 	    console.log("done adding meal");
-	    
-	    res.render('Calendar.html');
 	}
 	if (meal['weight'] != undefined) {
+		//console.log("adding weight");
+		//console.log(meal.date);
 	    var weight = parseInt(meal['weight']);
+	    //console.log(weight);
 	    conn.query('INSERT INTO table_' + req.session.userid + ' VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)', [null,meal['date'],0,null,null,null,null,weight,null],function(error,result){
-		    console.log("insert : " + error);
+		    console.log("insert weight: " + error);
 	    });
 	}
+	
+	res.render('Calendar.html');
 });
 
 /**

@@ -70,6 +70,9 @@ h5{
 	display:none;
 }
 
+#autogenDialog{
+	display:none;
+}
 /* CSS FOR DETAILED MEAL ENTRY FORM */
 #results {
 	width:400px;

@@ -14,7 +14,7 @@ window.addEventListener('load', function(){
 	
 	$('#fade').on('click',function(){
 				
-		// Show today's calorie infomation
+		// Show today's calorie infomation on detail panel
 		var today = $('.fatsecret_day_today > span').text();
 		var meals = current_month_data[today];
 		fill_date_screen(meals);
@@ -50,18 +50,8 @@ window.addEventListener('load', function(){
 		}
 		
 	});
-
-	$('#showPrevious').on('click',function(){
-		console.log("show!!!");
-		addpreviousMeal();
-	});
-
-
-	Form_eventListener();
 	
-	$('#prevMonth a,#nextMonth a').on('click',function() {
-	    Customize_cal();
-	});
+	Form_eventListener();
 			
 }, false);
 
@@ -80,6 +70,7 @@ function RefreshCal() {
 	$('#breakfast').prop('checked', true);
 	$('#results').html("");
 	$('#table_container tr:gt(0)').remove();
+	$('#weight_input').val("");
 	
 	fadeout();
 	updateCalendar_ajax();
@@ -215,9 +206,8 @@ function clear_date_screen() {
 
 //id mealname mealtype totalcalories
 function fill_date_screen(meals) {
-    
-    
-    console.log(meals);
+   
+    //console.log(meals);
     
     var mealtypeTable = {
 		    'breakfast': 1,
@@ -320,7 +310,7 @@ function getFood(foodid,mealtype,servings,calories) {
         {
         	var food = jQuery.parseJSON(msg);
             //console.log(food);
-            console.log(food.servings);
+            //console.log(food.servings);
             var total_calories = parseInt(calories,10)*parseInt(servings,10);
             var foodwrapper = '<td>'+ mealtype + '</td>' + 
 							  '<td>'+ servings + '</td>' + 
@@ -401,11 +391,12 @@ function updateCalendar_ajax() {
 **/
 function updateCalendar(data) {
     
-    console.log("Calendar data");
-    console.log(data);
+    //console.log("Calendar data");
+    //console.log(data);
     
     //assign the data to global variable current_month_data
     current_month_data = data;
+    //console.log(data);
     
     var days = $('.fatsecret_day_content');
     $('.fatsecret_day_content > p, .calories').remove();
@@ -416,12 +407,14 @@ function updateCalendar(data) {
 	var calories = 0;
 	for (var i = 0; i < data[key].length; i++) {
 	    //console.log(data
-	    calories += parseInt(data[key][i].totalcalories);
+	    if(data[key][i].totalcalories != null)
+	  		calories += parseInt(data[key][i].totalcalories);
 	}
-	$(item).append('<span class=calories>' + calories + '</span>');
+	if(calories != 0)
+		$(item).append('<span class=calories>' + calories + '</span>');
     }
-    console.log("days:");
-    console.log(days);
+    //console.log("days:");
+    //console.log(days);
     
     var today = new Date();
     for (var i = 0; i < days.length; i++) {
@@ -441,16 +434,31 @@ function updateCalendar(data) {
 
 // make lightbox appear
 function edit_meal(e) {
+	
 	$('#results').html("");
 
-	console.log(e.currentTarget.id);
+	//console.log(e.currentTarget.id);
 	var items = e.currentTarget.id.split('/');
 	//console.log(
 	Meal.date = new Date(items[2],items[1]-1,items[0]).getTime();
 	
+	//console.log($(e.currentTarget).parents("td").attr("class"));
+	
+	if( $(e.currentTarget).parents("td").attr("class") == "fatsecret_day_other missing" )
+	{
+		document.getElementById('autogenDialog').style.display='block';
+		document.getElementById('optionSelect').style.display='none';
+		document.getElementById('light').style.display='block';
+		document.getElementById('fade').style.display='block';
+		//console.log("past date");
+	}
+	else
+	{
+		document.getElementById('light').style.display='block';
+		document.getElementById('fade').style.display='block';
+	}
 
-	document.getElementById('light').style.display='block';
-	document.getElementById('fade').style.display='block';
+	
 	// document.getElementById('table_container').innerHTML ="";
 	// $('#table_container').html('<tr>
 	// 		<!-- <th>Type</th> -->
@@ -462,7 +470,6 @@ function edit_meal(e) {
 function getResult () {
 	
 	//e.preventDefault();
-	console.log($('#search_query').val());
 	
 	var req = new XMLHttpRequest();
 	req.open('GET', '/searchFood.json?food=' + $('#search_query').val() );
@@ -472,8 +479,6 @@ function getResult () {
 		{
 			// Take JSON "stings" and returns the resulting Javascript object
 			var content = jQuery.parseJSON(req.responseText);
-			console.log("content");
-			console.log(content);
 			RefreshResult(content,false);	
 			
 		}
@@ -498,9 +503,7 @@ function RefreshResult(content,yesterday) {
 	if(yesterday == true){
 
 		var n = content.total_results > 10 ? content.max_results : content.total_results;
-		console.log("n:"+n);
-		console.log(content);
-		console.log(content.name);
+
 
 		/*
 			Bug here, when only 1 object, I will have object has no method on
@@ -511,7 +514,7 @@ function RefreshResult(content,yesterday) {
 			
 			var inner_html = content[i].name//(n == 1) ? content.name : content[i].name;
 			//console.log(content[i].id+" "+content[i].name+" "+content[i].calories);
-			console.log(inner_html);
+			//console.log(inner_html);
 			$('#results').append($('<div></div')
 						  .html(inner_html)
 						  .on('click', handlerGen(content[i].id, 
@@ -552,7 +555,7 @@ function handlerGen(id, name, dsp, yesterday) {
 
 			var Re = /\d+kcal/;
 			var arr = Re.exec(dsp);
-			console.log(arr);
+			//console.log(arr);
 			var calories = parseInt(arr[0]);
 			
 			//console.log(id);
@@ -586,7 +589,22 @@ function Form_eventListener() {
 	});
 	
 	$('#btn_addweight').on('click', function(e){
-		alert("add weight!");
+		
+		Meal.food = undefined;
+		Meal.weight = $('#weight_input').val();
+		serialize_meal = JSON.stringify(Meal);
+		
+		// Create a FormData object from out form
+		var fd = new FormData();
+		fd.append('meal', serialize_meal);
+		
+		// Send it to the server 
+		var req = new XMLHttpRequest();
+		req.open('POST', '/addmeal', true);
+
+		req.addEventListener('load', RefreshCal);
+		req.send(fd);
+		
 	});
 	
 	$('#FoodSearch').on('submit', function(e){
@@ -629,12 +647,10 @@ function Form_eventListener() {
 	
 	$('#btn_addmeal').on('click', function(){
 		
-		console.log("====== save to database ======");
-		console.log(Meal);
+		//console.log("====== save to database ======");
+		//console.log(Meal);
 				
 		serialize_meal = JSON.stringify(Meal);
-		// console.log(serialize_meal);
-		
 		
 		// Create a FormData object from out form
 		var fd = new FormData();
@@ -668,11 +684,15 @@ function Form_eventListener() {
 		$(e.target).parent().parent().remove();
 		
 	});
+	
+	$('#showPrevious').on('click',function(){
+		console.log("show!!!");
+		addpreviousMeal();
+	});
+
 }
 
 function addpreviousMeal(){
-	console.log("current month data");
-	console.log(current_month_data);
 	if(Meal.date != undefined){
 		var date = new Date(Meal.date).getDate();
 		var food_type = $('#mealType input:radio:checked').val();
@@ -683,15 +703,9 @@ function addpreviousMeal(){
 			if(current_month_data.hasOwnProperty(d)){
 				// This will return the arrays of the food yesterday 
 				var foodPrevious = current_month_data[d];
-							console.log("has property:" + d);
-
+							
 				var food = document.createElement("div");
 				for(var i=0; i<foodPrevious.length; i++){
-
-					// console.log("radio:"+food_type);
-					// console.log("table:"+foodPrevious[i].mealtype);
-					// console.log("Yesterday");
-					// console.log(foodPrevious[i]);
 
 					if(foodPrevious[i].mealtype == food_type){
 						// previousMeal foodPrevious[i].mealname+'\n';
