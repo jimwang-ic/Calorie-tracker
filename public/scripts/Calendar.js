@@ -22,7 +22,7 @@ window.addEventListener('load', function(){
 		// Show today's calorie infomation on detail panel
 		var today = $('.fatsecret_day_today > span').text();
 		var meals = current_month_data[today];
-		fill_date_screen(meals);
+		fill_date_screen(meals,Meal.date);
 		RefreshCal();
 		
 	});
@@ -77,6 +77,10 @@ window.addEventListener('load', function(){
 // Refresh calendar and clean up the form after adding meal
 function RefreshCal() {
 	
+	fadeout();
+	updateCalendar_ajax();
+	load_graph(null,null);
+	
 	var temp_date = Meal.date;
 	Meal = {};
 	Meal.food = [];
@@ -91,9 +95,7 @@ function RefreshCal() {
 	$('#table_container tr:gt(0)').remove();
 	$('#weight_input').val("");
 	
-	fadeout();
-	updateCalendar_ajax();
-	load_graph(null,null);
+	
 }
 
 
@@ -144,7 +146,7 @@ function transferDateToIntSetID(){
 		var id = daynumber[i].innerHTML;
 		if(id.length == 1){
 			id = '0'+id;
-			console.log(id);
+			//console.log(id);
 		}
 		// set id
 		daylink[2*i].setAttribute("id",id+'/'+monthTable[dateArray[0]]+'/'+dateArray[1]);	
@@ -207,7 +209,9 @@ function Customize_cal() {
 				var day = id.split("/");
 				var date = parseInt(day[0],10);
 				var meals = current_month_data[date];
-				fill_date_screen(meals);
+				Meal.date = new Date(day[2],day[1]-1,day[0]).getTime();
+				
+				fill_date_screen(meals,Meal.date);
 		    }
 		    catch (error) {
 				clear_date_screen();
@@ -226,7 +230,7 @@ function clear_date_screen() {
 }
 
 //id mealname mealtype totalcalories
-function fill_date_screen(meals) {
+function fill_date_screen(meals,date) {
    
     if(meals === undefined)
     {
@@ -286,17 +290,21 @@ function fill_date_screen(meals) {
 	   	else 		
 	   	{
 	    	$("#box-table-a tr:eq(" + key + ") td:eq(1)").html("Recorded");
-	    	$("#box-table-a tr:eq(" + key + ")").on('click', editMeal(CombineMeal[mealtype_n].ids ));
+	    	$("#box-table-a tr:eq(" + key + ")").on('click', editMeal(CombineMeal[mealtype_n].ids,date));
 	    }
 	    
 		$("#box-table-a tr:eq(" + key + ") td:eq(2)").html(CombineMeal[key].calories);
     }
 }
 
-function editMeal(ids) {
+function editMeal(ids,date) {
 	return function(){
 		
+		console.log("FUCK");
+		console.log(date);
+		
 		Meal.ids = [];
+		Meal.date = date;
 		displayMeal(ids);
 		$('#btn_delete_meal').show();
 		document.getElementById('light').style.display='block';
@@ -415,7 +423,7 @@ function updateCalendar_ajax() {
 			
 			var editmeal_date = 0;
 			
-			if(Meal.date === undefined)
+			if(Meal.date == undefined)
 			{
 				editmeal_date = $('.fatsecret_day_today > span').text();	
 			}
@@ -427,8 +435,11 @@ function updateCalendar_ajax() {
 			
 			var meals = current_month_data[editmeal_date];
 			// Show the newest update information
-			fill_date_screen(meals);
+			fill_date_screen(meals,Meal.date);
 			
+			//reset Meal
+			Meal = {};
+			Meal.food = [];
 			
 	    } else {
 			console.log('error');

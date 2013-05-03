@@ -187,7 +187,7 @@ entry {
 	OR weight: int
 **/
 app.post('/addmeal', function(req,res) {
-	console.log("adding meal");
+	console.log("============= adding meal ===================");
 	var meal = JSON.parse(req.body.meal);
 	console.log(meal);
 	var time = meal['date'];
@@ -211,7 +211,7 @@ app.post('/addmeal', function(req,res) {
 		conn.query('DELETE FROM table_' + req.session.userid + ' WHERE id in (' +  where_condition + ')')
 			.on('error', console.error);
 	}
-	
+		
 	if (meal['food'] != undefined) {
 	    var food = meal['food'];
 	    var mealtype = food[0]['mealtype'];
