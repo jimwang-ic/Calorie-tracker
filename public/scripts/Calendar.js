@@ -60,18 +60,12 @@ window.addEventListener('load', function(){
 		
 		if( $('#yes_auto:checked').prop("checked") )
 		{	
-			console.log("============== Date ==================")
-			console.log(Meal.date);
-			automaticMeal("AUTO",Meal.date);	
-			console.log("AutoGenerate");
-			fadeout();
+			automaticMeal("AUTO",Meal.date);
 		}
 		else
 		{
-			document.getElementById('autogenDialog').style.display='none';
 			document.getElementById('optionSelect').style.display='block';
-			document.getElementById('chooseMeal').style.display='none';
-			document.getElementById('detailedForm').style.display='none';
+			document.getElementById('autogenDialog').style.display='none';
 			console.log("No!!");
 		}
 	});

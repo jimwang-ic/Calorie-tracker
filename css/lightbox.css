@@ -64,14 +64,17 @@ h5{
 
 #detailedForm{
 	display:none;
+	overflow:auto;
 }
 
 #weightInput{
 	display:none;
+	overflow:auto;
 }
 
 #autogenDialog{
 	display:none;
+	overflow:auto;
 }
 /* CSS FOR DETAILED MEAL ENTRY FORM */
 #results {
