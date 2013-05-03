@@ -419,9 +419,6 @@ function updateCalendar(data) {
 		$(item).append('<span class=calories>' + calories + '</span>');
     }
 
-    //test
-    console.log('testing.......');
-    automaticMeal("AUTO",1367467200000);
     
     var today = new Date();
     for (var i = 0; i < days.length; i++) {
