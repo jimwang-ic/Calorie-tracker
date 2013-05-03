@@ -732,6 +732,7 @@ function addpreviousMeal(){
   if mealtype is AUTO, then add 4 meals into database based on a day's calories
 **/
 
+//db scheme
 //(id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, mealtype TEXT, weight INTEGER, servings TEXT)
 
 /*{ food: 
