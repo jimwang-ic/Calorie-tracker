@@ -773,12 +773,9 @@ function addpreviousMeal(){
   date: 1367467200000 }*/
 //2000 calorie daily default
 function automaticMeal(mealtype,datetime) {
-    console.log('here');
     var calories = 0;
     var nummeals = 0;
-//     console.log(current_month_data);
     var data = current_month_data;
-    console.log(mealtype);
     if (mealtype == "AUTO") { //want to create one big meal
  	console.log(data);
 	for (var day in data) {
@@ -789,11 +786,8 @@ function automaticMeal(mealtype,datetime) {
 		nummeals += 1;
 	    }
 	}
-	mealtype = 'dinner';
     }
     else {
-	console.log('data');
-	console.log(data);
 	for (var day in data) {
 	    var meals = data[day];
 	    for (var i = 0; i < meals.length; i++) {
@@ -809,6 +803,9 @@ function automaticMeal(mealtype,datetime) {
     if (calories == 0) { //there's no data points
 	if (mealtype === 'snack') {
 	    calories = parseInt(DEFAULT_DAILY_SNACK);
+	}
+	else if (mealtype === 'AUTO') {
+	    calories = parseInt(DEFAULT_DAILY_CALORIES);
 	}
 	else {
 	    calories = parseInt(DEFAULT_DAILY_MEAL);
@@ -830,8 +827,6 @@ function automaticMeal(mealtype,datetime) {
     meal['food'].push(toadd);
     meal['date']=datetime;
     
-    console.log('meal');
-    console.log(meal);
     
     serialize_meal = JSON.stringify(meal);
     // Create a FormData object from out form
