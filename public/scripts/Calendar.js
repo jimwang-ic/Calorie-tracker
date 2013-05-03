@@ -56,6 +56,25 @@ window.addEventListener('load', function(){
 		
 	});
 	
+	$('#next_autogenDialog').on('click', function(){
+		
+		if( $('#yes_auto:checked').prop("checked") )
+		{	
+			console.log("============== Date ==================")
+			console.log(Meal.date);
+			automaticMeal("AUTO",Meal.date);	
+			console.log("AutoGenerate");
+		}
+		else
+		{
+			document.getElementById('autogenDialog').style.display='none';
+			document.getElementById('optionSelect').style.display='block';
+			document.getElementById('chooseMeal').style.display='none';
+			document.getElementById('detailedForm').style.display='none';
+			console.log("No!!");
+		}
+	});
+	
 	Form_eventListener();
 			
 }, false);
@@ -418,10 +437,6 @@ function updateCalendar(data) {
 	if(calories != 0)
 		$(item).append('<span class=calories>' + calories + '</span>');
     }
-
-    //test
-    //console.log('testing.......');
-    //automaticMeal("AUTO",1367467200000);
     
     var today = new Date();
     for (var i = 0; i < days.length; i++) {
@@ -746,6 +761,7 @@ function addpreviousMeal(){
   if mealtype is AUTO, then add 4 meals into database based on a day's calories
 **/
 
+//db scheme
 //(id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, mealtype TEXT, weight INTEGER, servings TEXT)
 
 /*{ food: 
@@ -817,10 +833,10 @@ function automaticMeal(mealtype,datetime) {
     console.log('meal');
     console.log(meal);
     
-    
+    serialize_meal = JSON.stringify(meal);
     // Create a FormData object from out form
     var fd = new FormData();
-    fd.append('meal', meal);
+    fd.append('meal', serialize_meal);
     
     // Send it to the server 
     var req = new XMLHttpRequest();
