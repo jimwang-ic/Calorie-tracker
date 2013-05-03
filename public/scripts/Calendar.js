@@ -64,6 +64,7 @@ window.addEventListener('load', function(){
 			console.log(Meal.date);
 			automaticMeal("AUTO",Meal.date);	
 			console.log("AutoGenerate");
+			fadeout();
 		}
 		else
 		{
@@ -106,6 +107,7 @@ function fadeout() {
 	
 	document.getElementById('light').style.display='none';
 	document.getElementById('fade').style.display='none';
+	document.getElementById('autogenDialog').style.display='none';
 	document.getElementById('optionSelect').style.display='block';
 	document.getElementById('chooseMeal').style.display='none';
 	document.getElementById('detailedForm').style.display='none';
