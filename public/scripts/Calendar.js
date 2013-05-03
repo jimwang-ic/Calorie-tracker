@@ -752,7 +752,7 @@ function addpreviousMeal(){
 						// console.log("foodPrevious id");
 						// console.log(foodPrevious[i].foodid);
 						mealidArr.push(foodPrevious[i].id);
-						foodidArr.push(foodPrevious[i].foodid.split(','));
+						//foodidArr.push(foodPrevious[i].foodid.split(','));
 						previousMeal.push({id : foodPrevious[i].foodid, name : foodPrevious[i].mealname, calories : foodPrevious[i].totalcalories, 
 							mealtype: foodPrevious[i].mealtype});
 
@@ -763,18 +763,21 @@ function addpreviousMeal(){
 
 		}
 		
-		var foodidArrFlat = [].concat.apply([], foodidArr);
+		//var foodidArrFlat = [].concat.apply([], foodidArr);
 
 		//HERE ! Meal id array and Food id array!
 
-		console.log(foodidArrFlat);
+		//console.log(foodidArrFlat);
 		console.log(mealidArr);
 		previousMeal['total_results'] = Object.keys(previousMeal).length;
 		previousMeal['max_results'] = 10;
 
-
+		
 		console.log("previousMeal");
 		console.log(previousMeal);
+		
+		displayMeal(mealidArr);
+		
 		// console.log("call refresh results");
 		// RefreshResult(previousMeal,true);
 		// $("#previousMealContent").html(totalmeal);
