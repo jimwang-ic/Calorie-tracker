@@ -735,7 +735,9 @@ function addpreviousMeal(){
 		var date = new Date(Meal.date).getDate();
 		var food_type = $('#mealType input:radio:checked').val();
 		var previousMeal =[];
-
+		var foodidArr = [];
+		var mealidArr =[];
+		console.log(current_month_data);
 		 for(var d =date-1; d >= date-5; d=d-1){
 			
 			if(current_month_data.hasOwnProperty(d)){
@@ -747,6 +749,10 @@ function addpreviousMeal(){
 
 					if(foodPrevious[i].mealtype == food_type){
 						// previousMeal foodPrevious[i].mealname+'\n';
+						// console.log("foodPrevious id");
+						// console.log(foodPrevious[i].foodid);
+						mealidArr.push(foodPrevious[i].id);
+						foodidArr.push(foodPrevious[i].foodid.split(','));
 						previousMeal.push({id : foodPrevious[i].foodid, name : foodPrevious[i].mealname, calories : foodPrevious[i].totalcalories, 
 							mealtype: foodPrevious[i].mealtype});
 
@@ -756,13 +762,21 @@ function addpreviousMeal(){
 		 }
 
 		}
+		
+		var foodidArrFlat = [].concat.apply([], foodidArr);
 
+		//HERE ! Meal id array and Food id array!
+
+		console.log(foodidArrFlat);
+		console.log(mealidArr);
 		previousMeal['total_results'] = Object.keys(previousMeal).length;
 		previousMeal['max_results'] = 10;
 
-		// console.log(previousMeal);
+
+		console.log("previousMeal");
+		console.log(previousMeal);
 		// console.log("call refresh results");
-		RefreshResult(previousMeal,true);
+		// RefreshResult(previousMeal,true);
 		// $("#previousMealContent").html(totalmeal);
 
 	}
