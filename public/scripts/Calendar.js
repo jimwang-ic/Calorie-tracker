@@ -1,6 +1,11 @@
 var ReqInterval = null;
 var Meal = {};
 var current_month_data = {};
+
+var DEFAULT_DAILY_CALORIES = 2000;
+var DEFAULT_DAILY_MEAL = 550;
+var DEFAULT_DAILY_SNACK = 150;
+
 window.addEventListener('load', function(){
 	
 	// Customize our Calendar  
@@ -420,8 +425,10 @@ function updateCalendar(data) {
 	}
 	$(item).append('<span class=calories>' + calories + '</span>');
     }
-    console.log("days:");
-    console.log(days);
+
+    //test
+    console.log('testing.......');
+    automaticMeal("AUTO",1367467200000);
     
     var today = new Date();
     for (var i = 0; i < days.length; i++) {
@@ -437,8 +444,6 @@ function updateCalendar(data) {
 	}
     }
     
-    console.log("AUTOMATIC: " + automaticMeal("big"));
-
 }
 
 // make lightbox appear
@@ -588,7 +593,7 @@ function Form_eventListener() {
 	});
 	
 	$('#btn_addweight').on('click', function(e){
-		alert("add weight!");
+
 	});
 	
 	$('#FoodSearch').on('submit', function(e){
@@ -723,25 +728,92 @@ function addpreviousMeal(){
 
 /**
   Takes in mealtype or calculates average across meals
-  Returns meal object with calorie value averaged across all meals client side
+  adds meal or all 4 meals for day in database
+  if mealtype is AUTO, then add 4 meals into database based on a day's calories
 **/
-function automaticMeal(mealtype) {
-    console.log("AUTO");
+
+//(id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, mealtype TEXT, weight INTEGER, servings TEXT)
+
+/*{ food: 
+   [ { id: '288333',
+       name: 'American Cheese',
+       calories: 337,
+       mealtype: 'breakfast',
+       servings: '1' } ],
+  date: 1367467200000 }*/
+//2000 calorie daily default
+function automaticMeal(mealtype,datetime) {
+    console.log('here');
     var calories = 0;
-    var meals = 0;
+    var nummeals = 0;
+//     console.log(current_month_data);
     var data = current_month_data;
-    if (mealtype == "big") { //want to create one big meal
-	console.log("HERE");
+    console.log(mealtype);
+    if (mealtype == "AUTO") { //want to create one big meal
+ 	console.log(data);
 	for (var day in data) {
 	    var meals = data[day];
 	    for (var i = 0; i < meals.length; i++) {
 		var meal = meals[i];
-		calories += meals.totalcalories;
-		meals += 1;
+		calories += parseInt(meal.totalcalories);
+		nummeals += 1;
+	    }
+	}
+	mealtype = 'dinner';
+    }
+    else {
+	console.log('data');
+	console.log(data);
+	for (var day in data) {
+	    var meals = data[day];
+	    for (var i = 0; i < meals.length; i++) {
+		var meal = meals[i];
+		if (meal.mealtype === mealtype) {
+		    console.log(meal.totalcalories);
+		    calories += parseInt(meal.totalcalories);
+		    nummeals += 1;
+		}
 	    }
 	}
     }
-    return calories/meals;
+    if (calories == 0) { //there's no data points
+	if (mealtype === 'snack') {
+	    calories = parseInt(DEFAULT_DAILY_SNACK);
+	}
+	else {
+	    calories = parseInt(DEFAULT_DAILY_MEAL);
+	}
+    }
+    else {
+	calories = parseInt(calories/nummeals);
+    }
+    
+    
+    meal = {};
+    meal['food'] = [];
+    toadd = {};
+    toadd.id = 0;
+    toadd.name = 'AUTOGENERATE';
+    toadd.calories = parseInt(calories);
+    toadd.mealtype = mealtype;
+    toadd.servings = 1;
+    meal['food'].push(toadd);
+    meal['date']=datetime;
+    
+    console.log('meal');
+    console.log(meal);
+    
+    
+    // Create a FormData object from out form
+    var fd = new FormData();
+    fd.append('meal', meal);
+    
+    // Send it to the server 
+    var req = new XMLHttpRequest();
+    req.open('POST', '/addmeal', true);
+
+    req.addEventListener('load', RefreshCal);
+    req.send(fd);
     
 }
 
