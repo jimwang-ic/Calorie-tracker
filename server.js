@@ -426,7 +426,7 @@ app.get('/history.json',function(req,res){
 	var fw = 0;
 	conn.query('SELECT * FROM table_' + req.session.userid + ' WHERE foodweight = "1" AND foodid != "0"').on('row',function(row){
 
-		entry.push({id:row.id,	 foodid:row.foodid, mealtype:row.mealtype, servings:row.servings });
+		entry.push({id:row.id,	 foodid:row.foodid, mealnames:row.mealname, mealtype:row.mealtype, servings:row.servings });
 
 	}).on('end',function(row){
 
@@ -466,13 +466,19 @@ function foodRank(entries){
 		}
 	}
 
+
+	// Every type of food will be sorted here
 	console.log('Breakfast');
 	console.log(rank['Breakfast']);
 	for(var i in rank){
 		// console.log(rank[i]);
 		rank[i]=sortObject(rank[i]);
-		console.log(rank[i]);
+		// console.log(rank[i]);
 	}
+	console.log("breakfast after sorting");
+	console.log(rank['Breakfast']);
+	
+
 }
 
 function arrange(entry,rank){
@@ -482,6 +488,7 @@ function arrange(entry,rank){
 	var servings;
 	foodids = entry['foodid'].toString().split(',');
 	servings = entry['servings'].split(',');	
+	mealnames = entry['mealnames'].split(',');
 
 	length = foodids.length;
 	
@@ -489,36 +496,38 @@ function arrange(entry,rank){
 	var foodid; 
 	var serving;
 	for(var i =0; i<length; i++){
-		// if(length == 1){
-		// 	foodid = entry['foodid'];
-		// 	serving = entry['servings'].split('*')[0];
-		// }else{
+
 		foodid = foodids[i];
-		console.log(servings[i].split('*'));
 		serving = servings[i].split('*')[0];
-		// }
+		mealname = mealnames[i];
 
 		if(rank.hasOwnProperty(foodid)){
-			rank[foodid] += parseInt(serving);
+			rank[foodid][0] += parseInt(serving);
+
 		}else{
-			rank[foodid] = parseInt(serving);
+			rank[foodid]={'frequency':parseInt(serving),'mealname':mealname};
 		}
 	}
-	console.log(rank);
+	// console.log("rank");
+	// console.log(rank);
 	return rank;
 }
 
 function sortObject(obj) {
     var arr = [];
     for (var prop in obj) {
-        if (obj.hasOwnProperty(prop)) {
+	    	
+    	 if (obj.hasOwnProperty(prop)) {
+        	
             arr.push({
                 'foodid': prop,
-                'freqency': obj[prop]
+                'frequency': obj[prop]['frequency'],
+                'mealname': obj[prop]['mealname']
             });
         }
     }
-    arr.sort(function(a, b) { return b.value - a.value; });
+    arr.sort(function(a, b) { 
+    	return b['frequency'] - a['frequency']; });
     return arr; // returns array
 }
 
