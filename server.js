@@ -426,7 +426,7 @@ app.get('/history.json',function(req,res){
 	var fw = 0;
 	conn.query('SELECT * FROM table_' + req.session.userid + ' WHERE foodweight = "1" AND foodid != "0"').on('row',function(row){
 
-		entry.push({id:row.id,	 foodid:row.foodid, mealtype:row.mealtype, serving:row.servings });
+		entry.push({id:row.id,	 foodid:row.foodid, mealtype:row.mealtype, servings:row.servings });
 
 	}).on('end',function(row){
 
@@ -466,22 +466,45 @@ function foodRank(entries){
 		}
 	}
 
-
+	console.log('Breakfast');
 	console.log(rank['Breakfast']);
 	for(var i in rank){
-		console.log(rank[i]);
-		sortObject(rank[i]);
+		// console.log(rank[i]);
+		rank[i]=sortObject(rank[i]);
 		console.log(rank[i]);
 	}
 }
 
 function arrange(entry,rank){
 	
-	if(rank.hasOwnProperty(entry['foodid'])){
-		rank[entry['foodid']] += rank[entry['servings']].split('*')[0];
-	}else{
-		rank[entry['foodid']] = 1;
+	var length =1;
+	var foodids;
+	var servings;
+	foodids = entry['foodid'].toString().split(',');
+	servings = entry['servings'].split(',');	
+
+	length = foodids.length;
+	
+
+	var foodid; 
+	var serving;
+	for(var i =0; i<length; i++){
+		// if(length == 1){
+		// 	foodid = entry['foodid'];
+		// 	serving = entry['servings'].split('*')[0];
+		// }else{
+		foodid = foodids[i];
+		console.log(servings[i].split('*'));
+		serving = servings[i].split('*')[0];
+		// }
+
+		if(rank.hasOwnProperty(foodid)){
+			rank[foodid] += parseInt(serving);
+		}else{
+			rank[foodid] = parseInt(serving);
+		}
 	}
+	console.log(rank);
 	return rank;
 }
 
@@ -490,12 +513,12 @@ function sortObject(obj) {
     for (var prop in obj) {
         if (obj.hasOwnProperty(prop)) {
             arr.push({
-                'key': prop,
-                'value': obj[prop]
+                'foodid': prop,
+                'freqency': obj[prop]
             });
         }
     }
-    arr.sort(function(a, b) { return a.value - b.value; });
+    arr.sort(function(a, b) { return b.value - a.value; });
     return arr; // returns array
 }
 
