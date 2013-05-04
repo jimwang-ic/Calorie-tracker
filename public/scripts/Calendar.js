@@ -788,7 +788,7 @@ function addpreviousMeal(){
 				var food = document.createElement("div");
 				for(var i=0; i<foodPrevious.length; i++){
 
-					if(foodPrevious[i].mealtype == food_type){
+					if(foodPrevious[i].mealtype == food_type && foodPrevious[i].mealtype !== "AUTOGENERATE"){
 						// previousMeal foodPrevious[i].mealname+'\n';
 						// console.log("foodPrevious id");
 						// console.log(foodPrevious[i].foodid);
@@ -817,10 +817,10 @@ function addpreviousMeal(){
 		console.log("previousMeal");
 		console.log(previousMeal);
 		
-		displayMeal(mealidArr);
+		// displayMeal(mealidArr);
 		
 		// console.log("call refresh results");
-		// RefreshResult(previousMeal,true);
+	 	RefreshResult(previousMeal,true);
 		// $("#previousMealContent").html(totalmeal);
 
 	}
