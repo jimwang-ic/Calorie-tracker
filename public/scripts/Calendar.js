@@ -170,6 +170,8 @@ function transferDateToIntSetID(){
 **/
 function Customize_cal() {
 	
+	getHistory();
+
 	updateCalendar_ajax();
 
 	// in order to have the information about what date we click on, we need
@@ -202,7 +204,9 @@ function Customize_cal() {
 
 	// Hide the fat secret api logo
 	$('.fatsecret_footer').hide();
+	
 	$('#btn_delete_meal').hide();
+
 	
 	$('.fatsecret_day_other, .fatsecret_day_today').click(function(e) {
         	
@@ -229,6 +233,33 @@ function Customize_cal() {
 	});
 	
 	
+}
+
+function getHistory(){
+	var req = new XMLHttpRequest();
+	req.open('GET', '/history.json');
+	req.addEventListener('load', function(){
+		
+		if(req.status == 200)
+		{
+			// Take JSON "strings" and returns the resulting Javascript object
+			var content = jQuery.parseJSON(req.responseText);
+
+			console.log("in get history");
+			console.log(content);
+			console.log(req.responseText);
+			// RefreshResult(content,false);	
+		}
+		else
+		{
+			console.log("check Calendar.js");
+		}
+		
+	});  
+	req.send(null);
+	
+	// Stop the timer
+	clearInterval(ReqInterval);
 }
 
 function clear_date_screen() {
@@ -800,6 +831,10 @@ function Form_eventListener() {
 		console.log("show!!!");
 		addpreviousMeal();
 	});
+
+	$('#showHistory').on('click',function(){
+
+	})
 
 }
 

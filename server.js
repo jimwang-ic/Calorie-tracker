@@ -415,9 +415,122 @@ app.get('/entry.json',function(req,res) {
 
 
 
+// { id: 4,
+//   datetime: 1367812800000,
+//   foodweight: 1,
+//   mealname: 'Fried Cornmeal Mush',
+//   totalcalories: 1699,
+//   foodid: 4467,
+//   mealtype: 'breakfast',
+//   weight: 0,
+//   servings: '1*1699' }
+
+/*
+	This will handle the food history and returns the top 5 food the user like the most for every meal type
+*/
+app.get('/history.json',function(req,res){
+	var entry = [];
+	var fw = 0;
+	conn.query('SELECT * FROM table_' + req.session.userid + ' WHERE foodweight = "1" AND foodid != "0"').on('row',function(row){
+
+		entry.push({id:row.id,	 foodid:row.foodid, mealtype:row.mealtype, servings:row.servings });
+
+	}).on('end',function(row){
+
+		console.log("--------------------------------------query everything start----------------------------------------");
+
+		console.log(entry);
+		foodRank(entry);
+		console.log("--------------------------------------query everything end----------------------------------------")
+		res.json(entry);
+
+	});
+});
 
 
-/**e
+function foodRank(entries){
+	var rank = {};
+	rank['Breakfast'] = {};
+	rank['Lunch'] = {};
+	rank['Dinner'] = {};
+	rank['Snack'] = {};
+	
+	for(var i in entries){
+	
+		switch(entries[i]['mealtype']){
+			case "breakfast":
+				rank['Breakfast'] = arrange(entries[i],rank['Breakfast']);
+			break;
+			case "lunch":
+				rank['Lunch'] = arrange(entries[i],rank['Lunch']);
+			break;
+			case 	"dinner":
+				rank['Dinner'] = arrange(entries[i],rank['Dinner']);
+			break;
+			case "snack":
+				rank['Snack'] = arrange(entries[i],rank['Snack']);
+			break;
+		}
+	}
+
+	console.log('Breakfast');
+	console.log(rank['Breakfast']);
+	for(var i in rank){
+		// console.log(rank[i]);
+		rank[i]=sortObject(rank[i]);
+		console.log(rank[i]);
+	}
+}
+
+function arrange(entry,rank){
+	
+	var length =1;
+	var foodids;
+	var servings;
+	foodids = entry['foodid'].toString().split(',');
+	servings = entry['servings'].split(',');	
+
+	length = foodids.length;
+	
+
+	var foodid; 
+	var serving;
+	for(var i =0; i<length; i++){
+		// if(length == 1){
+		// 	foodid = entry['foodid'];
+		// 	serving = entry['servings'].split('*')[0];
+		// }else{
+		foodid = foodids[i];
+		console.log(servings[i].split('*'));
+		serving = servings[i].split('*')[0];
+		// }
+
+		if(rank.hasOwnProperty(foodid)){
+			rank[foodid] += parseInt(serving);
+		}else{
+			rank[foodid] = parseInt(serving);
+		}
+	}
+	console.log(rank);
+	return rank;
+}
+
+function sortObject(obj) {
+    var arr = [];
+    for (var prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+            arr.push({
+                'foodid': prop,
+                'freqency': obj[prop]
+            });
+        }
+    }
+    arr.sort(function(a, b) { return b.value - a.value; });
+    return arr; // returns array
+}
+
+
+/**
 
 CALENDAR TO DATABASE
 SENDS: month/year (mm-yy), username
