@@ -430,18 +430,100 @@ app.get('/entry.json',function(req,res) {
 });
 
 
+
+// { id: 4,
+//   datetime: 1367812800000,
+//   foodweight: 1,
+//   mealname: 'Fried Cornmeal Mush',
+//   totalcalories: 1699,
+//   foodid: 4467,
+//   mealtype: 'breakfast',
+//   weight: 0,
+//   servings: '1*1699' }
+
+/*
+	This will handle the food history and returns the top 5 food the user like the most for every meal type
+*/
 app.get('/history.json',function(req,res){
-	conn.query('SELECT * FROM table_' + req.session.userid).on('row',function(row){
-		console.log("query everything");
-		console.log(row);
+	var entry = [];
+	var fw = 0;
+	conn.query('SELECT * FROM table_' + req.session.userid + ' WHERE foodweight = "1" AND foodid != "0"').on('row',function(row){
+
+		entry.push({id:row.id,	 foodid:row.foodid, mealtype:row.mealtype, serving:row.servings });
+
 	}).on('end',function(row){
-		res.json(row);
+
+		console.log("--------------------------------------query everything start----------------------------------------");
+
+		console.log(entry);
+		foodRank(entry);
+		console.log("--------------------------------------query everything end----------------------------------------")
+		res.json(entry);
+
 	});
 });
 
 
+function foodRank(entries){
+	var rank = {};
+	rank['Breakfast'] = {};
+	rank['Lunch'] = {};
+	rank['Dinner'] = {};
+	rank['Snack'] = {};
+	
+	for(var i in entries){
+	
+		switch(entries[i]['mealtype']){
+			case "breakfast":
+				rank['Breakfast'] = arrange(entries[i],rank['Breakfast']);
+			break;
+			case "lunch":
+				rank['Lunch'] = arrange(entries[i],rank['Lunch']);
+			break;
+			case 	"dinner":
+				rank['Dinner'] = arrange(entries[i],rank['Dinner']);
+			break;
+			case "snack":
+				rank['Snack'] = arrange(entries[i],rank['Snack']);
+			break;
+		}
+	}
 
-/**e
+
+	console.log(rank['Breakfast']);
+	for(var i in rank){
+		console.log(rank[i]);
+		sortObject(rank[i]);
+		console.log(rank[i]);
+	}
+}
+
+function arrange(entry,rank){
+	
+	if(rank.hasOwnProperty(entry['foodid'])){
+		rank[entry['foodid']] += rank[entry['servings']].split('*')[0];
+	}else{
+		rank[entry['foodid']] = 1;
+	}
+	return rank;
+}
+
+function sortObject(obj) {
+    var arr = [];
+    for (var prop in obj) {
+        if (obj.hasOwnProperty(prop)) {
+            arr.push({
+                'key': prop,
+                'value': obj[prop]
+            });
+        }
+    }
+    arr.sort(function(a, b) { return a.value - b.value; });
+    return arr; // returns array
+}
+
+
+/**
 
 CALENDAR TO DATABASE
 SENDS: month/year (mm-yy), username
