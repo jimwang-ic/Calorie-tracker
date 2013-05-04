@@ -1,0 +1,310 @@
+TkDiff 4.1.4 report
+
+File A: ./styleloginsupport.css.LOCAL.32008.css
+File B:  ./styleloginsupport.css.REMOTE.32008.css
+
+number of diffs: 1
+         0 regions were deleted
+         0 regions were added
+         1 regions were changed
+
+
+     1 ! /*******************                                                                  1 ! /*******************
+     2 ! LOGIN FORM STYLESHEET                                                                 2 ! LOGIN FORM STYLESHEET
+     3 ! by: Amit Jakhu                                                                        3 ! by: Amit Jakhu
+     4 ! www.amitjakhu.com                                                                     4 ! www.amitjakhu.com
+     5 ! *******************/                                                                  5 ! *******************/
+     6 !                                                                                       6 !
+     7 ! /*******************                                                                  7 ! /*******************
+     8 ! FONTS                                                                                 8 ! FONTS
+     9 ! *******************/                                                                  9 ! *******************/
+    10 !                                                                                      10 !
+    11 ! @import url(http://fonts.googleapis.com/css?family=Bree+Serif);                      11 ! @import url(http://fonts.googleapis.com/css?family=Bree+Serif);
+    12 !                                                                                      12 !
+    13 ! /*******************                                                                 13 ! /*******************
+    14 ! SELECTION STYLING                                                                    14 ! SELECTION STYLING
+    15 ! *******************/                                                                 15 ! *******************/
+    16 !                                                                                      16 !
+    17 ! ::selection {                                                                        17 ! ::selection {
+    18 ! 	color: #fff;                                                                        18 ! 	color: #fff;
+    19 ! 	background: #f676b2; /* Safari */                                                   19 ! 	background: #f676b2; /* Safari */
+    20 ! }                                                                                    20 ! }
+    21 ! ::-moz-selection {                                                                   21 ! ::-moz-selection {
+    22 ! 	color: #fff;                                                                        22 ! 	color: #fff;
+    23 ! 	background: #f676b2; /* Firefox */                                                  23 ! 	background: #f676b2; /* Firefox */
+    24 ! }                                                                                    24 ! }
+    25 !                                                                                      25 !
+    26 ! /*******************                                                                 26 ! /*******************
+    27 ! BODY STYLING                                                                         27 ! BODY STYLING
+    28 ! *******************/                                                                 28 ! *******************/
+    29 !                                                                                      29 !
+    30 ! * {                                                                                  30 ! * {
+    31 ! 	margin: 0;                                                                          31 ! 	margin: 0;
+    32 ! 	padding: 0;                                                                         32 ! 	padding: 0;
+    33 ! 	border: 0;                                                                          33 ! 	border: 0;
+    34 ! }                                                                                    34 ! }
+    35 !                                                                                      35 !
+    36 ! body {                                                                               36 ! body {
+    37 ! 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;    37 ! 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    38 ! 	font-weight:300;                                                                    38 ! 	font-weight:300;
+    39 ! 	text-align: left;                                                                   39 ! 	text-align: left;
+    40 ! 	text-decoration: none;                                                              40 ! 	text-decoration: none;
+    41 ! }                                                                                    41 ! }
+    42 !                                                                                      42 !
+    43 ! #wrapper {                                                                           43 ! #wrapper {
+    44 ! 	/* Center wrapper perfectly */                                                      44 ! 	/* Center wrapper perfectly */
+    45 ! 	width: 300px;                                                                       45 ! 	width: 300px;
+    46 ! 	height: 400px;                                                                      46 ! 	height: 400px;
+    47 ! 	position: relative;                                                                 47 ! 	position: relative;
+    48 ! 	left: 600px;                                                                        48 ! 	left: 600px;
+    49 ! 	top: -115px;                                                                        49 ! 	top: -115px;
+    50 ! 	display: inline-block;                                                              50 ! 	display: inline-block;
+    51 !                                                                                      51 !
+    52 !                                                                                      52 !
+    53 ! }                                                                                    53 ! }
+    54 !                                                                                      54 !
+    55 ! /*                                                                                   55 ! /*
+    56 ! .gradient {                                                                          56 ! .gradient {
+    57 ! 	width: 600px;                                                                       57 ! 	width: 600px;
+    58 ! 	height: 600px;                                                                      58 ! 	height: 600px;
+    59 ! 	position: fixed;                                                                    59 ! 	position: fixed;
+    60 ! 	left: 50%;                                                                          60 ! 	left: 50%;
+    61 ! 	top: 50%;                                                                           61 ! 	top: 50%;
+    62 ! 	margin-left: -300px;                                                                62 ! 	margin-left: -300px;
+    63 ! 	margin-top: -300px;                                                                 63 ! 	margin-top: -300px;
+    64 !                                                                                      64 !
+    65 ! 	background: url(../images/gradient.png) no-repeat;                                  65 ! 	background: url(../images/gradient.png) no-repeat;
+    66 ! }                                                                                    66 ! }
+    67 ! */                                                                                   67 ! */
+    68 !                                                                                      68 !
+    69 ! .gradient {                                                                          69 ! .gradient {
+    70 ! 	/* Center Positioning */                                                            70 ! 	/* Center Positioning */
+    71 ! 	width: 600px;                                                                       71 ! 	width: 600px;
+    72 ! 	height: 600px;                                                                      72 ! 	height: 600px;
+    73 ! 	position: fixed;                                                                    73 ! 	position: fixed;
+    74 ! 	left: 50%;                                                                          74 ! 	left: 50%;
+    75 ! 	top: 50%;                                                                           75 ! 	top: 50%;
+    76 ! 	margin-left: -300px;                                                                76 ! 	margin-left: -300px;
+    77 ! 	margin-top: -300px;                                                                 77 ! 	margin-top: -300px;
+    78 !                                                                                      78 !
+    79 ! 	/* Fallback */                                                                      79 ! 	/* Fallback */
+    80 ! 	background-image: url(../images/gradient.png);                                      80 ! 	background-image: url(../images/gradient.png);
+    81 ! 	background-repeat: no-repeat;                                                       81 ! 	background-repeat: no-repeat;
+    82 !                                                                                      82 !
+    83 ! 	/* CSS3 Gradient */                                                                 83 ! 	/* CSS3 Gradient */
+    84 ! 	background-image: -webkit-gradient(radial, 0% 0%, 0% 100%, from(rgba(213,246,255,1)), to(rgba(213,246,255,0)));    84 ! 	background-image: -webkit-gradient(radial, 0% 0%, 0% 100%, from(rgba(213,246,255,1)), to(rgba(213,246,255,0)));
+    85 ! 	background-image: -webkit-radial-gradient(50% 50%, 40% 40%, rgba(213,246,255,1), rgba(213,246,255,0));    85 ! 	background-image: -webkit-radial-gradient(50% 50%, 40% 40%, rgba(213,246,255,1), rgba(213,246,255,0));
+    86 ! 	background-image: -moz-radial-gradient(50% 50%, 50% 50%, rgba(213,246,255,1), rgba(213,246,255,0));    86 ! 	background-image: -moz-radial-gradient(50% 50%, 50% 50%, rgba(213,246,255,1), rgba(213,246,255,0));
+    87 ! 	background-image: -ms-radial-gradient(50% 50%, 50% 50%, rgba(213,246,255,1), rgba(213,246,255,0));    87 ! 	background-image: -ms-radial-gradient(50% 50%, 50% 50%, rgba(213,246,255,1), rgba(213,246,255,0));
+    88 ! 	background-image: -o-radial-gradient(50% 50%, 50% 50%, rgba(213,246,255,1), rgba(213,246,255,0));    88 ! 	background-image: -o-radial-gradient(50% 50%, 50% 50%, rgba(213,246,255,1), rgba(213,246,255,0));
+    89 ! }                                                                                    89 ! }
+    90 !                                                                                      90 !
+    91 ! /*******************                                                                 91 ! /*******************
+    92 ! LOGIN FORM                                                                           92 ! LOGIN FORM
+    93 ! *******************/                                                                 93 ! *******************/
+    94 !                                                                                      94 !
+    95 ! .login-form {                                                                        95 ! .login-form {
+    96 ! 	width: 300px;                                                                       96 ! 	width: 300px;
+    97 ! 	margin: 0 auto;                                                                     97 ! 	margin: 0 auto;
+    98 ! 	position: relative;                                                                 98 ! 	position: relative;
+    99 ! 	z-index:5;                                                                          99 ! 	z-index:5;
+   100 !                                                                                     100 !
+   101 ! 	background: #f3f3f3;                                                               101 ! 	background: #f3f3f3;
+   102 ! 	border: 1px solid #fff;                                                            102 ! 	border: 1px solid #fff;
+   103 ! 	border-radius: 5px;                                                                103 ! 	border-radius: 5px;
+   104 !                                                                                     104 !
+   105 ! 	box-shadow: 0 1px 3px rgba(0,0,0,0.5);                                             105 ! 	box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+   106 ! 	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);                                        106 ! 	-moz-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+   107 ! 	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);                                     107 ! 	-webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+   108 ! }                                                                                   108 ! }
+   109 !                                                                                     109 !
+   110 ! /*******************                                                                110 ! /*******************
+   111 ! HEADER                                                                              111 ! HEADER
+   112 ! *******************/                                                                112 ! *******************/
+   113 !                                                                                     113 !
+   114 ! .login-form .header {                                                               114 ! .login-form .header {
+   115 ! 	padding: 40px 30px 30px 30px;                                                      115 ! 	padding: 40px 30px 30px 30px;
+   116 ! }                                                                                   116 ! }
+   117 !                                                                                     117 !
+   118 ! .login-form .header h1 {                                                            118 ! .login-form .header h1 {
+   119 ! 	font-family: 'Bree Serif', serif;                                                  119 ! 	font-family: 'Bree Serif', serif;
+   120 ! 	font-weight: 300;                                                                  120 ! 	font-weight: 300;
+   121 ! 	font-size: 28px;                                                                   121 ! 	font-size: 28px;
+   122 ! 	line-height:34px;                                                                  122 ! 	line-height:34px;
+   123 ! 	color: #414848;                                                                    123 ! 	color: #414848;
+   124 ! 	text-shadow: 1px 1px 0 rgba(256,256,256,1.0);                                      124 ! 	text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
+   125 ! 	margin-bottom: 10px;                                                               125 ! 	margin-bottom: 10px;
+   126 ! }                                                                                   126 ! }
+   127 !                                                                                     127 !
+   128 ! .login-form .header span {                                                          128 ! .login-form .header span {
+   129 ! 	font-size: 11px;                                                                   129 ! 	font-size: 11px;
+   130 ! 	line-height: 16px;                                                                 130 ! 	line-height: 16px;
+   131 ! 	color: #678889;                                                                    131 ! 	color: #678889;
+   132 ! 	text-shadow: 1px 1px 0 rgba(256,256,256,1.0);                                      132 ! 	text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
+   133 ! }                                                                                   133 ! }
+   134 !                                                                                     134 !
+   135 ! /*******************                                                                135 ! /*******************
+   136 ! CONTENT                                                                             136 ! CONTENT
+   137 ! *******************/                                                                137 ! *******************/
+   138 !                                                                                     138 !
+   139 ! .login-form .content {                                                              139 ! .login-form .content {
+   140 ! 	padding: 0 30px 25px 30px;                                                         140 ! 	padding: 0 30px 25px 30px;
+   141 ! }                                                                                   141 ! }
+   142 !                                                                                     142 !
+   143 ! /* Input field */                                                                   143 ! /* Input field */
+   144 ! .login-form .content .input {                                                       144 ! .login-form .content .input {
+   145 ! 	width: 188px;                                                                      145 ! 	width: 188px;
+   146 ! 	padding: 15px 25px;                                                                146 ! 	padding: 15px 25px;
+   147 !                                                                                     147 !
+   148 ! 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;   148 ! 	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+   149 ! 	font-weight: 400;                                                                  149 ! 	font-weight: 400;
+   150 ! 	font-size: 14px;                                                                   150 ! 	font-size: 14px;
+   151 ! 	color: #9d9e9e;                                                                    151 ! 	color: #9d9e9e;
+   152 ! 	text-shadow: 1px 1px 0 rgba(256,256,256,1.0);                                      152 ! 	text-shadow: 1px 1px 0 rgba(256,256,256,1.0);
+   153 !                                                                                     153 !
+   154 ! 	background: #fff;                                                                  154 ! 	background: #fff;
+   155 ! 	border: 1px solid #fff;                                                            155 ! 	border: 1px solid #fff;
+   156 ! 	border-radius: 5px;                                                                156 ! 	border-radius: 5px;
+   157 !                                                                                     157 !
+   158 ! 	box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);                                      158 ! 	box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
+   159 ! 	-moz-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);                                 159 ! 	-moz-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
+   160 ! 	-webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);                              160 ! 	-webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.50);
+   161 ! }                                                                                   161 ! }
+   162 !                                                                                     162 !
+   163 ! /* Second input field */                                                            163 ! /* Second input field */
+   164 ! .login-form .content .password, .login-form .content .pass-icon {                   164 ! .login-form .content .password, .login-form .content .pass-icon {
+   165 ! 	margin-top: 25px;                                                                  165 ! 	margin-top: 25px;
+   166 ! }                                                                                   166 ! }
+   167 !                                                                                     167 !
+   168 ! .login-form .content .input:hover {                                                 168 ! .login-form .content .input:hover {
+   169 ! 	background: #dfe9ec;                                                               169 ! 	background: #dfe9ec;
+   170 ! 	color: #414848;                                                                    170 ! 	color: #414848;
+   171 ! }                                                                                   171 ! }
+   172 !                                                                                     172 !
+   173 ! .login-form .content .input:focus {                                                 173 ! .login-form .content .input:focus {
+   174 ! 	background: #dfe9ec;                                                               174 ! 	background: #dfe9ec;
+   175 ! 	color: #414848;                                                                    175 ! 	color: #414848;
+   176 !                                                                                     176 !
+   177 ! 	box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);                                      177 ! 	box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
+   178 ! 	-moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);                                 178 ! 	-moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
+   179 ! 	-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);                              179 ! 	-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,0.25);
+   180 ! }                                                                                   180 ! }
+   181 !                                                                                     181 !
+   182 ! .user-icon, .pass-icon {                                                            182 ! .user-icon, .pass-icon {
+   183 ! 	width: 46px;                                                                       183 ! 	width: 46px;
+   184 ! 	height: 47px;                                                                      184 ! 	height: 47px;
+   185 ! 	display: block;                                                                    185 ! 	display: block;
+   186 ! 	position: absolute;                                                                186 ! 	position: absolute;
+   187 ! 	left: 0px;                                                                         187 ! 	left: 0px;
+   188 ! 	padding-right: 2px;                                                                188 ! 	padding-right: 2px;
+   189 ! 	z-index: 3;                                                                        189 ! 	z-index: 3;
+   190 !                                                                                     190 !
+   191 ! 	-moz-border-radius-topleft: 5px;                                                   191 ! 	-moz-border-radius-topleft: 5px;
+   192 ! 	-moz-border-radius-bottomleft: 5px;                                                192 ! 	-moz-border-radius-bottomleft: 5px;
+   193 ! 	-webkit-border-top-left-radius: 5px;                                               193 ! 	-webkit-border-top-left-radius: 5px;
+   194 ! 	-webkit-border-bottom-left-radius: 5px;                                            194 ! 	-webkit-border-bottom-left-radius: 5px;
+   195 ! }                                                                                   195 ! }
+   196 !                                                                                     196 !
+   197 ! .user-icon {                                                                        197 ! .user-icon {
+   198 ! 	top:147px; /* Positioning fix for slide-in, got lazy to think up of simpler method. */   198 ! 	top:147px; /* Positioning fix for slide-in, got lazy to think up of simpler method. */
+   199 ! 	background: rgba(65,72,72,0.75) url(../images/user-icon.png) no-repeat center;     199 ! 	background: rgba(65,72,72,0.75) url(../images/user-icon.png) no-repeat center;
+   200 ! }                                                                                   200 ! }
+   201 !                                                                                     201 !
+   202 ! .pass-icon {                                                                        202 ! .pass-icon {
+   203 ! 	top:221px;                                                                         203 ! 	top:221px;
+   204 ! 	background: rgba(65,72,72,0.75) url(../images/pass-icon.png) no-repeat center;     204 ! 	background: rgba(65,72,72,0.75) url(../images/pass-icon.png) no-repeat center;
+   205 ! }                                                                                   205 ! }
+   206 !                                                                                     206 !
+   207 ! /* Animation */                                                                     207 ! /* Animation */
+   208 ! .input, .user-icon, .pass-icon, .button, .register {                                208 ! .input, .user-icon, .pass-icon, .button, .register {
+   209 ! 	transition: all 0.5s;                                                              209 ! 	transition: all 0.5s;
+   210 ! 	-moz-transition: all 0.5s;                                                         210 ! 	-moz-transition: all 0.5s;
+   211 ! 	-webkit-transition: all 0.5s;                                                      211 ! 	-webkit-transition: all 0.5s;
+   212 ! 	-o-transition: all 0.5s;                                                           212 ! 	-o-transition: all 0.5s;
+   213 ! 	-ms-transition: all 0.5s;                                                          213 ! 	-ms-transition: all 0.5s;
+   214 ! }                                                                                   214 ! }
+   215 !                                                                                     215 !
+   216 ! /*******************                                                                216 ! /*******************
+   217 ! FOOTER                                                                              217 ! FOOTER
+   218 ! *******************/                                                                218 ! *******************/
+   219 !                                                                                     219 !
+   220 ! .login-form .footer {                                                               220 ! .login-form .footer {
+   221 ! 	padding: 25px 30px 40px 30px;                                                      221 ! 	padding: 25px 30px 40px 30px;
+   222 ! 	overflow: auto;                                                                    222 ! 	overflow: auto;
+   223 !                                                                                     223 !
+   224 ! 	background: #d4dedf;                                                               224 ! 	background: #d4dedf;
+   225 ! 	border-top: 1px solid #fff;                                                        225 ! 	border-top: 1px solid #fff;
+   226 !                                                                                     226 !
+   227 ! 	box-shadow: inset 0 1px 0 rgba(0,0,0,0.15);                                        227 ! 	box-shadow: inset 0 1px 0 rgba(0,0,0,0.15);
+   228 ! 	-moz-box-shadow: inset 0 1px 0 rgba(0,0,0,0.15);                                   228 ! 	-moz-box-shadow: inset 0 1px 0 rgba(0,0,0,0.15);
+   229 ! 	-webkit-box-shadow: inset 0 1px 0 rgba(0,0,0,0.15);                                229 ! 	-webkit-box-shadow: inset 0 1px 0 rgba(0,0,0,0.15);
+   230 ! }                                                                                   230 ! }
+   231 !                                                                                     231 !
+   232 ! /* Login button */                                                                  232 ! /* Login button */
+   233 ! .login-form .footer .button {                                                       233 ! .login-form .footer .button {
+   234 ! 	float:right;                                                                       234 ! 	float:right;
+   235 ! 	padding: 11px 25px;                                                                235 ! 	padding: 11px 25px;
+   236 !                                                                                     236 !
+   237 ! 	font-family: 'Bree Serif', serif;                                                  237 ! 	font-family: 'Bree Serif', serif;
+   238 ! 	font-weight: 300;                                                                  238 ! 	font-weight: 300;
+   239 ! 	font-size: 18px;                                                                   239 ! 	font-size: 18px;
+   240 ! 	color: #fff;                                                                       240 ! 	color: #fff;
+   241 ! 	text-shadow: 0px 1px 0 rgba(0,0,0,0.25);                                           241 ! 	text-shadow: 0px 1px 0 rgba(0,0,0,0.25);
+   242 !                                                                                     242 !
+   243 ! 	background: #56c2e1;                                                               243 ! 	background: #56c2e1;
+   244 ! 	border: 1px solid #46b3d3;                                                         244 ! 	border: 1px solid #46b3d3;
+   245 ! 	border-radius: 5px;                                                                245 ! 	border-radius: 5px;
+   246 ! 	cursor: pointer;                                                                   246 ! 	cursor: pointer;
+   247 !                                                                                     247 !
+   248 ! 	box-shadow: inset 0 0 2px rgba(256,256,256,0.75);                                  248 ! 	box-shadow: inset 0 0 2px rgba(256,256,256,0.75);
+   249 ! 	-moz-box-shadow: inset 0 0 2px rgba(256,256,256,0.75);                             249 ! 	-moz-box-shadow: inset 0 0 2px rgba(256,256,256,0.75);
+   250 ! 	-webkit-box-shadow: inset 0 0 2px rgba(256,256,256,0.75);                          250 ! 	-webkit-box-shadow: inset 0 0 2px rgba(256,256,256,0.75);
+   251 ! }                                                                                   251 ! }
+   252 !                                                                                     252 !
+   253 ! .login-form .footer .button:hover {                                                 253 ! .login-form .footer .button:hover {
+   254 ! 	background: #3f9db8;                                                               254 ! 	background: #3f9db8;
+   255 ! 	border: 1px solid rgba(256,256,256,0.75);                                          255 ! 	border: 1px solid rgba(256,256,256,0.75);
+   256 !                                                                                     256 !
+   257 ! 	box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);                                       257 ! 	box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+   258 ! 	-moz-box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);                                  258 ! 	-moz-box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+   259 ! 	-webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);                               259 ! 	-webkit-box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+   260 ! }                                                                                   260 ! }
+   261 !                                                                                     261 !
+   262 ! .login-form .footer .button:focus {                                                 262 ! .login-form .footer .button:focus {
+   263 ! 	position: relative;                                                                263 ! 	position: relative;
+   264 ! 	bottom: -1px;                                                                      264 ! 	bottom: -1px;
+   265 !                                                                                     265 !
+   266 ! 	background: #56c2e1;                                                               266 ! 	background: #56c2e1;
+   267 !                                                                                     267 !
+   268 ! 	box-shadow: inset 0 1px 6px rgba(256,256,256,0.75);                                268 ! 	box-shadow: inset 0 1px 6px rgba(256,256,256,0.75);
+   269 ! 	-moz-box-shadow: inset 0 1px 6px rgba(256,256,256,0.75);                           269 ! 	-moz-box-shadow: inset 0 1px 6px rgba(256,256,256,0.75);
+   270 ! 	-webkit-box-shadow: inset 0 1px 6px rgba(256,256,256,0.75);                        270 ! 	-webkit-box-shadow: inset 0 1px 6px rgba(256,256,256,0.75);
+   271 ! }                                                                                   271 ! }
+   272 !                                                                                     272 !
+   273 ! /* Register button */                                                               273 ! /* Register button */
+   274 ! .login-form .footer .register {                                                     274 ! .login-form .footer .register {
+   275 ! 	display: block;                                                                    275 ! 	display: block;
+   276 ! 	float: right;                                                                      276 ! 	float: right;
+   277 ! 	padding: 10px;                                                                     277 ! 	padding: 10px;
+   278 ! 	margin-right: 20px;                                                                278 ! 	margin-right: 20px;
+   279 !                                                                                     279 !
+   280 ! 	background: none;                                                                  280 ! 	background: none;
+   281 ! 	border: none;                                                                      281 ! 	border: none;
+   282 ! 	cursor: pointer;                                                                   282 ! 	cursor: pointer;
+   283 !                                                                                     283 !
+   284 ! 	font-family: 'Bree Serif', serif;                                                  284 ! 	font-family: 'Bree Serif', serif;
+   285 ! 	font-weight: 300;                                                                  285 ! 	font-weight: 300;
+   286 ! 	font-size: 18px;                                                                   286 ! 	font-size: 18px;
+   287 ! 	color: #414848;                                                                    287 ! 	color: #414848;
+   288 ! 	text-shadow: 0px 1px 0 rgba(256,256,256,0.5);                                      288 ! 	text-shadow: 0px 1px 0 rgba(256,256,256,0.5);
+   289 ! }                                                                                   289 ! }
+   290 !                                                                                     290 !
+   291 ! .login-form .footer .register:hover {                                               291 ! .login-form .footer .register:hover {
+   292 ! 	color: #3f9db8;                                                                    292 ! 	color: #3f9db8;
+   293 ! }                                                                                   293 ! }
+   294 !                                                                                     294 !
+   295 ! .login-form .footer .register:focus {                                               295 ! .login-form .footer .register:focus {
+   296 ! 	position: relative;                                                                296 ! 	position: relative;
+   297 ! 	bottom: -1px;                                                                      297 ! 	bottom: -1px;
+   298 ! }                                                                                   298 ! }
+

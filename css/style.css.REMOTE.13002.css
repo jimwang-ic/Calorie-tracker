@@ -1,0 +1,168 @@
+/* General CSS for ShapeUp Webapp */
+
+*{
+	margin:0;
+	padding:0;
+	font-family: Arial, Helvetica, monotype;
+	/*border: red 1px dotted;*/
+}
+
+
+body{
+	background:#eee;
+	min-width:800px;
+	background-image:url('../public/images/bedge_grunge.png');
+}
+
+
+a{
+	text-decoration:none;
+	color:black;
+}
+
+a:visited {
+ 	color:black;
+}
+
+#calendar a:hover {
+	color:#999;
+}
+
+
+h2{
+	font-size: 45px;
+	margin-top:20px;
+	margin-bottom:20px;
+	text-align: center;
+}
+
+
+#fatsecret_output_0, #fatsecret_output_2 {
+	color:#EEE;
+	position:float;
+	float:left;
+	margin:5px 0px 0px 29px; 
+	display:block;
+}
+
+
+#fatsecret_output_0{
+	margin-left:21px;
+	color:black;
+}
+
+
+.date{
+	display:inline-block;	
+	font-size:20pt;
+	margin-left:300px;
+	margin-right:270px;
+	margin-bottom:10px;
+	position:absolute;
+	top:45px;
+	left:175px;
+}
+
+
+.monthbutton{
+	height: 25px;
+	width: 125px;
+	border:1px #aaa solid;
+	display:inline-block;
+	background:#ddd;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
+	margin-top:25px;
+	margin-left:25px;
+}
+
+#prevMonth{
+	margin-bottom:10px;
+	position:absolute;
+	left:15px;
+	top:40px;
+}
+
+#nextMonth{
+	position:absolute;
+	left:487px;
+	top:40px;
+}
+
+.monthbutton:hover {
+	background:#ccc;
+}
+
+
+a.monthbutton{
+	color:#EEE;
+}
+
+
+#calendar_tab{
+	margin-top:55px;
+	margin-bottom:40px;
+}
+
+
+#graph{
+	margin:40px auto;
+
+}
+
+
+/*Login page css*/
+#leftlogincolumn {
+	width: 40%;
+	height: 80%;
+	float: left;
+	border: 3px solid;
+	background-color: #6495ED ;
+	
+}
+
+#rightlogincolumn {
+	width: 40%;
+	height: 80%;
+	float: right;
+	border: 3px solid;
+}
+
+
+#toploginbar {
+	width: 100%;
+	height: 5%;
+	border: 3px solid;
+}
+
+
+#bottomloginbar {
+	width: 100%;
+	height: 5%;
+	border: 3px solid;
+	position: absolute;
+	bottom: 0;
+}
+
+#motto {
+	color: #FFFFFF;
+}
+
+#tabandday_cont{
+	overflow:auto;
+	margin:auto;
+	display:block;
+	position:absolute;
+	top:140px;
+	left:10%;
+	width:1050px;
+}
+
+#dayDataholder{
+	height:580px;
+	margin-top:22px;
+	width:400px;
+	background-image:url('../public/images/navy_blue.png');
+	overflow:auto;
+}

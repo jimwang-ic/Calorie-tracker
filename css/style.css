@@ -11,8 +11,9 @@ body{
 	min-width:800px;
 	overflow:auto;
 	background-image:url('../images/sky.JPG');
-	background-size:100%;
+	background-size: cover;
 	background-repeat:no-repeat;
+	
 }
 
 
