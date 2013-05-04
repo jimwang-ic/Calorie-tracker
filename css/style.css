@@ -118,6 +118,11 @@ a.monthbutton{
 	height:300px;
 }
 
+#plus_button{
+	background-image:url('../public/images/add.png');
+	font-size:12pt;
+}
+
 
 
 #tabandday_cont{
@@ -137,6 +142,9 @@ a.monthbutton{
 	width:360px;
 	background-image:url('../public/images/navy_blue.png');
 	overflow:auto;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px;
+	border-radius:3px;
 }
 
 
