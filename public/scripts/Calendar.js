@@ -295,12 +295,12 @@ if(meals[0].mealtype === 'AUTO')
 	    if(mealnames == 'AUTOGENERATE,')
 	    {
 	    	$("#box-table-a tr:eq(" + key + ") td:eq(1)").html("Auto");
-	    	$("#box-table-a tr:eq(" + key + ")").on('click', editMeal(CombineMeal[mealtype_n].ids,date,true));
+	    	$("#box-table-a tr:eq(" + key + ")").on('click', editMeal(CombineMeal[key].ids,date,true));
 	   	}
 	   	else 		
 	   	{
 	    	$("#box-table-a tr:eq(" + key + ") td:eq(1)").html("Recorded");
-	    	$("#box-table-a tr:eq(" + key + ")").on('click', editMeal(CombineMeal[mealtype_n].ids,date,false));
+	    	$("#box-table-a tr:eq(" + key + ")").on('click', editMeal(CombineMeal[key].ids,date,false));
 	    }
 	    
 		$("#box-table-a tr:eq(" + key + ") td:eq(2)").html(CombineMeal[key].calories);
@@ -312,7 +312,8 @@ function editMeal(ids,date,autogen) {
 		
 		//console.log("FUCK");
 		//console.log(date);
-		
+		console.log("============ IDS ===============");
+		console.log(ids);
 		Meal.ids = [];
 		Meal.date = date;
 		displayMeal(ids);
@@ -352,16 +353,18 @@ function queryMeal(id) {
 			var mealtype = content.mealtype;
 			var servings = content.servings;
 			
+			//setup meal type
+			$("#" + mealtype).prop('checked', true);
+			
 			//console.log(content);
 			for(var key in foodids)
 			{
 				var servings_cal = servings[key].split("*");
 				//console.log(foodids[key]);
-				getFood(foodids[key],mealtype,servings_cal[0],servings_cal[1]);	
+				getFood(foodids[key],mealtype,servings_cal[0],servings_cal[1],id);	
 			}
 			
-			if(Meal.ids != undefined)
-				Meal.ids.push(id);
+			
 				
 		},
 		error: function()
@@ -372,7 +375,7 @@ function queryMeal(id) {
 	
 }
 
-function getFood(foodid,mealtype,servings,calories) {
+function getFood(foodid,mealtype,servings,calories,id) {
 	
 	
 	$.ajax({
@@ -381,18 +384,21 @@ function getFood(foodid,mealtype,servings,calories) {
         data: "foodid="+ foodid,
         success: function(msg)
         {
-      
-        	
+			if(Meal.ids != undefined)
+				Meal.ids.push(id);
      		
         	var food = jQuery.parseJSON(msg);
             //console.log(food);
             //console.log(food.servings);
             var total_calories = parseInt(calories,10)*parseInt(servings,10);
             // Add to meal object	
-			Meal.food.push({id : foodid, name : food.food_name, calories : total_calories, mealtype: mealtype, servings : servings});
 			
-            if(!msg) return;
-            
+			
+            if(!msg) 
+            {
+            	/* Meal.food.push({id : foodid, name : 'AUTOGENERATE', calories : total_calories, mealtype: mealtype, servings : servings}); */
+            	return;
+            }
             var foodwrapper = '<td>'+ mealtype + '</td>' + 
 							  '<td>'+ servings + '</td>' + 
 							  '<td>'+ food.food_name +'</td>' +
@@ -406,7 +412,8 @@ function getFood(foodid,mealtype,servings,calories) {
 			var table_container = document.getElementById("table_container");
 			table_container.appendChild(tofill);
 			
-			
+			Meal.food.push({id : foodid, name : food.food_name, calories : total_calories, mealtype: mealtype, servings : servings});
+		
        
         },
         error: function()
@@ -735,8 +742,7 @@ function Form_eventListener() {
 	$('#btn_addmeal').on('click', function(){
 		
 		//console.log("====== save to database ======");
-		//console.log(Meal);
-				
+		//console.log(Meal);		
 		serialize_meal = JSON.stringify(Meal);
 		
 		// Create a FormData object from out form
@@ -756,6 +762,9 @@ function Form_eventListener() {
 	
 	$('#btn_delete_meal').on('click', function(){
 		
+		
+		//console.log("~~~~ delete MEAL ~~~~");
+		//console.log(Meal);
 		serialize_meal = JSON.stringify(Meal);
 		
 		var fd = new FormData();
@@ -914,9 +923,8 @@ function automaticMeal(mealtype,datetime) {
     
     if(mealtype === 'AUTO')
     {
-    	console.log("~~~AUTO~~~");
-    	//var meals = [];
-		for(var key in mealtypeTable)
+    	//console.log("~~~AUTO~~~");
+    	for(var key in mealtypeTable)
 		{
 			var meal = {};
 			var toadd = {};
@@ -960,11 +968,13 @@ function automaticMeal(mealtype,datetime) {
 	    toadd.servings = 1;
 	    meal['food'].push(toadd);
 	    meal['date']=datetime;
+	    meal.autogen = true;
 	   
 	    serialize_meal = JSON.stringify(meal);
 	    var fd = new FormData();
-	    fd.append('meal', serialize_meal);
-	    
+	    fd.append('meal', serialize_meal);    
+	    serialize_meal = JSON.stringify(Meal);
+			
 	    $.ajax({
 	       type: 'POST',
 		   url: '/addmeal',
