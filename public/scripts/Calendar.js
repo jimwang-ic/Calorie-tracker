@@ -888,70 +888,47 @@ function automaticMeal(mealtype,datetime) {
     
     if(mealtype === 'AUTO')
     {
-    	//console.log("~~~AUTO~~~");
+    	// Add seperate meals in database
     	for(var key in mealtypeTable)
 		{
-			var meal = {};
-			var toadd = {};
-			meal['food'] = [];
-			console.log(key);
-			toadd.id = 0;	
-			toadd.name = 'AUTOGENERATE';
-		    toadd.calories = parseInt(calories);
-		    toadd.mealtype = key;
-		    toadd.servings = 1;
-		    meal['food'].push(toadd);
-		    meal['date']=datetime;
-		     
-		    serialize_meal = JSON.stringify(meal);
-		    var fd = new FormData();
-		    fd.append('meal', serialize_meal);
-		    
-		    $.ajax({
-		       type: 'POST',
-			   url: '/addmeal',
-			   processData: false,
-			   contentType: false,
-			   data:fd,
-			   success: RefreshCal,
-			   error: function(){
-				   console.log("error!");
-			   }
-		    });
-		    		
+			auto_generate_meal(key,datetime,calories);
 		}    
     }
     else
     {
-	    meal = {};
-	    meal['food'] = [];
-	    toadd = {};
-	    toadd.id = 0;
-	    toadd.name = 'AUTOGENERATE';
-	    toadd.calories = parseInt(calories);
-	    toadd.mealtype = mealtype;
-	    toadd.servings = 1;
-	    meal['food'].push(toadd);
-	    meal['date']=datetime;
-	    meal.autogen = true;
-	   
-	    serialize_meal = JSON.stringify(meal);
-	    var fd = new FormData();
-	    fd.append('meal', serialize_meal);    
-	    serialize_meal = JSON.stringify(Meal);
-			
-	    $.ajax({
-	       type: 'POST',
-		   url: '/addmeal',
-		   processData: false,
-		   contentType: false,
-		   data:fd,
-		   success: RefreshCal,
-		   error: function(){
-			   console.log("error!");
-		   }
-	    });
+    	auto_generate_meal(mealtype,datetime,calories);
+	    
     }    
     
 }
 
+function auto_generate_meal(type,datetime,calories,boolVal)
+{
+	meal = {};
+    meal['food'] = [];
+    toadd = {};
+    toadd.id = 0;
+    toadd.name = 'AUTOGENERATE';
+    toadd.calories = parseInt(calories);
+    toadd.mealtype = type;
+    toadd.servings = 1;
+    meal['food'].push(toadd);
+    meal['date']=datetime;
+    meal.autogen = true;
+   
+    serialize_meal = JSON.stringify(meal);
+    var fd = new FormData();
+    fd.append('meal', serialize_meal); 
+		
+    $.ajax({
+       type: 'POST',
+	   url: '/addmeal',
+	   processData: false,
+	   contentType: false,
+	   data:fd,
+	   success: RefreshCal,
+	   error: function(){
+		   console.log("error!");
+	   }
+    });
+}
