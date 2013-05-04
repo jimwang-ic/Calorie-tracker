@@ -6,6 +6,13 @@ var DEFAULT_DAILY_CALORIES = 2000;
 var DEFAULT_DAILY_MEAL = 550;
 var DEFAULT_DAILY_SNACK = 150;
 
+var mealtypeTable = {
+	    'breakfast': 1,
+	    'lunch':2,
+	    'dinner':3,
+	    'snack':4
+};  
+	    
 window.addEventListener('load', function(){
 	
 	// Customize our Calendar  
@@ -26,12 +33,13 @@ window.addEventListener('load', function(){
 		RefreshCal();
 		
 	});
-			
+	
 	$('#next_choosemeal').on('click',function(){
 	
-		if( $('#auto_gen:checked').prop("checked") )
+		if( $('#auto_generate:checked').prop("checked") )
 		{
-			alert("auto generate!");
+			var food_type = $('#mealType input:radio:checked').val();
+			automaticMeal(food_type,Meal.date);
 		}
 		else
 		{
@@ -94,7 +102,7 @@ function RefreshCal() {
 	$('#results').html("");
 	$('#table_container tr:gt(0)').remove();
 	$('#weight_input').val("");
-	
+	$('#auto_generate').prop('checked',false);
 	
 }
 
@@ -238,7 +246,11 @@ function fill_date_screen(meals,date) {
     	return;
     }
     
-   	if(meals[0].mealtype === 'AUTO')
+    clear_date_screen();
+    
+    // Must change something here
+   	/*
+if(meals[0].mealtype === 'AUTO')
    	{
    		var calories = meals[0].totalcalories/4;
 	   	for(var i = 1 ; i <= 4 ; i++)
@@ -249,18 +261,13 @@ function fill_date_screen(meals,date) {
 	   	}   	
 	   	return;
    	}
-   	 
-    var mealtypeTable = {
-		    'breakfast': 1,
-		    'lunch':2,
-		    'dinner':3,
-		    'snack':4
-	    };  
-	    
-    clear_date_screen();
-    
+   	
+*/ 
+       
     // Combine the meals base on their types
     var CombineMeal = {};
+    
+    // ! Fuck here
     
     for(var key in meals)
     {
@@ -286,22 +293,25 @@ function fill_date_screen(meals,date) {
 	    $("#box-table-a tr:eq(" + key + ")").unbind();
 	    
 	    if(mealnames == 'AUTOGENERATE,')
+	    {
 	    	$("#box-table-a tr:eq(" + key + ") td:eq(1)").html("Auto");
+	    	$("#box-table-a tr:eq(" + key + ")").on('click', editMeal(CombineMeal[mealtype_n].ids,date,true));
+	   	}
 	   	else 		
 	   	{
 	    	$("#box-table-a tr:eq(" + key + ") td:eq(1)").html("Recorded");
-	    	$("#box-table-a tr:eq(" + key + ")").on('click', editMeal(CombineMeal[mealtype_n].ids,date));
+	    	$("#box-table-a tr:eq(" + key + ")").on('click', editMeal(CombineMeal[mealtype_n].ids,date,false));
 	    }
 	    
 		$("#box-table-a tr:eq(" + key + ") td:eq(2)").html(CombineMeal[key].calories);
     }
 }
 
-function editMeal(ids,date) {
+function editMeal(ids,date,autogen) {
 	return function(){
 		
-		console.log("FUCK");
-		console.log(date);
+		//console.log("FUCK");
+		//console.log(date);
 		
 		Meal.ids = [];
 		Meal.date = date;
@@ -371,10 +381,18 @@ function getFood(foodid,mealtype,servings,calories) {
         data: "foodid="+ foodid,
         success: function(msg)
         {
+      
+        	
+     		
         	var food = jQuery.parseJSON(msg);
             //console.log(food);
             //console.log(food.servings);
             var total_calories = parseInt(calories,10)*parseInt(servings,10);
+            // Add to meal object	
+			Meal.food.push({id : foodid, name : food.food_name, calories : total_calories, mealtype: mealtype, servings : servings});
+			
+            if(!msg) return;
+            
             var foodwrapper = '<td>'+ mealtype + '</td>' + 
 							  '<td>'+ servings + '</td>' + 
 							  '<td>'+ food.food_name +'</td>' +
@@ -388,8 +406,7 @@ function getFood(foodid,mealtype,servings,calories) {
 			var table_container = document.getElementById("table_container");
 			table_container.appendChild(tofill);
 			
-			// Add to meal object	
-			Meal.food.push({id : foodid, name : food.food_name, calories : total_calories, mealtype: mealtype, servings : servings});
+			
        
         },
         error: function()
@@ -438,8 +455,10 @@ function updateCalendar_ajax() {
 			fill_date_screen(meals,Meal.date);
 			
 			//reset Meal
+			var temp_date = Meal.date;
 			Meal = {};
 			Meal.food = [];
+			Meal.date = temp_date;
 			
 	    } else {
 			console.log('error');
@@ -855,13 +874,14 @@ function automaticMeal(mealtype,datetime) {
     var nummeals = 0;
     var data = current_month_data;
     if (mealtype == "AUTO") { //want to create one big meal
+ 	console.log("AUTO GENERATE");
  	console.log(data);
 	for (var day in data) {
 	    var meals = data[day];
 	    for (var i = 0; i < meals.length; i++) {
-		var meal = meals[i];
-		calories += parseInt(meal.totalcalories);
-		nummeals += 1;
+			var meal = meals[i];
+			calories += parseInt(meal.totalcalories);
+			nummeals += 1;
 	    }
 	}
     }
@@ -871,9 +891,8 @@ function automaticMeal(mealtype,datetime) {
 	    for (var i = 0; i < meals.length; i++) {
 		var meal = meals[i];
 		if (meal.mealtype === mealtype) {
-		    console.log(meal.totalcalories);
-		    calories += parseInt(meal.totalcalories);
-		    nummeals += 1;
+	    	calories += parseInt(meal.totalcalories);
+	    	nummeals += 1;
 		}
 	    }
 	}
@@ -883,7 +902,7 @@ function automaticMeal(mealtype,datetime) {
 	    calories = parseInt(DEFAULT_DAILY_SNACK);
 	}
 	else if (mealtype === 'AUTO') {
-	    calories = parseInt(DEFAULT_DAILY_CALORIES);
+	    calories = parseInt(DEFAULT_DAILY_CALORIES)/4;
 	}
 	else {
 	    calories = parseInt(DEFAULT_DAILY_MEAL);
@@ -893,30 +912,71 @@ function automaticMeal(mealtype,datetime) {
 	calories = parseInt(calories/nummeals);
     }
     
-    //mealtype = "dinner";
-    meal = {};
-    meal['food'] = [];
-    toadd = {};
-    toadd.id = 0;
-    toadd.name = 'AUTOGENERATE';
-    toadd.calories = parseInt(calories);
-    toadd.mealtype = mealtype;
-    toadd.servings = 1;
-    meal['food'].push(toadd);
-    meal['date']=datetime;
-    
-    
-    serialize_meal = JSON.stringify(meal);
-    // Create a FormData object from out form
-    var fd = new FormData();
-    fd.append('meal', serialize_meal);
-    
-    // Send it to the server 
-    var req = new XMLHttpRequest();
-    req.open('POST', '/addmeal', true);
-
-    req.addEventListener('load', RefreshCal);
-    req.send(fd);
+    if(mealtype === 'AUTO')
+    {
+    	console.log("~~~AUTO~~~");
+    	//var meals = [];
+		for(var key in mealtypeTable)
+		{
+			var meal = {};
+			var toadd = {};
+			meal['food'] = [];
+			console.log(key);
+			toadd.id = 0;	
+			toadd.name = 'AUTOGENERATE';
+		    toadd.calories = parseInt(calories);
+		    toadd.mealtype = key;
+		    toadd.servings = 1;
+		    meal['food'].push(toadd);
+		    meal['date']=datetime;
+		     
+		    serialize_meal = JSON.stringify(meal);
+		    var fd = new FormData();
+		    fd.append('meal', serialize_meal);
+		    
+		    $.ajax({
+		       type: 'POST',
+			   url: '/addmeal',
+			   processData: false,
+			   contentType: false,
+			   data:fd,
+			   success: RefreshCal,
+			   error: function(){
+				   console.log("error!");
+			   }
+		    });
+		    		
+		}    
+    }
+    else
+    {
+	    meal = {};
+	    meal['food'] = [];
+	    toadd = {};
+	    toadd.id = 0;
+	    toadd.name = 'AUTOGENERATE';
+	    toadd.calories = parseInt(calories);
+	    toadd.mealtype = mealtype;
+	    toadd.servings = 1;
+	    meal['food'].push(toadd);
+	    meal['date']=datetime;
+	   
+	    serialize_meal = JSON.stringify(meal);
+	    var fd = new FormData();
+	    fd.append('meal', serialize_meal);
+	    
+	    $.ajax({
+	       type: 'POST',
+		   url: '/addmeal',
+		   processData: false,
+		   contentType: false,
+		   data:fd,
+		   success: RefreshCal,
+		   error: function(){
+			   console.log("error!");
+		   }
+	    });
+    }    
     
 }
 
