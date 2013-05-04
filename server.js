@@ -161,6 +161,14 @@ app.get('/getFood.json', function(req,res){
 	var ip = 'ec2-54-244-185-162.us-west-2.compute.amazonaws.com';
 	var port = 8811;
 	
+	if(food_id == 0)
+	{
+		res.send();
+		return;
+	}
+	
+	console.log("fuck!?");
+	
 	// Connect to DNode server for FatSecretAPI.php running in above ip with TCP port 8811 
 	// and call "getFood" with arugment Search_string. 
 	dnode.connect(ip,port, function (remote, conn) {
@@ -193,7 +201,7 @@ app.post('/addmeal', function(req,res) {
 	var time = meal['date'];
 	
 	// Edit meal
-	// delete the sperate meals in database, then add the combined one
+	// delete the sperate meals in database, then insert the combined one
 	if(meal.ids != undefined)
 	{
 		var ids = meal.ids;
@@ -206,8 +214,7 @@ app.post('/addmeal', function(req,res) {
 		
 		where_condition = where_condition.substring(0, where_condition.length -1);
 		
-		console.log(where_condition);
-		
+		//console.log(where_condition);
 		conn.query('DELETE FROM table_' + req.session.userid + ' WHERE id in (' +  where_condition + ')')
 			.on('error', console.error);
 	}
@@ -283,36 +290,6 @@ app.post('/deletemeal',function(req,res) {
     res.render('Calendar.html');
 */
 });
-
-/**
-	Edit Meal
-**/
-app.post('/editmeal', function(req,res){
-	console.log("============ edit meal");
-	var meal = JSON.parse(req.body.meal);
-	//console.log(req.body.meal.ids);
-	var ids = meal.ids;
-	var where_condition = "";
-	
-	for(key in ids)
-	{
-		where_condition += "'" +  ids[key]  + "',";	
-	}
-	
-	where_condition = where_condition.substring(0, where_condition.length -1);
-	console.log(where_condition);
-	
-	conn.query('DELETE FROM table_' + req.session.userid + ' WHERE id in (' +  where_condition + ')')
-		.on('error', console.error);
-	
-	
-	
-	console.log("============ edit meal finished");
-	res.send();
-	
-});
-
-
 
 /**
  * Get data for graph from DB
