@@ -15,6 +15,7 @@
 		<script src="/public/scripts/jquery.flot.js"></script>
 		<script src="/public/scripts/jquery.flot.time.js"></script>
 		<script src="/public/scripts/jquery-ui.js"></script>
+		<script src="/public/scripts/popbox.js"></script>
 
 		<!-- We can customize our calendar through the calendar.css -->
 		<!-- this css file comes from http://platform.fatsecret.com/api/Default.aspx?screen=jsapicssr -->
@@ -22,6 +23,7 @@
 		<link rel="stylesheet" href="css/style.css" type="text/css" />
 		<link rel="stylesheet" href="css/tab.css" type="text/css" />
 		<link rel="stylesheet" href="css/lightbox.css" type="text/css" />	
+		<link rel="stylesheet" href="css/jquery-ui-1.10.2.custom.css" type="text/css" />
 
 	</head>
 
@@ -161,22 +163,52 @@
 		<div id = "light" class="white_content">
 			<h5>Meal Entry Form</h5>
 			<!-- FOOD SEARCH FORM -->
-
+			<div id="autogenDialog">
+				<h5>Auto generate your meal?</h5>
+				<label><span class="rad"><input class ="mealType" type="radio" name="group1" id="yes_auto" value="yes_auto" checked><span class="m" >Yes</span></span></label>
+				<label><span class="rad" ><input type="radio" name="group1" id="no_auto" value="no_auto"><span class="m" >No</span></span></label>
+				
+				<div id="next_autogenDialog" class="next"> Next </div>
+				
+			</div>
+			
+			<div id="optionSelect">
+				<label><span class="rad"><input class ="mealType" type="radio" name="group1" id="addMeal" value="breakfast" checked><span class="m" >Add meal</span></span></label>
+				<label><span class="rad" ><input type="radio" name="group1" id="addWeight" value="lunch"><span class="m" >Add weight</span></span></label>
+				
+				<div id="next_optionselect" class="next"> Next </div>
+				
+			</div>
+			
+			<div id="weightInput">
+				<form id="weightForm">
+					Input your weigh: <input type="text" id="weight_input">
+					<button id="btn_addweight">Add Weight</button>
+				</form>
+			</div>
+			
 			<div id="chooseMeal">	
 				<div id="mealandbutton">
 					<span id="choosemealtoenter">Choose Meal to Enter: </span>
 					<form id="mealType">
 
 						<label><span class="rad"><input class ="mealType" type="radio" name="group1" id="breakfast" value="breakfast" checked><span class="m" >Breakfast</span></span></label>
-						<label>	<span class="rad" ><input type="radio" name="group1" id="lunch" value="lunch"><span class="m" >Lunch</span> </span></label>
+						<label><span class="rad" ><input type="radio" name="group1" id="lunch" value="lunch"><span class="m" >Lunch</span> </span></label>
 						<label><span class="rad"><input type="radio" name="group1" id="dinner" value="dinner"><span class="m" >Dinner</span></span></label>
 						<label><span class="rad"><input type="radio" name="group1" id="snack" value="snack"><span class="m" >Snack</span></span></label>
+						
+						
+						<label><span class="rad"><input type="radio" name="group1" id="previous_meal" value="previous_meal"><span class="m" >Recent meal</span></span></label>
+						<label><span class="rad"><input type="radio" name="group1" id="auto_gen" value="auto_gen"><span class="m" >Auto generate</span></span></label>
+						
 					</form>
+										
 				</div>
-				<div id="next"> Next </div> <!-- next page button -->
+				<div id="next_choosemeal" class="next"> Next </div> <!-- next page button -->
 			</div>
 
 
+			
 			<div id="detailedForm">
 				<button id="showPrevious">Show Previous Meal!</button>
 				<div id="searchpref">
@@ -217,43 +249,9 @@
 
 				</div>
 
-
-				<!--
-				<select id="meal_type" name="meal_type" form="foodtracker">
-					<option value="Breakfast">Breakfast</option>
-					<option value="Lunch">Lunch</option>
-					<option value="Dinner">Dinner</option>
-					<option value="Snack">Snack</option>
-					<option value="Beverage">Beverage</option>
-				</select>
-				-->
-
-
-				<!--
-				<form name="input" action="html_form_action.asp" method="post" id="foodtracker">
-
-					Username: <input type="text" name="user" id="username"><br>
-					Food:	<input type="text" name="food" id="foodentry" value="" size="85" maxlength="255" autocomplete="off">
-					<div id="q_results_container" style="display: none;">
-						<div id="q_results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
-					</div>
-
-					<input type="button" value="Show" id="saveInJavaScript">
-					-->
-
-
-					<!-- <input type="text" id="ntq" name="q" value="" size="85" maxlength="255" autocomplete="off">
-
-					<div id="q_results_container">
-
-						<div align="right" class="button" style="background:#cccccc; border-bottom:1px dotted #333333; width:552px; position:relative; top:0px; right:0px;" onclick="NutritionTracker.handleManualEntry(event);"><b>x</b>&nbsp;&nbsp;</div>
-
-						<div id="q_results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
-
-					</div>
-					-->
-
-					<!-- </form> -->
+				<!-- show previous meal -->
+				<button id="showPrevious">Show Previous Meal!</button>
+				
 
 				<div id="data_container">
 					<table class="box-table-b" id="table_container">
@@ -269,7 +267,9 @@
 				</div>
 
 				<button id='btn_addmeal'>Add Meal</button>
-
+				<button id='btn_delete_meal'>Delete Meal</button>
+				<!-- <button id=' -->
+				
 
 			</div>
 		</div>

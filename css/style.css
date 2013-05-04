@@ -224,3 +224,8 @@ a.monthbutton{
 {	float:left;
 	margin:0;
 }
+
+.missing 
+{
+    background-color: #DDADA2;
+}
