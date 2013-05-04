@@ -220,8 +220,10 @@ app.post('/addmeal', function(req,res) {
 	}
 	if(meal.autogen)
 	{
+		var food = meal['food'];
+	    var mealtype = food[0]['mealtype'];
 		//console.log("auto gen !!");
-		conn.query('DELETE FROM table_' + req.session.userid + ' WHERE datetime=$1',time)
+		conn.query('DELETE FROM table_' + req.session.userid + ' WHERE datetime=$1 AND mealtype=$2',[time,mealtype])
 			.on('error', console.error);
 	}
 	

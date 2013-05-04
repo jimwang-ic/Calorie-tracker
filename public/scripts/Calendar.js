@@ -58,12 +58,7 @@ window.addEventListener('load', function(){
 function RefreshCal() {
 	updateCalendar_ajax();
 	load_graph(null,null);
-	
-	var temp_date = Meal.date;
-	Meal = {};
-	Meal.food = [];
-	Meal.date = temp_date;
-	
+		
 	$('#foodid').val("");
 	$('#search_query').val("");
 	$('#calories_field').val("");
@@ -168,7 +163,7 @@ function Customize_cal() {
 				var date = parseInt(day[0],10);
 				var meals = current_month_data[date];
 				Meal.date = new Date(day[2],day[1]-1,day[0]).getTime();
-				fill_date_screen(meals,Meal.date);
+				fill_date_screen(meals);
 		    }
 		    catch (error) {
 				clear_date_screen();
@@ -212,7 +207,7 @@ function clear_date_screen() {
 }
 
 //id mealname mealtype totalcalories
-function fill_date_screen(meals,date) {
+function fill_date_screen(meals) {
 	clear_date_screen();
     if(meals === undefined) return;
            
@@ -247,15 +242,15 @@ function fill_date_screen(meals,date) {
 	   	else 
 	    	$("#box-table-a tr:eq(" + key + ") td:eq(1)").html("Recorded");
 	    	
-	    $("#box-table-a tr:eq(" + key + ")").on('click', editMeal(CombineMeal[key].ids,date));
+	    $("#box-table-a tr:eq(" + key + ")").on('click', editMeal(CombineMeal[key].ids));
 		$("#box-table-a tr:eq(" + key + ") td:eq(2)").html(CombineMeal[key].calories);
     }
 }
 
-function editMeal(ids,date) {
+function editMeal(ids) {
 	return function(){
 		Meal.ids = [];
-		Meal.date = date;
+		//Meal.date = date;
 		displayMeal(ids);
 		$('#btn_delete_meal').show();
 		document.getElementById('light').style.display='block';
@@ -378,10 +373,14 @@ function updateCalendar_ajax() {
 			updateCalendar(JSON.parse(content));
 			
 			var editmeal_date = 0;
-			
+			//! this shit here
 			if(Meal.date == undefined)
 			{
-				editmeal_date = $('.fatsecret_day_today > span').text();	
+				editmeal_date = $('.fatsecret_day_today > span').text();
+				var id = $('.fatsecret_day_today a span').attr('id');
+				var day = id.split("/");
+				var meals = current_month_data[date];
+				Meal.date = new Date(day[2],day[1]-1,day[0]).getTime();		
 			}
 			else
 			{
@@ -391,9 +390,12 @@ function updateCalendar_ajax() {
 			
 			var meals = current_month_data[editmeal_date];
 			// Show the newest update information
-			fill_date_screen(meals,Meal.date);
+			console.log("MEAL DATE");
+			console.log(Meal.date);
 			
-			//reset Meal
+			fill_date_screen(meals);
+			
+			//reset Meal object, keep the date (since there are callbacks still need to know the date information)
 			var temp_date = Meal.date;
 			Meal = {};
 			Meal.food = [];
@@ -720,12 +722,7 @@ function form_eventListener() {
 function form_navigation(){
 	
 	$('#fade').on('click',function(){
-		// Show today's calorie infomation on detail date info
-		var today = $('.fatsecret_day_today > span').text();
-		var meals = current_month_data[today];
-		fill_date_screen(meals,Meal.date);
 		RefreshCal();
-		
 	});
 	
 	$('#next_choosemeal').on('click',function(){
