@@ -441,7 +441,6 @@ app.get('/history.json',function(req,res){
 		console.log("after rank")
 		console.log(rank);
 		
-		console.log("--------------------------------------query everything end----------------------------------------"//console.log("--------------------------------------query everything end----------------------------------------")
 		res.json(entry);
 
 	});

@@ -784,8 +784,8 @@ function addpreviousMeal(){
 							
 				var food = document.createElement("div");
 				for(var i=0; i<foodPrevious.length; i++){
-
-					if(foodPrevious[i].mealtype == food_type && foodPrevious[i].mealtype !== "AUTOGENERATE"){
+					
+					if(foodPrevious[i].mealtype == food_type && foodPrevious[i].mealname !== "AUTOGENERATE"){
 						// previousMeal foodPrevious[i].mealname+'\n';
 						// console.log("foodPrevious id");
 						// console.log(foodPrevious[i].foodid);
