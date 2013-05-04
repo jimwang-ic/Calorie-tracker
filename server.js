@@ -436,9 +436,11 @@ app.get('/history.json',function(req,res){
 
 		//console.log("--------------------------------------query everything start----------------------------------------");
 
-		//console.log(entry);
-		foodRank(entry);
-		//console.log("--------------------------------------query everything end----------------------------------------")
+		var rank = foodRank(entry);
+
+		console.log("after rank")
+		console.log(rank);
+		
 		res.json(entry);
 
 	});
@@ -479,9 +481,10 @@ function foodRank(entries){
 		rank[i]=sortObject(rank[i]);
 		// console.log(rank[i]);
 	}
-	//console.log("breakfast after sorting");
-	//console.log(rank['Breakfast']);
-	
+
+	console.log("breakfast after sorting");
+	console.log(rank['Breakfast']);
+	return rank;
 
 }
 
@@ -490,9 +493,9 @@ function arrange(entry,rank){
 	var length =1;
 	var foodids;
 	var servings;
-	foodids = entry['foodid'].toString().split(',');
-	servings = entry['servings'].split(',');	
-	mealnames = entry['mealnames'].split(',');
+	var foodids = entry['foodid'].toString().split(',');
+	var servings = entry['servings'].split(',');	
+	var mealnames = entry['mealnames'].split(',');
 
 	length = foodids.length;
 	
