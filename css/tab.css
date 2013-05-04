@@ -1,3 +1,5 @@
+/* CSS for tabs on Calendar.html */
+
 a:active {
 	outline:none;
 }
@@ -7,30 +9,34 @@ a:focus {
 }
 
 #tabs_container {
-	width: 1250px;
+	width: 1050px;
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 12px;
 	margin:auto;
 	float:left;
-	background:#fff;
+	background:transparent;
 	position:relative;
 	overflow:auto;
-	-webkit-border-radius:9px;
-	-moz-border-radius:9px;
-	border-radius:9px;
+}
+
+#tab_contents_container{
+
 }
 
 .tabs{
-	background-image:url('../public/images/bedge_grunge.png');
+	background-color:transparent;
+}
+
+ul.tabs li  a{
+	-webkit-border-radius:4px 4px 0 0;
+	-moz-border-radius:4px 4px 0 0;
+	border-radius:4px 4px 0 0;
 }
 
 #tabs_container ul.tabs {
 	list-style: none;
-	border-bottom: 1px solid #ccc;
 	height: 21px;
-	margin: 0;
 }
-
 
 #tabs_container ul.tabs li{
 	float: left;
@@ -52,13 +58,16 @@ a:focus {
 	padding-top:4px;
 }
 
-
-
 div.tab_contents_container{
 	border: 1px solid #ccc;
 	border-top: none;
 	padding: 10px;
-	overflow:auto;
+	overflow:hidden;
+	background:#fff;
+	-webkit-border-radius:0px 4px 4px 4px;
+	-moz-border-radius:0px 4px 4px 4px;
+	border-radius:0px 4px 4px 4px;
+	height:581px;
 }
 
 div.tab_contents{
@@ -66,13 +75,19 @@ div.tab_contents{
 }
 
 div.tab_contents_active{
-	display:block;
+	display:inline-block;
 }
 
 #calendar_tab{
 	overflow:auto;
+	margin-top:55px;
+	margin-bottom:40px;
 }
+
+
 
 div.clear {
 	clear:both;
 }
+
+

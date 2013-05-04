@@ -17,10 +17,6 @@ app.use('/img', express.static(__dirname + '/img'));
 app.use('/fonts', express.static(__dirname + '/fonts'));
 app.use('/view', express.static(__dirname + '/view'));
 app.use('/images', express.static(__dirname + '/images'));
-app.use('/view/loginboxsupport', express.static(__dirname + '/view/loginboxsupport'));
-app.use('/view/loginboxsupport/css', express.static(__dirname + '/view/loginboxsupport/css'));
-app.use('/view/loginboxsupport/fonts/Bree_Serif', express.static(__dirname + '/view/loginboxsupport/fonts/Bree_Serif'));
-app.use('/view/loginboxsupport/images', express.static(__dirname + '/view/loginboxsupport/images'));
 app.use(express.cookieParser());
 app.use(express.bodyParser());
 
@@ -45,29 +41,15 @@ console.log('Listen on port 8080');
 var conn;
 fs.exists('database.db',function(exists) {
 	conn = anyDB.createConnection('sqlite3://database.db');
-	console.log(exists);
     if (exists === false) {
-    	console.log("making table");
 		conn.query('CREATE TABLE users (userid INTEGER PRIMARY KEY, username TEXT, password TEXT);') 
-		    .on('end', function() {
+		    .on('end', function(end) {
 		    console.log('Made table!');
 		    });
-		conn.query('CREATE TABLE calendar (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, mealtype TEXT, weight INTEGER);') 
-		.on('end', function() {
-		    console.log('Made table!');
-	    
-	    //UNCOMMENT FOR TEST POINTS
-	    //test();
-	});
     }
   
 });
 
-
-/* I  didn't understand the function above. So I just create users here*/
-conn = anyDB.createConnection('sqlite3://database.db');
-//Delete after first usage 
-conn.query('CREATE TABLE users (userid INTEGER PRIMARY KEY, username TEXT, password TEXT);');
 
 
 
@@ -79,17 +61,27 @@ app.post('/login', function(req, res) {
 
 		if (req.body.submit == "Register") {
 		//check if user is already registered 
-			conn.query('SELECT username FROM users WHERE username = $1;', [req.body.username]).on('end', function(end) {
-				if (end.rowCount == 1) {
+			conn.query('SELECT userid FROM users WHERE username = $1;', [req.body.username],function(error,result){
+			    //console.log(result);
+				if (result.rows.length > 0) {
 					//Alert user that either that username is taken, or user has already registered 
-					console.log("username taked, or already registered");
-					res.render('login.html');				
+					res.render('login.html');
 				}
 				//Otherwise, create new username/password entry in user database 
 				else {
-					conn.query('INSERT INTO users VALUES ($1, $2, $3);', [null, req.body.username, req.body.password]);
-					console.log("inserted name");
-					res.render('Calendar.html'); 
+				    var userid;
+					conn.query('INSERT INTO users VALUES ($1, $2, $3);', [null, req.body.username, req.body.password],function(error,result) {
+					    conn.query('SELECT last_insert_rowid() AS userid',function(error,result) {
+						userid = result.rows[0].userid;
+						conn.query('CREATE TABLE table_' + userid + ' (id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, mealtype TEXT, weight INTEGER, servings TEXT);')
+						.on('end',function() {
+						    req.session.userid = userid;
+						    req.session.username = req.body.username;
+						    res.render('Calendar.html'); 
+						});
+						
+					    });
+					});
 				}
 		
 			});
@@ -97,15 +89,20 @@ app.post('/login', function(req, res) {
 
 		
 		if (req.body.submit == "Login") {
-			conn.query('SELECT username FROM users WHERE username = $1 AND password = $2', [req.body.username, req.body.password]).on('end', function(end) {
-				if (end.rowCount == 0) {
+		    console.log(req.body.password);
+			conn.query('SELECT * FROM users WHERE username=$1 AND password=$2;', [req.body.username, req.body.password],function(error,result) {
+				if (result.rows.length == 0) {
 					//Alert user that username/password pair is incorrect, or user is not registered 
 					console.log("username or password incorrect, or user has not registered");
 					res.render('login.html');
 				}
 				//Otherwise, log user in
 				else { 
-					res.render('Calendar.html'); 
+				    console.log(result);
+				    var userid = result.rows[0].userid;
+				    req.session.userid = userid;
+				    req.session.username = req.body.username;
+				    res.render('Calendar.html'); 
 				}
 			
 			});
@@ -132,7 +129,7 @@ app.get('/searchFood.json', function(req,res){
 	console.log('Search Food:', req.query.food);
 	
 	var Search_string = req.query.food;
-	var ip = 'ec2-54-244-185-162.us-west-2.compute.amazonaws.com';
+	var ip = 'ec2-54-244-185-162.us-west-2.compute.amazonaws.com';0
 	var port = 8811;
 	
 	// Connect to DNode server for FatSecretAPI.php running in above ip with TCP port 8811 
@@ -164,6 +161,12 @@ app.get('/getFood.json', function(req,res){
 	var ip = 'ec2-54-244-185-162.us-west-2.compute.amazonaws.com';
 	var port = 8811;
 	
+	if(food_id == 0)
+	{
+		res.send();
+		return;
+	}
+	
 	// Connect to DNode server for FatSecretAPI.php running in above ip with TCP port 8811 
 	// and call "getFood" with arugment Search_string. 
 	dnode.connect(ip,port, function (remote, conn) {
@@ -190,32 +193,72 @@ entry {
 	OR weight: int
 **/
 app.post('/addmeal', function(req,res) {
-	console.log("adding meal");
 	var meal = JSON.parse(req.body.meal);
-	console.log(meal);
-	console.log(new Date(meal['date']));
-	var food = meal['food']
-	var time = meal['date']
-	var mealtype = food[0]['mealtype'];
-	console.log("meal: " + mealtype);
-	ids = "";
-	names = "";
-	mealtypes = "";
-	calories = 0;
-	for (var i = 0; i < food.length-1; i++) {
-		ids += food[i]['id'] + ",";
-		names += food[i]['name'] + " , ";
-		calories = calories + parseInt(food[i]['calories']);
+	var time = meal['date'];
+	
+	// Edit meal
+	// delete the sperate meals in database, then insert the combined one
+	if(meal.ids != undefined)
+	{
+		var ids = meal.ids;
+		var where_condition = "";
+		for(key in ids)
+		{
+			where_condition += "'" +  ids[key]  + "',";	
+		}
+		where_condition = where_condition.substring(0, where_condition.length -1);
+		conn.query('DELETE FROM table_' + req.session.userid + ' WHERE id in (' +  where_condition + ')')
+			.on('error', console.error);
 	}
-	ids += food[food.length-1]['id'];
-	names += food[food.length-1]['name'];
-	calories += parseInt(food[food.length-1]['calories']);
-	//id,date,foodorweight,name,calories,id,weight
-	conn.query('INSERT INTO calendar VALUES ($1,$2,$3,$4,$5,$6,$7,$8)', [null,meal['date'],1,names,calories,ids,mealtype,0],function(error,result){
-		console.log("insert : " + error);
-	});
-	console.log("after");
-	console.log('done');
+	if(meal.autogen)
+	{
+		conn.query('DELETE FROM table_' + req.session.userid + ' WHERE datetime=$1 AND mealtype=$2',[time,meal.food[0].mealtype])
+			.on('error', console.error);
+	}
+	else
+	{
+		conn.query('DELETE FROM table_' + req.session.userid + ' WHERE datetime=$1 AND mealtype=$2 AND mealname=$3',[time,meal.food[0].mealtype,"AUTOGENERATE"])
+			.on('error', console.error);
+	}
+	
+		
+	if (meal['food'] != undefined) {
+	    var food = meal['food'];
+	    var mealtype = food[0]['mealtype'];
+	    ids = "";
+	    names = "";
+	    mealtypes = "";
+	    servings = "";
+	    calories = 0;
+	    for (var i = 0; i < food.length-1; i++) {
+		    ids += food[i]['id'] + ",";
+		    names += food[i]['name'] + " , ";
+		    calories = calories + parseInt(food[i]['calories']);
+		    servings += food[i]['servings'] + "*" + food[i]['calories']/food[i]['servings'] + ",";
+	    }
+	   
+	    ids += food[food.length-1]['id'];
+	    names += food[food.length-1]['name'];
+	    calories += parseInt(food[food.length-1]['calories']);
+	    servings += food[food.length-1]['servings'] + "*" + food[food.length-1]['calories']/food[food.length-1]['servings'];
+	   
+	    //(id INTEGER PRIMARY KEY, datetime INTEGER, foodweight BINARY, mealname TEXT, totalcalories INTEGER, foodid INTEGER, mealtype TEXT, weight INTEGER, servings TEXT)
+	    conn.query('INSERT INTO table_' + req.session.userid + ' VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)', [null,meal['date'],1,names,calories,ids,mealtype,0,servings],function(error,result){
+		    console.log("insert : " + error);
+	    });
+	    console.log("done adding meal");
+	}
+	
+	
+	if (meal['weight'] != undefined) {
+		//console.log("adding weight");
+		//console.log(meal.date);
+	    var weight = parseInt(meal['weight']);
+	    //console.log(weight);
+	    conn.query('INSERT INTO table_' + req.session.userid + ' VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)', [null,meal['date'],0,null,null,null,null,weight,null],function(error,result){
+		    console.log("insert weight: " + error);
+	    });
+	}
 	
 	res.render('Calendar.html');
 });
@@ -224,13 +267,33 @@ app.post('/addmeal', function(req,res) {
   Delete Meal
 **/
 app.post('/deletemeal',function(req,res) {
-    var id = req.body.id;
-    conn.query('DELETE FROM calendar WHERE id=$1;',[id]);
+	
+	console.log("============ delete meal!! =========")
+	var meal = JSON.parse(req.body.meal);
+	var ids = meal.ids;
+	console.log(ids);
+	var where_condition = "";
+	
+	for(key in ids)
+	{
+		where_condition += "'" +  ids[key]  + "',";	
+	}
+	
+	where_condition = where_condition.substring(0, where_condition.length -1);
+	
+	console.log(where_condition);
+	
+	conn.query('DELETE FROM table_' + req.session.userid + ' WHERE id in (' +  where_condition + ')')
+		.on('error', console.error);
+			
+	res.send();
+	
+   /*
+ var id = req.body.id;
+    conn.query('DELETE FROM table_' + req.session.userid + ' WHERE id=$1;',[id]);
     res.render('Calendar.html');
+*/
 });
-
-
-
 
 /**
  * Get data for graph from DB
@@ -247,9 +310,9 @@ app.get('/graph.json', function(req,res){
     var dates = {};
     //as of now returns everything
     //conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
-    conn.query('SELECT * FROM calendar WHERE datetime BETWEEN $1 AND $2 ORDER BY datetime;',[start,end])
+    conn.query('SELECT * FROM table_' + req.session.userid + ' WHERE datetime BETWEEN $1 AND $2 ORDER BY datetime;',[start,end])
 	    .on('row',function(row) {
-		console.log(row);
+		//console.log(row);
 		if (row.foodweight == 1) {
 		    if (dates[row.datetime] == undefined) {
 			dates[row.datetime] = [];
@@ -261,7 +324,7 @@ app.get('/graph.json', function(req,res){
 		}
 		
 		
-		console.log(row.mealname);
+		//console.log(row.mealname);
 		var day = new Date(row.datetime).getDate();
 		var entry = {};
 		entry['mealname'] = row.mealname;
@@ -296,8 +359,8 @@ app.get('/graph.json', function(req,res){
 		    data['food'].push([parseInt(time),day_calories,hidden_items]);
 		}app.post
 	
-		console.log('about to return');
-		console.log(row);
+		//console.log('about to return');
+		//console.log(row);
 		//examinePrevious();
 		res.json(data);
 	    })
@@ -312,6 +375,7 @@ app.get('/graph.json', function(req,res){
     date: datetime (integer)
     food: [id1,id2,id3]
     OR weight: int
+    servings : [servings*calories]
     entry id
 }
 **/
@@ -321,15 +385,17 @@ app.get('/entry.json',function(req,res) {
 	res.json(entry);
     }
     else {
-	conn.query('SELECT * FROM calendar WHERE id = $1;',[req.query['id']])
+	conn.query('SELECT * FROM table_' + req.session.userid + ' WHERE id = $1;',[req.query['id']])
 	    .on('row',function(row) {
-		console.log(row);
+		//console.log(row);
 		if (row.foodweight == 1) {
 		    if (row.foodid.toString().indexOf(",") !== -1) { //there is more than one
 			entry['food'] = row.foodid.split(','); //undo CSV
+			entry['servings'] = row.servings.split(',');
 		    }
 		    else {
 			entry['food'] = [row.foodid];
+			entry['servings'] = [row.servings];
 		    }
 		    entry['mealtype'] = row.mealtype;
 		}
@@ -346,9 +412,131 @@ app.get('/entry.json',function(req,res) {
 
 
 
+// { id: 4,
+//   datetime: 1367812800000,
+//   foodweight: 1,
+//   mealname: 'Fried Cornmeal Mush',
+//   totalcalories: 1699,
+//   foodid: 4467,
+//   mealtype: 'breakfast',
+//   weight: 0,
+//   servings: '1*1699' }
+
+/*
+	This will handle the food history and returns the top 5 food the user like the most for every meal type
+*/
+app.get('/history.json',function(req,res){
+	var entry = [];
+	var fw = 0;
+	conn.query('SELECT * FROM table_' + req.session.userid + ' WHERE foodweight = "1" AND foodid != "0"').on('row',function(row){
+
+		entry.push({id:row.id,	 foodid:row.foodid, mealnames:row.mealname, mealtype:row.mealtype, servings:row.servings });
+
+	}).on('end',function(row){
+
+		//console.log("--------------------------------------query everything start----------------------------------------");
+
+		//console.log(entry);
+		foodRank(entry);
+		//console.log("--------------------------------------query everything end----------------------------------------")
+		res.json(entry);
+
+	});
+});
 
 
-/**e
+function foodRank(entries){
+	var rank = {};
+	rank['Breakfast'] = {};
+	rank['Lunch'] = {};
+	rank['Dinner'] = {};
+	rank['Snack'] = {};
+	
+	for(var i in entries){
+	
+		switch(entries[i]['mealtype']){
+			case "breakfast":
+				rank['Breakfast'] = arrange(entries[i],rank['Breakfast']);
+			break;
+			case "lunch":
+				rank['Lunch'] = arrange(entries[i],rank['Lunch']);
+			break;
+			case 	"dinner":
+				rank['Dinner'] = arrange(entries[i],rank['Dinner']);
+			break;
+			case "snack":
+				rank['Snack'] = arrange(entries[i],rank['Snack']);
+			break;
+		}
+	}
+
+
+	// Every type of food will be sorted here
+	//console.log('Breakfast');
+	//console.log(rank['Breakfast']);
+	for(var i in rank){
+		// console.log(rank[i]);
+		rank[i]=sortObject(rank[i]);
+		// console.log(rank[i]);
+	}
+	//console.log("breakfast after sorting");
+	//console.log(rank['Breakfast']);
+	
+
+}
+
+function arrange(entry,rank){
+	
+	var length =1;
+	var foodids;
+	var servings;
+	foodids = entry['foodid'].toString().split(',');
+	servings = entry['servings'].split(',');	
+	mealnames = entry['mealnames'].split(',');
+
+	length = foodids.length;
+	
+
+	var foodid; 
+	var serving;
+	for(var i =0; i<length; i++){
+
+		foodid = foodids[i];
+		serving = servings[i].split('*')[0];
+		mealname = mealnames[i];
+
+		if(rank.hasOwnProperty(foodid)){
+			rank[foodid][0] += parseInt(serving);
+
+		}else{
+			rank[foodid]={'frequency':parseInt(serving),'mealname':mealname};
+		}
+	}
+	// console.log("rank");
+	// console.log(rank);
+	return rank;
+}
+
+function sortObject(obj) {
+    var arr = [];
+    for (var prop in obj) {
+	    	
+    	 if (obj.hasOwnProperty(prop)) {
+        	
+            arr.push({
+                'foodid': prop,
+                'frequency': obj[prop]['frequency'],
+                'mealname': obj[prop]['mealname']
+            });
+        }
+    }
+    arr.sort(function(a, b) { 
+    	return b['frequency'] - a['frequency']; });
+    return arr; // returns array
+}
+
+
+/**
 
 CALENDAR TO DATABASE
 SENDS: month/year (mm-yy), username
@@ -358,7 +546,6 @@ returns: rows of database: meal name, day, id, totalcalories, mealtype
 **/
 app.get('/calendar.json',function(req,res) {
     var data = {};
-    console.log("date " + req.query['date']);
     try {
 	var date = req.query['date'].split('-');
     }
@@ -370,23 +557,19 @@ app.get('/calendar.json',function(req,res) {
     //we want five days before first day of the month for pulling previous meals
     var start = new Date(date[0],month,1);
     start.setDate(start.getDate()-5);
-    console.log("start");
-    console.log(start);
     var end = new Date(date[0],month+1,0);
-    console.log(end);
-    conn.query('SELECT mealname,datetime,totalcalories,id,mealtype,foodid FROM calendar WHERE datetime BETWEEN $1 AND $2',[start,end])
+    //console.log(req.session.userid);
+    conn.query('SELECT mealname,datetime,totalcalories,id,mealtype,foodid FROM table_' + req.session.userid + ' WHERE datetime BETWEEN $1 AND $2',[start,end])
 
 	.on('row',function(row) {
-	    console.log(new Date(row.datetime));
+	    //console.log('each meal');
 	    var d = new Date(row.datetime);
 	    var day = parseInt(d.getDate());
-	    console.log(day);
 	    if (d.getMonth() != month) {
 		//prev 5 days
 		var last = new Date(date[0],d.getMonth() +1,0);
-		console.log(last.getDate());
+		//console.log(last.getDate());
 		day =  parseInt(parseInt(day) - parseInt(last.getDate()));
-		console.log('this ' + day);
 	    }
 	    var entry = {};
 	    entry['mealname'] = row.mealname;
@@ -401,6 +584,8 @@ app.get('/calendar.json',function(req,res) {
 	})
 	.on('end',function(row) {
 	    //examinePrevious(); add later
+	    console.log('to return');
+	    //console.log(data);
 	    res.json(data);
 	});
 });
@@ -462,28 +647,78 @@ function addUser(username,password) {
 
 
 //BEGIN AI STUFF
-//will be called on each calendar call (opening of page)
-//examines dates from last meal input until now and prompts user to enter meal on dates missed
-//user can choose to enter automatic dates if they want
-function examinePrevious() {
+/**will be called every time meal is added
+returns days,hours since last meal
+adds missing days to data structure since last meal
+**/
+function timeSinceLast(userid) {
     //first get max date from database
     console.log("THIS SHIT RIGHT HERE");
-    var time;
-    conn.query('SELECT MAX(datetime) AS date from calendar',function(err,rows,fields) {
-	/*console.log(rows);
-	time = parseInt(rows['rows'][0]['date']);
-	console.log(new Date(time));
-	var today = new Date();
-	console.log(today);
+    var recenttime;
+    conn.query('SELECT datetime from table_' + userid + 'ORDER BY datetime DESC LIMIT 0,2',function(err,rows,fields) {
+	console.log(rows);
+	var recent = parseInt(rows['rows'][0]['datetime']);
+	var secondrecent = parseInt(rows['rows'][1]['datetime']);
     
-	var difference = today.getTime() - time;
+	var difference = recent - secondrecent;
 	var hoursdiff = difference / 216000;
-	console.log(hoursdiff/24 + " days and " + hoursdiff % 24 + " hours");*/
+	
+	
+	
+	var dateArray = {};
+	var currentDate = new Date(secondrecent);
+	var stopDate = new Date(recent);
+	while (currentDate <= stopDate) {
+	    dateArray[new Date(currentDate).getTime()] = 0;
+	    currentDate = currentDate.addDays(1);
+	}
+	
+	conn.query('SELECT datetime from table_' + userid + 'WHERE datetime BETWEEN $1 AND $2',[secondrecent,recent]).on('row',function(row){
+	    currentDate[datetime] = 1;
+	});
+	
+	for (key in dateArray) {
+	    if (dateArray[key] == 0) {
+		missing_days.push(key);
+	    }
+	}
+	
+	
+	
+	
+	
+	
+	return hoursdiff/24 + " days and " + hoursdiff % 24 + " hours";
     });
+}
 
-    
-    
-    
+
+var missing_days = [];
+
+
+
+////////////////////////////////////
+/**
+ Every time a meal is added, add missing days to data structure
+ this function is called during add meal and adds all missing days to data structure
+**/
+function daysMissing(userid,time) {
+    //first get initial entry
+    conn.query('SELECT MIN(datetime) AS date from table_' + userid + ';',function(err,rows,fields) {
+	var starttime;
+	try {
+	    starttime = parseInt(rows['rows'][0]['date']);
+	}
+	catch(err) {
+	    return [];
+	}
+	//generate all time values till present day
+	var start = new Date(starttime);
+	var today = new Date(time);
+	var days = [];
+	
+	
+    });
 }
 
 //END AI STUFF
