@@ -34,11 +34,18 @@ window.addEventListener('load', function(){
 	
 	// Customize our Calendar  
 	Customize_cal();
-	
+	//$('#container').remove();
 	fatsecret.onTabChanged = function(tab_id){
 		//change from analysis to calendar
 		if(tab_id == 8)
 		{	
+			//$('#holder').
+			//var temp_html = $('#holder').html();
+			//console.log(temp_html);
+			//$('#holder').remove();
+			//$('#holder').hide().fadeIn('fast');
+			
+			//<div  id="holder">
 			Customize_cal();
 		}
 	};
@@ -47,7 +54,8 @@ window.addEventListener('load', function(){
 	form_eventListener();
 	// Event for form navigation 
 	form_navigation();
-	
+	// Get history
+	getHistory();
 				
 }, false);
 
@@ -91,7 +99,7 @@ function transferDateToIntSetID(){
 	// selector for children in order to set id 
 	var daynumber = $(".fatsecret_day_number");
 	var daylink = $(".fatsecret_day_link");
-	var date = $("#fatsecret_output_1").text();
+	var date = $("#fatsecret_date").text();
 	// regular expression to get rid of '\n'
 	var datetext = date.replace(/\n/g, '');
 	var dateArray = datetext.split(' ');
@@ -115,7 +123,6 @@ function transferDateToIntSetID(){
 **/
 function Customize_cal() {
 	
-	getHistory();
 	RefreshCal();
 
 	// in order to have the information about what date we click on, we need
@@ -149,21 +156,34 @@ function Customize_cal() {
 	// Hide the fat secret api logo
 	$('.fatsecret_footer').hide();
 
+	$('#fatsecret_nav').hide();
+	$('.fatsecret_calendar_summary').hide();
+	$('#fatsecret_previousmonth a').wrap('<div id="prevMonth" class="monthbutton"></div').wrap('<span id="fatsecret_output_0"></span');
+	
+	$('#fatsecret_nextmonth a').wrap('<div id ="nextMonth" class="monthbutton"></div').wrap('<span id="fatsecret_output_2"></span');
+	
+	$('.fatsecret_heading').contents(':not(span)').remove() ;
+	
 	
 	$('.fatsecret_day_other, .fatsecret_day_today').click(function(e) {
         	
+        console.log("Click!!");	
         if ($(e.target).is('.fatsecret_day_content span')) 
         {
             return;
         }
         else 
         {
+        	console.log("Click target!!");
 		    var id = $(e.target).find( $('a span') ).attr('id');
 		    try {
+		    
+		    	console.log("Click target!! 22");
 				var day = id.split("/");
 				var date = parseInt(day[0],10);
 				var meals = current_month_data[date];
 				Meal.date = new Date(day[2],day[1]-1,day[0]).getTime();
+				console.log(id);
 				fill_date_screen(meals);
 		    }
 		    catch (error) {
@@ -214,7 +234,9 @@ function clear_date_screen() {
 function fill_date_screen(meals) {
 	clear_date_screen();
     if(meals === undefined) return;
-           
+    
+    console.log("Click target!! 33");
+    
     // Combine the meals base on their types
     var CombineMeal = {};
     
@@ -354,10 +376,10 @@ function getFood(foodid,mealtype,servings,calories,id) {
     });
 }
 
-
+//! asshole
 function updateCalendar_ajax() {
 	
-	var date = $("#fatsecret_output_1").text();
+	var date = $("#fatsecret_date").text();
 	// regular expression to get rid of '\n'
 	var datetext = date.replace(/\n/g, '');
 	var dateArray = datetext.split(' ');
