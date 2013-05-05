@@ -1,6 +1,7 @@
 var ReqInterval = null;
 var Meal = {};
 var current_month_data = {};
+var history_data = {};
 
 var DEFAULT_DAILY_CALORIES = 2000;
 var DEFAULT_DAILY_MEAL = 550;
@@ -188,8 +189,9 @@ function getHistory(){
 			console.log("=============================in get history=======================");
 			console.log(content);
 			console.log(req.responseText);
-
 			console.log("=============================end get history=======================");
+			
+			history_data = content;
 			// RefreshResult(content,false);	
 		}
 		else
@@ -271,7 +273,6 @@ function editMeal(ids) {
 function displayMeal(mealIds) {
 	for(var key in mealIds)
 	{
-		console.log("Fuck!");
 		queryMeal(mealIds[key]);
 	}
 		
@@ -376,7 +377,6 @@ function updateCalendar_ajax() {
 			updateCalendar(JSON.parse(content));
 			
 			var editmeal_date = 0;
-			//! this shit here
 			if(Meal.date == undefined)
 			{
 				editmeal_date = $('.fatsecret_day_today > span').text();
@@ -506,7 +506,7 @@ function getResult () {
 		{
 			// Take JSON "stings" and returns the resulting Javascript object
 			var content = jQuery.parseJSON(req.responseText);
-			RefreshResult(content,false);	
+			RefreshResult(content,false,false);	
 			
 		}
 		else
@@ -522,7 +522,7 @@ function getResult () {
 }
 
 
-function RefreshResult(content,previousMealIds) {
+function RefreshResult(content,previousMealIds,suggestMeal) {
 	
 	$('#results').html("");
 	
@@ -547,11 +547,33 @@ function RefreshResult(content,previousMealIds) {
 						  .on('click', handlerGen(content[i].id, 
 						                          content[i].name,
 						                          content[i].calories,
-						                          previousMealIds[i]))
+						                          previousMealIds[i],false))
 			);	
 			
 		}
 
+	}
+	//! Suggest Meal
+	else if(suggestMeal){
+	
+		
+		var food_type = $('#mealType input:radio:checked').val();
+		var foods = content[food_type];
+		
+		console.log(food_type);
+		console.log(foods);
+		
+		for(var key in foods)
+		{
+			$('#results').append($('<div></div')
+						  .html(foods[key].mealname)
+						  .on('click', handlerGen(foods[key].foodid, 
+						                          foods[key].mealname,
+						                          foods[key].calories,
+						                          false,true))
+						  );
+		}
+		
 	}
 	else{
 		var n = content.total_results > 10 ? content.max_results : content.total_results;
@@ -567,44 +589,42 @@ function RefreshResult(content,previousMealIds) {
 						  .on('click', handlerGen(content.food[i].food_id, 
 						                          content.food[i].food_name,
 						                          content.food[i].food_description,
-						                          false))
+						                          false,false))
 						  );	
 			
 		}
 	}
 }
 
-function handlerGen(id, name, dsp, previousMealId) {
+function handlerGen(id, name, dsp, previousMealId, suggestMeal) {
 
-	if(!previousMealId){
+	if(previousMealId){
 		return function() {
-			// console.log("id:"+id);
-			// console.log("name:"+name);
-			// console.log("dsp:"+dsp);
-
-			var Re = /\d+kcal/;
-			var arr = Re.exec(dsp);
-			//console.log(arr);
-			var calories = parseInt(arr[0]);
-			
-			//console.log(id);
-			//console.log(name);
-			//console.log(parseInt(arr[0]));
-			
-			$('#search_query').val(name);
-			$('#calories_field').val(calories);
-			$('#foodid').val(id);
-
-		}
-	}else{
-
-		return function() {
-			
+	
 			var arrayId = [];
 			arrayId.push(previousMealId);
 			displayMeal(arrayId);
-			
+	
 		}
+	}
+	else if(suggestMeal){
+		return function() {
+			$('#search_query').val(name);
+			$('#calories_field').val(dsp);
+			$('#foodid').val(id);
+		}
+	}
+	else{
+		return function() {
+			var Re = /\d+kcal/;
+			var arr = Re.exec(dsp);
+			var calories = parseInt(arr[0]);
+		
+			$('#search_query').val(name);
+			$('#calories_field').val(calories);
+			$('#foodid').val(id);
+		}
+		
 	}
 }
 
@@ -721,7 +741,7 @@ function form_eventListener() {
 	});
 
 	$('#showHistory').on('click',function(){
-
+		RefreshResult(history_data,false,true);
 	});
 
 }
@@ -824,7 +844,7 @@ function addpreviousMeal(){
 		// displayMeal(mealidArr);
 		
 		// console.log("call refresh results");
-	 	RefreshResult(previousMeal,mealidArr);
+	 	RefreshResult(previousMeal,mealidArr,false);
 		// $("#previousMealContent").html(totalmeal);
 
 	}

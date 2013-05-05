@@ -449,25 +449,25 @@ app.get('/history.json',function(req,res){
 
 function foodRank(entries){
 	var rank = {};
-	rank['Breakfast'] = {};
-	rank['Lunch'] = {};
-	rank['Dinner'] = {};
-	rank['Snack'] = {};
+	rank['breakfast'] = {};
+	rank['lunch'] = {};
+	rank['dinner'] = {};
+	rank['snack'] = {};
 	
 	for(var i in entries){
 	
 		switch(entries[i]['mealtype']){
 			case "breakfast":
-				rank['Breakfast'] = arrange(entries[i],rank['Breakfast']);
+				rank['breakfast'] = arrange(entries[i],rank['breakfast']);
 			break;
 			case "lunch":
-				rank['Lunch'] = arrange(entries[i],rank['Lunch']);
+				rank['lunch'] = arrange(entries[i],rank['lunch']);
 			break;
 			case 	"dinner":
-				rank['Dinner'] = arrange(entries[i],rank['Dinner']);
+				rank['dinner'] = arrange(entries[i],rank['dinner']);
 			break;
 			case "snack":
-				rank['Snack'] = arrange(entries[i],rank['Snack']);
+				rank['snack'] = arrange(entries[i],rank['snack']);
 			break;
 		}
 	}
