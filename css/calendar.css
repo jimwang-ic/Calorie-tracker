@@ -20,7 +20,7 @@
 {
 	padding: 2px;
 	border: 1px solid #AABCFE;
-	float:left;
+	/* float:left; */
 }
 
 /* days row (Sun, Mon, Tues, etc) */
@@ -102,9 +102,18 @@
 }
 
 
-.date{
+#fatsecret_date{
 	width: 200px;
 	margin:0 0 0 100px !important;
 }
 
+.fatsecret_nextmonth {
+	margin-right: 2.5%;
+	font-weight: 100;
+	float: right;
+}
 
+.fatsecret_previousmonth {
+	margin-left: 2.5%;
+	font-weight: 100;
+}

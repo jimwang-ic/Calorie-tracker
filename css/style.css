@@ -27,11 +27,11 @@ a:visited {
  	color:black;
 }
 
-#calendar{
-	width: 650px;
+#fatsecret_calendar{
+	width: 670px;
 }
 
-#calendar a:hover {
+#fatsecret_calendar a:hover {
 	color:#999;
 }
 
@@ -60,7 +60,7 @@ h2{
 }
 
 
-.date{
+#fatsecret_date{
 	display:inline-block;	
 	font-size:20pt;
 	margin-left:300px;
@@ -216,13 +216,19 @@ a.monthbutton{
 
 #holder{
 	width:615px;
+	height: 542px;
 	margin:0;
 	overflow:auto;
 }
 
 /* this is the actual calendar */
-#fatsecret_output_3 
-{	float:left;
+/* #fatsecret_output_3  */
+.fatsecret_calendar
+{	
+	position: relative;
+	left:15px;
+	top:6px;
+	float:left;
 	margin:0;
 }
 

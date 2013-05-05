@@ -1,6 +1,7 @@
 var ReqInterval = null;
 var Meal = {};
 var current_month_data = {};
+var history_data = {};
 
 var DEFAULT_DAILY_CALORIES = 2000;
 var DEFAULT_DAILY_MEAL = 550;
@@ -33,11 +34,18 @@ window.addEventListener('load', function(){
 	
 	// Customize our Calendar  
 	Customize_cal();
-	
+	//$('#container').remove();
 	fatsecret.onTabChanged = function(tab_id){
 		//change from analysis to calendar
 		if(tab_id == 8)
 		{	
+			//$('#holder').
+			//var temp_html = $('#holder').html();
+			//console.log(temp_html);
+			//$('#holder').remove();
+			//$('#holder').hide().fadeIn('fast');
+			
+			//<div  id="holder">
 			Customize_cal();
 		}
 	};
@@ -46,7 +54,8 @@ window.addEventListener('load', function(){
 	form_eventListener();
 	// Event for form navigation 
 	form_navigation();
-	
+	// Get history
+	getHistory();
 				
 }, false);
 
@@ -90,7 +99,7 @@ function transferDateToIntSetID(){
 	// selector for children in order to set id 
 	var daynumber = $(".fatsecret_day_number");
 	var daylink = $(".fatsecret_day_link");
-	var date = $("#fatsecret_output_1").text();
+	var date = $("#fatsecret_date").text();
 	// regular expression to get rid of '\n'
 	var datetext = date.replace(/\n/g, '');
 	var dateArray = datetext.split(' ');
@@ -114,7 +123,6 @@ function transferDateToIntSetID(){
 **/
 function Customize_cal() {
 	
-	getHistory();
 	RefreshCal();
 
 	// in order to have the information about what date we click on, we need
@@ -148,21 +156,34 @@ function Customize_cal() {
 	// Hide the fat secret api logo
 	$('.fatsecret_footer').hide();
 
+	$('#fatsecret_nav').hide();
+	$('.fatsecret_calendar_summary').hide();
+	$('#fatsecret_previousmonth a').wrap('<div id="prevMonth" class="monthbutton"></div').wrap('<span id="fatsecret_output_0"></span');
+	
+	$('#fatsecret_nextmonth a').wrap('<div id ="nextMonth" class="monthbutton"></div').wrap('<span id="fatsecret_output_2"></span');
+	
+	$('.fatsecret_heading').contents(':not(span)').remove() ;
+	
 	
 	$('.fatsecret_day_other, .fatsecret_day_today').click(function(e) {
         	
+        console.log("Click!!");	
         if ($(e.target).is('.fatsecret_day_content span')) 
         {
             return;
         }
         else 
         {
+        	console.log("Click target!!");
 		    var id = $(e.target).find( $('a span') ).attr('id');
 		    try {
+		    
+		    	console.log("Click target!! 22");
 				var day = id.split("/");
 				var date = parseInt(day[0],10);
 				var meals = current_month_data[date];
 				Meal.date = new Date(day[2],day[1]-1,day[0]).getTime();
+				console.log(id);
 				fill_date_screen(meals);
 		    }
 		    catch (error) {
@@ -185,9 +206,12 @@ function getHistory(){
 			// Take JSON "strings" and returns the resulting Javascript object
 			var content = jQuery.parseJSON(req.responseText);
 
-			console.log("in get history");
+			console.log("=============================in get history=======================");
 			console.log(content);
 			console.log(req.responseText);
+			console.log("=============================end get history=======================");
+			
+			history_data = content;
 			// RefreshResult(content,false);	
 		}
 		else
@@ -210,7 +234,9 @@ function clear_date_screen() {
 function fill_date_screen(meals) {
 	clear_date_screen();
     if(meals === undefined) return;
-           
+    
+    console.log("Click target!! 33");
+    
     // Combine the meals base on their types
     var CombineMeal = {};
     
@@ -350,10 +376,10 @@ function getFood(foodid,mealtype,servings,calories,id) {
     });
 }
 
-
+//! asshole
 function updateCalendar_ajax() {
 	
-	var date = $("#fatsecret_output_1").text();
+	var date = $("#fatsecret_date").text();
 	// regular expression to get rid of '\n'
 	var datetext = date.replace(/\n/g, '');
 	var dateArray = datetext.split(' ');
@@ -373,7 +399,6 @@ function updateCalendar_ajax() {
 			updateCalendar(JSON.parse(content));
 			
 			var editmeal_date = 0;
-			//! this shit here
 			if(Meal.date == undefined)
 			{
 				editmeal_date = $('.fatsecret_day_today > span').text();
@@ -503,7 +528,7 @@ function getResult () {
 		{
 			// Take JSON "stings" and returns the resulting Javascript object
 			var content = jQuery.parseJSON(req.responseText);
-			RefreshResult(content,false);	
+			RefreshResult(content,false,false);	
 			
 		}
 		else
@@ -519,12 +544,12 @@ function getResult () {
 }
 
 
-function RefreshResult(content,yesterday) {
+function RefreshResult(content,previousMealIds,suggestMeal) {
 	
 	$('#results').html("");
 	
 	// This happened where we are using yesterday meal
-	if(yesterday == true){
+	if(previousMealIds){
 
 		var n = content.total_results > 10 ? content.max_results : content.total_results;
 
@@ -543,11 +568,34 @@ function RefreshResult(content,yesterday) {
 						  .html(inner_html)
 						  .on('click', handlerGen(content[i].id, 
 						                          content[i].name,
-						                          content[i].calories,true))
+						                          content[i].calories,
+						                          previousMealIds[i],false))
 			);	
 			
 		}
 
+	}
+	//! Suggest Meal
+	else if(suggestMeal){
+	
+		
+		var food_type = $('#mealType input:radio:checked').val();
+		var foods = content[food_type];
+		
+		console.log(food_type);
+		console.log(foods);
+		
+		for(var key in foods)
+		{
+			$('#results').append($('<div></div')
+						  .html(foods[key].mealname)
+						  .on('click', handlerGen(foods[key].foodid, 
+						                          foods[key].mealname,
+						                          foods[key].calories,
+						                          false,true))
+						  );
+		}
+		
 	}
 	else{
 		var n = content.total_results > 10 ? content.max_results : content.total_results;
@@ -562,42 +610,43 @@ function RefreshResult(content,yesterday) {
 						  .html(inner_html)
 						  .on('click', handlerGen(content.food[i].food_id, 
 						                          content.food[i].food_name,
-						                          content.food[i].food_description,false))
+						                          content.food[i].food_description,
+						                          false,false))
 						  );	
 			
 		}
 	}
 }
 
-function handlerGen(id, name, dsp, yesterday) {
+function handlerGen(id, name, dsp, previousMealId, suggestMeal) {
 
-	if(yesterday == false){
+	if(previousMealId){
 		return function() {
-			// console.log("id:"+id);
-			// console.log("name:"+name);
-			// console.log("dsp:"+dsp);
-
-			var Re = /\d+kcal/;
-			var arr = Re.exec(dsp);
-			//console.log(arr);
-			var calories = parseInt(arr[0]);
-			
-			//console.log(id);
-			//console.log(name);
-			//console.log(parseInt(arr[0]));
-			
-			$('#search_query').val(name);
-			$('#calories_field').val(calories);
-			$('#foodid').val(id);
-
+	
+			var arrayId = [];
+			arrayId.push(previousMealId);
+			displayMeal(arrayId);
+	
 		}
-	}else{
-
+	}
+	else if(suggestMeal){
 		return function() {
 			$('#search_query').val(name);
 			$('#calories_field').val(dsp);
 			$('#foodid').val(id);
 		}
+	}
+	else{
+		return function() {
+			var Re = /\d+kcal/;
+			var arr = Re.exec(dsp);
+			var calories = parseInt(arr[0]);
+		
+			$('#search_query').val(name);
+			$('#calories_field').val(calories);
+			$('#foodid').val(id);
+		}
+		
 	}
 }
 
@@ -714,7 +763,7 @@ function form_eventListener() {
 	});
 
 	$('#showHistory').on('click',function(){
-
+		RefreshResult(history_data,false,true);
 	});
 
 }
@@ -784,8 +833,8 @@ function addpreviousMeal(){
 							
 				var food = document.createElement("div");
 				for(var i=0; i<foodPrevious.length; i++){
-
-					if(foodPrevious[i].mealtype == food_type){
+					
+					if(foodPrevious[i].mealtype == food_type && foodPrevious[i].mealname !== "AUTOGENERATE"){
 						// previousMeal foodPrevious[i].mealname+'\n';
 						// console.log("foodPrevious id");
 						// console.log(foodPrevious[i].foodid);
@@ -813,11 +862,11 @@ function addpreviousMeal(){
 		
 		console.log("previousMeal");
 		console.log(previousMeal);
-		
-		displayMeal(mealidArr);
+		console.log(mealidArr);
+		// displayMeal(mealidArr);
 		
 		// console.log("call refresh results");
-		// RefreshResult(previousMeal,true);
+	 	RefreshResult(previousMeal,mealidArr,false);
 		// $("#previousMealContent").html(totalmeal);
 
 	}
