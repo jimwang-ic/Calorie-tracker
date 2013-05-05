@@ -441,7 +441,7 @@ app.get('/history.json',function(req,res){
 		console.log("after rank")
 		console.log(rank);
 		
-		res.json(entry);
+		res.json(rank);
 
 	});
 });
@@ -506,13 +506,14 @@ function arrange(entry,rank){
 
 		foodid = foodids[i];
 		serving = servings[i].split('*')[0];
+		calories = servings[i].split('*')[1];
 		mealname = mealnames[i];
 
 		if(rank.hasOwnProperty(foodid)){
 			rank[foodid][0] += parseInt(serving);
 
 		}else{
-			rank[foodid]={'frequency':parseInt(serving),'mealname':mealname};
+			rank[foodid]={'frequency':parseInt(serving),'mealname':mealname, 'calories':calories};
 		}
 	}
 	// console.log("rank");
@@ -529,7 +530,8 @@ function sortObject(obj) {
             arr.push({
                 'foodid': prop,
                 'frequency': obj[prop]['frequency'],
-                'mealname': obj[prop]['mealname']
+                'mealname': obj[prop]['mealname'],
+                'calories':obj[prop]['calories']
             });
         }
     }

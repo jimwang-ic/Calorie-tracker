@@ -185,9 +185,11 @@ function getHistory(){
 			// Take JSON "strings" and returns the resulting Javascript object
 			var content = jQuery.parseJSON(req.responseText);
 
-			console.log("in get history");
+			console.log("=============================in get history=======================");
 			console.log(content);
 			console.log(req.responseText);
+
+			console.log("=============================end get history=======================");
 			// RefreshResult(content,false);	
 		}
 		else
