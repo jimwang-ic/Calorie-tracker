@@ -39,7 +39,7 @@ window.addEventListener('load', function(){
 		//change from analysis to calendar
 		if(tab_id == 8)
 		{	
-			//Customize_cal();
+			Customize_cal();
 		}
 	};
 	
