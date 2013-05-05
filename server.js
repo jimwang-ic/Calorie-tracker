@@ -232,7 +232,7 @@ app.post('/addmeal', function(req,res) {
 	    calories = 0;
 	    for (var i = 0; i < food.length-1; i++) {
 		    ids += food[i]['id'] + ",";
-		    names += food[i]['name'] + " , ";
+		    names += food[i]['name'] + " * ";
 		    calories = calories + parseInt(food[i]['calories']);
 		    servings += food[i]['servings'] + "*" + food[i]['calories']/food[i]['servings'] + ",";
 	    }
@@ -434,8 +434,10 @@ app.get('/history.json',function(req,res){
 
 	}).on('end',function(row){
 
-		//console.log("--------------------------------------query everything start----------------------------------------");
-
+		console.log("--------------------------------------query everything start----------------------------------------");
+		console.log(entry);
+		console.log("--------------------------------------query everything end----------------------------------------");
+		
 		var rank = foodRank(entry);
 
 		console.log("after rank")
@@ -495,7 +497,7 @@ function arrange(entry,rank){
 	var servings;
 	var foodids = entry['foodid'].toString().split(',');
 	var servings = entry['servings'].split(',');	
-	var mealnames = entry['mealnames'].split(',');
+	var mealnames = entry['mealnames'].split('*');
 
 	length = foodids.length;
 	
