@@ -436,13 +436,14 @@ app.get('/history.json',function(req,res){
 
 		console.log("--------------------------------------query everything start----------------------------------------");
 		console.log(entry);
-		console.log("--------------------------------------query everything end----------------------------------------");
 		
 		var rank = foodRank(entry);
 
 		console.log("after rank")
 		console.log(rank);
 		
+		console.log("--------------------------------------query everything end----------------------------------------");
+
 		res.json(rank);
 
 	});
@@ -485,7 +486,7 @@ function foodRank(entries){
 	}
 
 	console.log("breakfast after sorting");
-	console.log(rank['Breakfast']);
+	console.log(rank['breakfast']);
 	return rank;
 
 }
@@ -508,11 +509,16 @@ function arrange(entry,rank){
 
 		foodid = foodids[i];
 		serving = servings[i].split('*')[0];
+
 		calories = servings[i].split('*')[1];
 		mealname = mealnames[i];
 
+		console.log("mealname:"+ mealname);
+		console.log("serving:"+ serving);
+
+
 		if(rank.hasOwnProperty(foodid)){
-			rank[foodid][0] += parseInt(serving);
+			rank[foodid].frequency += parseInt(serving);
 
 		}else{
 			rank[foodid]={'frequency':parseInt(serving),'mealname':mealname, 'calories':calories};
