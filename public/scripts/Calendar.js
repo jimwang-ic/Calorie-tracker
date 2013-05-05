@@ -269,6 +269,7 @@ function editMeal(ids) {
 function displayMeal(mealIds) {
 	for(var key in mealIds)
 	{
+		console.log("Fuck!");
 		queryMeal(mealIds[key]);
 	}
 		
@@ -519,12 +520,12 @@ function getResult () {
 }
 
 
-function RefreshResult(content,yesterday) {
+function RefreshResult(content,previousMealIds) {
 	
 	$('#results').html("");
 	
 	// This happened where we are using yesterday meal
-	if(yesterday == true){
+	if(previousMealIds){
 
 		var n = content.total_results > 10 ? content.max_results : content.total_results;
 
@@ -543,7 +544,8 @@ function RefreshResult(content,yesterday) {
 						  .html(inner_html)
 						  .on('click', handlerGen(content[i].id, 
 						                          content[i].name,
-						                          content[i].calories,true))
+						                          content[i].calories,
+						                          previousMealIds[i]))
 			);	
 			
 		}
@@ -562,16 +564,17 @@ function RefreshResult(content,yesterday) {
 						  .html(inner_html)
 						  .on('click', handlerGen(content.food[i].food_id, 
 						                          content.food[i].food_name,
-						                          content.food[i].food_description,false))
+						                          content.food[i].food_description,
+						                          false))
 						  );	
 			
 		}
 	}
 }
 
-function handlerGen(id, name, dsp, yesterday) {
+function handlerGen(id, name, dsp, previousMealId) {
 
-	if(yesterday == false){
+	if(!previousMealId){
 		return function() {
 			// console.log("id:"+id);
 			// console.log("name:"+name);
@@ -594,9 +597,11 @@ function handlerGen(id, name, dsp, yesterday) {
 	}else{
 
 		return function() {
-			$('#search_query').val(name);
-			$('#calories_field').val(dsp);
-			$('#foodid').val(id);
+			
+			var arrayId = [];
+			arrayId.push(previousMealId);
+			displayMeal(arrayId);
+			
 		}
 	}
 }
@@ -813,11 +818,11 @@ function addpreviousMeal(){
 		
 		console.log("previousMeal");
 		console.log(previousMeal);
-		
+		console.log(mealidArr);
 		// displayMeal(mealidArr);
 		
 		// console.log("call refresh results");
-	 	RefreshResult(previousMeal,true);
+	 	RefreshResult(previousMeal,mealidArr);
 		// $("#previousMealContent").html(totalmeal);
 
 	}
