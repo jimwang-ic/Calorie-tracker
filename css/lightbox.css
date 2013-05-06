@@ -26,15 +26,13 @@ h5{
 #chooseMeal{
 	display:none;
 	overflow:auto;
-
 }
 
 #mealandbutton{
-		border: 1px #ccc solid;	
-		overflow:auto;
-	padding:20px 15px 100px 20px;
+	border: 1px #ccc solid;	
+	overflow:auto;
+	padding:20px 15px 40px 20px;
 	margin:42px 20px;
-
 }
 
 #choosemealtoenter{
@@ -48,18 +46,17 @@ h5{
 	height:30px;
 	text-align:center;
 	padding-top:10px;
-	margin-right:20px;
 	margin-top:10px;
 	float:right;
 	clear:both;
 	-webkit-border-radius: 3px;
 	-moz-border-radius: 3px;
 	border-radius: 3px;
+	position:absolute;
+	bottom:30px;
+	right:30px;
 }
 
-#next:hover {
-	background:#6b95FF;
-}
 
 
 #detailedForm{
@@ -88,8 +85,8 @@ h5{
 	background:white;
 	font-size:10pt;
 	color:black;
-
 }
+
 #results_wrapper{
 	padding-left:20px;
 }
@@ -155,7 +152,21 @@ h5{
 	background:#ff8d8d;
 }
 
-#btn_addmeal, #btn_addweight{
+#results div {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	cursor:default;
+	margin-left:10px;
+}
+
+#results div:hover {
+	color:#bbb;
+}
+
+#btn_addmeal, #btn_addweight, .next, #next_choosemeal,#next_autogenDialog
+{
 	height: 40px;
 	width:90px;
 	color:#eee;
@@ -172,7 +183,7 @@ h5{
 	border:0px solid white;
 }
 
-#btn_addmeal:hover {
+#btn_addmeal:hover, #btn_addweight:hover, #next_choosemeal:hover, #next_autogenDialog:hover, .next:hover {
 	background:#6b95ff;
 }
 
@@ -265,4 +276,25 @@ h5{
 
 #FoodSearch{
  	width:500px;
+}
+
+
+#prev_autogenDialog,#back_button_addmeal, #prev_optionselect, #prev_choosemeal, #back_btn_addweight{
+	position:absolute;
+	left:30px;
+	bottom:30px;
+	background:#ddd;
+	color:#333;
+}
+
+#prev_autogenDialog:hover, #back_button_addmeal:hover, #prev_optionselect:hover, #prev_choosemeal:hover, #back_btn_addweight:hover {
+	background:#d5d5d5;
+
+}
+
+
+.exit{
+	position:absolute;
+	top:10px;
+	right:10px;
 }

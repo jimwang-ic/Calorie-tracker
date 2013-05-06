@@ -54,6 +54,7 @@ fs.exists('database.db',function(exists) {
 
 
 
+
 app.post('/login', function(req, res) {
 		//Use this variable in other functions to call correct user 
 		req.session.userID = req.body.username;
@@ -65,7 +66,7 @@ app.post('/login', function(req, res) {
 			    //console.log(result);
 				if (result.rows.length > 0) {
 					//Alert user that either that username is taken, or user has already registered 
-					res.render('login.html');
+					res.render('loginerrorregister.html');
 				}
 				//Otherwise, create new username/password entry in user database 
 				else {
@@ -94,7 +95,7 @@ app.post('/login', function(req, res) {
 				if (result.rows.length == 0) {
 					//Alert user that username/password pair is incorrect, or user is not registered 
 					console.log("username or password incorrect, or user has not registered");
-					res.render('login.html');
+					res.render('loginerrorlogin.html');
 				}
 				//Otherwise, log user in
 				else { 
@@ -108,6 +109,13 @@ app.post('/login', function(req, res) {
 			});
 		
 		}
+});
+
+
+app.post('/errorform', function(req, res) {
+	res.render('login.html');
+
+
 });
 
 

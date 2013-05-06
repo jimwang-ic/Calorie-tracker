@@ -98,6 +98,14 @@ h2{
 	top:40px;
 }
 
+#box-table-a tr {
+	background: #E8EDFF;
+}
+
+#box-table-a tr:hover {
+	background-color:#D8DDFF
+}
+
 .monthbutton:hover {
 	background:#ccc;
 }
@@ -158,6 +166,7 @@ a.monthbutton{
 
 /* CSS FOR DAILY DATA */
 #dayData{
+	cursor:default;
 	display:block;
 	background:white;
 	width:300px;
@@ -170,6 +179,10 @@ a.monthbutton{
 	padding:20px;
 	padding-left:0px;
 	float:left;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
 
 
@@ -202,7 +215,6 @@ a.monthbutton{
 }
 
 #box-table-a td {
-	background: #E8EDFF;
 	border-bottom: 1px solid white;
 	color: #669;
 	border-top: 1px solid transparent;
@@ -235,4 +247,10 @@ a.monthbutton{
 .missing 
 {
     background-color: #DDADA2;
+}
+
+#autogenDialog
+{
+
+
 }
