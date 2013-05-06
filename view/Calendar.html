@@ -168,22 +168,27 @@
 			<h5>Meal Entry Form</h5>
 			<!-- FOOD SEARCH FORM -->
 			<div id="autogenDialog">
+				<div id="mealandbutton">
 				<h5>Auto generate your meal?</h5>
+
 				<form>
 					<label><span class="rad"><input class ="mealType" type="radio" name="group1" id="yes_auto" value="yes_auto" checked><span class="m" >Yes</span></span></label>
 					<label><span class="rad" ><input type="radio" name="group1" id="no_auto" value="no_auto"><span class="m" >No</span></span></label>
 				</form>
-				<div id="next_autogenDialog" class="next"> Next </div>
+			</div>
+				<button id="next_autogenDialog" class="next"> Next </button>
 				
 			</div>
 			
 			<div id="optionSelect">
+
+				<div id="mealandbutton">
 				<form>
 					<label><span class="rad"><input class ="mealType" type="radio" name="group1" id="addMeal" value="addMeal" checked><span class="m" >Add meal</span></span></label>
 					<label><span class="rad" ><input type="radio" name="group1" id="addWeight" value="addWeight"><span class="m" >Add weight</span></span></label>
 				</form>
-				<div id="next_optionselect" class="next"> Next </div>
-				
+				</div>
+				<button id="next_optionselect" class="next"> Next </button>
 			</div>
 			
 			<div id="weightInput">
@@ -208,7 +213,8 @@
 					</form>
 										
 				</div>
-				<div id="next_choosemeal" class="next"> Next </div> <!-- next page button -->
+				<button id="next_choosemeal" class="next"> Next </button> <!-- next page button -->
+				<button id="prev_choosemeal" class="next"> Back </button>
 			</div>
 
 
@@ -271,6 +277,7 @@
 				</div>
 
 				<button id='btn_addmeal'>Add Meal</button>
+				<button id-'back_button_addmeal'> Back </button>
 				<button id='btn_delete_meal'>Delete Meal</button>
 				<!-- <button id=' -->
 				
