@@ -179,7 +179,8 @@ function Customize_cal() {
         	console.log("Click target!!");
 		    var id = $(e.target).find( $('a span') ).attr('id');
 		    try {
-		    
+		    	
+		    	$(e.target).css({"background-color":"rgb(80,140,170)"});
 		    	console.log("Click target!! 22");
 				var day = id.split("/");
 				var date = parseInt(day[0],10);
