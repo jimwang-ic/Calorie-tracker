@@ -62,7 +62,7 @@ h5{
 #detailedForm{
 	display:none;
 	overflow:auto;
-	height:350px;
+	height:100%;
 }
 
 #weightInput{
