@@ -85,8 +85,8 @@ h5{
 	background:white;
 	font-size:10pt;
 	color:black;
-
 }
+
 #results_wrapper{
 	padding-left:20px;
 }
@@ -158,6 +158,7 @@ h5{
 	-ms-user-select: none;
 	user-select: none;
 	cursor:default;
+	margin-left:10px;
 }
 
 #results div:hover {
@@ -182,7 +183,7 @@ h5{
 	border:0px solid white;
 }
 
-#btn_addmeal:hover, .next:hover {
+#btn_addmeal:hover, #btn_addweight:hover, #next_choosemeal:hover, #next_autogenDialog:hover, .next:hover {
 	background:#6b95ff;
 }
 
@@ -278,10 +279,22 @@ h5{
 }
 
 
-#prev_autogenDialog, #prev_optionselect, #prev_choosemeal{
+#prev_autogenDialog,#back_button_addmeal, #prev_optionselect, #prev_choosemeal, #back_btn_addweight{
 	position:absolute;
 	left:30px;
 	bottom:30px;
 	background:#ddd;
 	color:#333;
+}
+
+#prev_autogenDialog:hover, #back_button_addmeal:hover, #prev_optionselect:hover, #prev_choosemeal:hover, #back_btn_addweight:hover {
+	background:#d5d5d5;
+
+}
+
+
+.exit{
+	position:absolute;
+	top:10px;
+	right:10px;
 }

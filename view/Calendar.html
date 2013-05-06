@@ -165,39 +165,45 @@
 
 		<!-- HTML FOR LIGHTBOX -->
 		<div id = "light" class="white_content">
+			<img height="15px" src = "images/x-mark-512.png" class="exit">
+
 			<h5>Meal Entry Form</h5>
 			<!-- FOOD SEARCH FORM -->
 			<div id="autogenDialog">
 				<div id="mealandbutton">
-				<h5>Auto generate your meal?</h5>
+					<h5>Auto generate your meal?</h5>
 
-				<form>
-					<label><span class="rad"><input class ="mealType" type="radio" name="group1" id="yes_auto" value="yes_auto" checked><span class="m" >Yes</span></span></label>
-					<label><span class="rad" ><input type="radio" name="group1" id="no_auto" value="no_auto"><span class="m" >No</span></span></label>
-				</form>
-			</div>
+					<form>
+						<label><span class="rad"><input class ="mealType" type="radio" name="group1" id="yes_auto" value="yes_auto" checked><span class="m" >Yes</span></span></label>
+						<label><span class="rad" ><input type="radio" name="group1" id="no_auto" value="no_auto"><span class="m" >No</span></span></label>
+					</form>
+				</div>
 				<button id="next_autogenDialog" class="next"> Next </button>
-				
-			</div>
-			
-			<div id="optionSelect">
 
+			</div>
+
+			<div id="optionSelect">
+			
 				<div id="mealandbutton">
-				<form>
-					<label><span class="rad"><input class ="mealType" type="radio" name="group1" id="addMeal" value="addMeal" checked><span class="m" >Add meal</span></span></label>
-					<label><span class="rad" ><input type="radio" name="group1" id="addWeight" value="addWeight"><span class="m" >Add weight</span></span></label>
-				</form>
+					<form>
+						<label><span class="rad"><input class ="mealType" type="radio" name="group1" id="addMeal" value="addMeal" checked><span class="m" >Add meal</span></span></label>
+						<label><span class="rad" ><input type="radio" name="group1" id="addWeight" value="addWeight"><span class="m" >Add weight</span></span></label>
+					</form>
 				</div>
 				<button id="next_optionselect" class="next"> Next </button>
 			</div>
-			
+
 			<div id="weightInput">
-				<form id="weightForm">
-					Input your weigh: <input type="text" id="weight_input">
-					<button id="btn_addweight">Add Weight</button>
-				</form>
+				<div id="mealandbutton">
+
+					<form id="weightForm">
+						Input your weigh: <input type="text" id="weight_input">
+						<button id="btn_addweight" class="next">Add Weight</button>
+						<button id="back_btn_addweight" class="next"> Back </button>
+					</form>
+				</div>
 			</div>
-			
+
 			<div id="chooseMeal">	
 				<div id="mealandbutton">
 					<span id="choosemealtoenter">Choose Meal to Enter: </span>
@@ -208,17 +214,16 @@
 						<label><span class="rad"><input type="radio" name="group1" id="dinner" value="dinner"><span class="m" >Dinner</span></span></label>
 						<label><span class="rad"><input type="radio" name="group1" id="snack" value="snack"><span class="m" >Snack</span></span></label>
 						<label><span class="rad"><input type="checkbox" name="group2" id="auto_generate" value="auto_generate"><span class="m" >auto generate</span></span></label>
-						<!-- <label><span class="rad"><input type="radio" name="group1" id="auto_gen" value="auto_gen"><span class="m" >Auto generate</span></span></label> -->
-						
+
 					</form>
-										
+
 				</div>
 				<button id="next_choosemeal" class="next"> Next </button> <!-- next page button -->
 				<button id="prev_choosemeal" class="next"> Back </button>
 			</div>
 
 
-			
+
 			<div id="detailedForm">
 				<div id="searchpref">
 					<div id="fd">
@@ -261,7 +266,7 @@
 				<!-- show previous meal -->
 				<button id="showPrevious">Show Previous Meal!</button>
 				<button id="showHistory">Show Suggested Meal!</button>
-				
+
 
 				<div id="data_container">
 					<table class="box-table-b" id="table_container">
@@ -277,7 +282,7 @@
 				</div>
 
 				<button id='btn_addmeal'>Add Meal</button>
-				<button id-'back_button_addmeal'> Back </button>
+				<button id='back_button_addmeal' class="next"> Back </button>
 				<button id='btn_delete_meal'>Delete Meal</button>
 				<!-- <button id=' -->
 				
