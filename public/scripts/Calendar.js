@@ -158,9 +158,11 @@ function Customize_cal() {
 
 	$('#fatsecret_nav').hide();
 	$('.fatsecret_calendar_summary').hide();
-	$('#fatsecret_previousmonth a').wrap('<div id="prevMonth" class="monthbutton"></div').wrap('<span id="fatsecret_output_0"></span');
+	$('#fatsecret_previousmonth a').wrap('<div id="prevMonth" class="monthbutton"></div')
+								   .wrap('<span id="fatsecret_output_0"></span');
 	
-	$('#fatsecret_nextmonth a').wrap('<div id ="nextMonth" class="monthbutton"></div').wrap('<span id="fatsecret_output_2"></span');
+	$('#fatsecret_nextmonth a').wrap('<div id ="nextMonth" class="monthbutton"></div')
+							   .wrap('<span id="fatsecret_output_2"></span');
 	
 	$('.fatsecret_heading').contents(':not(span)').remove() ;
 	
