@@ -774,6 +774,26 @@ function form_navigation(){
 		RefreshCal();
 	});
 	
+
+	$('#prev_choosemeal').on('click', function () {
+		document.getElementById('chooseMeal').style.display='none';
+		document.getElementById('optionSelect').style.display='block';
+	});
+
+	$('#back_btn_addweight').on('click', function () {
+		document.getElementById('weightInput').style.display='none';
+		document.getElementById('optionSelect').style.display='block';
+	});
+
+
+	$('#back_button_addmeal').on('click', function () {
+		document.getElementById('detailedForm').style.display='none';
+		document.getElementById('chooseMeal').style.display='block';
+	});
+
+
+
+
 	$('#next_choosemeal').on('click',function(){
 		if( $('#auto_generate:checked').prop("checked") )
 		{
