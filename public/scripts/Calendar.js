@@ -131,7 +131,7 @@ function Customize_cal() {
 	transferDateToIntSetID();
 
 	// Change the span element's title to "Edit Meal"
-	$('.fatsecret_day_content div:nth-child(1) span').html('<span id="plus_btn">+</span>');	
+	$('.fatsecret_day_content div:nth-child(1) span').html('<span id="plus_btn_container"><img id="plus_btn" src="../../images/editmeal.png"></span>');	
 	// remove the original onclick function
 	$('.fatsecret_day_content div:nth-child(1) a').removeAttr('onclick');
 	// bind our customize click event
@@ -462,7 +462,7 @@ function updateCalendar(data) {
 	  		calories += parseInt(data[key][i].totalcalories);
 	}
 	if(calories != 0)
-		$(item).append('<span class=calories>' + calories + '</span>');
+		$(item).append('<span class=calories style="position: relative; top: -10px;">' +'<p>' + 'Calories:' + '</p>' + calories + '</span>');
     }
     
     var today = new Date();
@@ -774,6 +774,32 @@ function form_navigation(){
 		RefreshCal();
 	});
 	
+	
+	$('.exit').on('click', function () {
+		document.getElementById('light').style.display='none';
+		document.getElementById('fade').style.display='none';
+	});
+	
+
+	$('#prev_choosemeal').on('click', function () {
+		document.getElementById('chooseMeal').style.display='none';
+		document.getElementById('optionSelect').style.display='block';
+	});
+
+	$('#back_btn_addweight').on('click', function () {
+		document.getElementById('weightInput').style.display='none';
+		document.getElementById('optionSelect').style.display='block';
+	});
+
+
+	$('#back_button_addmeal').on('click', function () {
+		document.getElementById('detailedForm').style.display='none';
+		document.getElementById('chooseMeal').style.display='block';
+	});
+
+
+
+
 	$('#next_choosemeal').on('click',function(){
 		if( $('#auto_generate:checked').prop("checked") )
 		{
