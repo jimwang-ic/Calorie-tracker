@@ -229,17 +229,28 @@
 					<div id="fd">
 						<form id="FoodSearch">
 
-							<div id="searcherbar">Search For Food Item: <input type="text" id="search_query">
+							<div id="searcherbar">
+								
+								<div id="bar">Search For Food Item: 
+								<input type="text" id="search_query">
+							</div>
+
+								<button id="showPrevious" class="otherselect">Show Previous Meal</button>
+								<button id="showHistory" class="otherselect">Show Suggested Meal</button>
+
+
 								<div id="food_choose"></div>
 
 								<!-- <input type="submit" value="Search" id="search"> -->
 								<input type="hidden" id="calories_field"> 
-								<input type="hidden" id="foodid">
+								<input type="hidden" id="foodid">	
+
 
 							</div>
+							<!-- show previous meal -->
 							<div id="results_wrapper">
-								<div id="results" style="width:550px; height:100px; position:relative; top:0px; border:solid #cccccc 1px; overflow:scroll;"></div>
-								<input type="button" id="btn_additem" value="Add!">
+								<div id="results" ></div>
+								<input type="button"  class="otherselect" id="btn_additem" value="Add!">
 							</form> 
 
 							<div id="selector">
@@ -263,13 +274,12 @@
 
 				</div>
 
-				<!-- show previous meal -->
-				<button id="showPrevious">Show Previous Meal!</button>
-				<button id="showHistory">Show Suggested Meal!</button>
+
 
 
 				<div id="data_container">
 					<table class="box-table-b" id="table_container">
+						<div id="text">
 						<tr>
 							<!-- <th>Type</th> -->
 							<th>Type</th>
@@ -278,11 +288,13 @@
 							<th>Total Calories</th>
 							<th></th>
 						</tr>
+					</div>
 					</table>
+				<button id='btn_addmeal' class="next">Add Meal</button>
+				<button id='back_button_addmeal' class="next"> Back </button>
 				</div>
 
-				<button id='btn_addmeal'>Add Meal</button>
-				<button id='back_button_addmeal' class="next"> Back </button>
+
 				<button id='btn_delete_meal'>Delete Meal</button>
 				<!-- <button id=' -->
 				
