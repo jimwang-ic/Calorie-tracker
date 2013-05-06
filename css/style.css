@@ -127,11 +127,15 @@ a.monthbutton{
 	height:300px;
 }
 
-#plus_button{
-	background-image:url('../public/images/add.png');
-	font-size:12pt;
+#plus_btn_container {
+	position: relative;
+	top: 45px;
+	right: -3px;
 }
 
+#plus_btn{
+	height: 15px;
+}
 
 
 #tabandday_cont{
