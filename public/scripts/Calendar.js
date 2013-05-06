@@ -774,6 +774,12 @@ function form_navigation(){
 		RefreshCal();
 	});
 	
+	
+	$('.exit').on('click', function () {
+		document.getElementById('light').style.display='none';
+		document.getElementById('fade').style.display='none';
+	});
+	
 
 	$('#prev_choosemeal').on('click', function () {
 		document.getElementById('chooseMeal').style.display='none';
