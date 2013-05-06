@@ -331,6 +331,13 @@ h5{
 	right:30px;
 }
 
+#btn_delete_meal{
+	margin:0;
+	position:absolute;
+	top:140px;
+	right:30px;
+}
+
 #data_container{
 	position:relative;
 }
