@@ -223,7 +223,7 @@ app.post('/addmeal', function(req,res) {
 		conn.query('DELETE FROM table_' + req.session.userid + ' WHERE datetime=$1 AND mealtype=$2',[time,meal.food[0].mealtype])
 			.on('error', console.error);
 	}
-	else
+	else if(meal.weight == undefined)
 	{
 		conn.query('DELETE FROM table_' + req.session.userid + ' WHERE datetime=$1 AND mealtype=$2 AND mealname=$3',[time,meal.food[0].mealtype,"AUTOGENERATE"])
 			.on('error', console.error);
